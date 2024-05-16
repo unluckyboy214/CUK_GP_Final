@@ -130,7 +130,38 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bambino.cpp" />
+    <ClCompile Include="Dasol.cpp" />
+    <ClCompile Include="GameClass.cpp" />
+    <ClCompile Include="GameClassPhase.h" />
+    <ClCompile Include="Hall.cpp" />
+    <ClCompile Include="KimSuHwan.cpp" />
+    <ClCompile Include="LastBoss.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Entrance.cpp" />
+    <ClCompile Include="Maria.cpp" />
+    <ClCompile Include="Michael.cpp" />
+    <ClCompile Include="Nicols1.cpp" />
+    <ClCompile Include="Nicols2.cpp" />
+    <ClCompile Include="Nicols3.cpp" />
+    <ClCompile Include="Sophiebara.cpp" />
+    <ClCompile Include="Virtus.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Bambino.h" />
+    <ClInclude Include="Dasol.h" />
+    <ClInclude Include="GameClass.h" />
+    <ClInclude Include="Entrance.h" />
+    <ClInclude Include="Hall.h" />
+    <ClInclude Include="KimSuHwan.h" />
+    <ClInclude Include="LastBoss.h" />
+    <ClInclude Include="Maria.h" />
+    <ClInclude Include="Michael.h" />
+    <ClInclude Include="Nicols1.h" />
+    <ClInclude Include="Nicols2.h" />
+    <ClInclude Include="Nicols3.h" />
+    <ClInclude Include="Sophiebara.h" />
+    <ClInclude Include="Virtus.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

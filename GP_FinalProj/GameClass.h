@@ -1,0 +1,58 @@
+// GameClass.h
+#pragma once
+
+#include <iostream>
+#include <string>
+#include "SDL.h"
+#include "SDL_ttf.h"
+#include "SDL_mixer.h"
+#include "SDL_image.h"
+
+const int WINDOW_WIDTH = 800;
+const int WINDOW_HEIGHT = 600;
+
+void InitGame();
+void ClearGame();
+
+// Game Phases
+const int PHASE_Entrance = 0;
+const int PHASE_KimSuHwan = 1;
+const int PHASE_Hall = 2;
+const int PHASE_Nicols1 = 3;
+const int PHASE_Nicols2 = 4;
+const int PHASE_Nicols3 = 5;
+const int PHASE_Maria = 6;
+const int PHASE_Virtus = 7;
+const int PHASE_Bambino = 8;
+const int PHASE_Dasol = 9;
+const int PHASE_Sophiebara = 10;
+const int PHASE_Michael = 11;
+const int PHASE_LastBoss = 12;
+
+extern int g_current_game_phase;
+extern bool g_flag_running;
+extern SDL_Renderer* g_renderer;
+extern SDL_Window* g_window;
+extern Uint32 g_frame_per_sec;
+extern bool g_move_left;
+extern bool g_move_right;
+extern bool g_move_up;
+extern bool g_move_down;
+
+// Game variables
+enum class PlayerDirection {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+};
+
+extern SDL_Rect g_player_destination_rect;
+extern PlayerDirection g_player_direction;
+
+// 클로킹 관련
+extern bool is_cloaking;
+extern int cloaking_alpha;
+extern bool is_cloaking_on;
+extern float cloaking_time;
+extern float cloaking_duration;
