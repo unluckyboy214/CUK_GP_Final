@@ -57,7 +57,7 @@ Entrance::Entrance()
     portal_rect_EtoK.w = portal_width;
     portal_rect_EtoK.h = portal_height;
 
-    // 포탈 위치 조정
+    // 포탈 위치 조정(상)
     portal_rect_EtoK.x = (WINDOW_WIDTH - portal_rect_EtoK.w) / 2;
     portal_rect_EtoK.y = 0;
 

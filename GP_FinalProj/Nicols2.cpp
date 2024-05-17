@@ -54,19 +54,27 @@ Nicols2::Nicols2()
     portal_texture = SDL_CreateTextureFromSurface(g_renderer, resized_portal_surface);
     SDL_FreeSurface(resized_portal_surface);
 
-    portal_rect_HtoK.w = portal_width;
-    portal_rect_HtoK.h = portal_height;
+    portal_rect_N2toN1.w = portal_width;
+    portal_rect_N2toN1.h = portal_height;
 
-    portal_rect_HtoN1.w = portal_width;
-    portal_rect_HtoN1.h = portal_height;
+    portal_rect_N2toN3.w = portal_width;
+    portal_rect_N2toN3.h = portal_height;
 
-    // 포탈 위치 조정
-    portal_rect_HtoK.x = (WINDOW_WIDTH - portal_rect_HtoK.w) / 2;
-    portal_rect_HtoK.y = 500;
+    portal_rect_N2toB.w = portal_width;
+    portal_rect_N2toB.h = portal_height;
 
-    // 포탈 위치 조정
-    portal_rect_HtoN1.x = 700;
-    portal_rect_HtoN1.y = (WINDOW_HEIGHT - portal_rect_HtoN1.h) / 2;
+    // 포탈 위치 조정(좌)
+    portal_rect_N2toN1.x = 0;
+    portal_rect_N2toN1.y = (WINDOW_HEIGHT - portal_rect_N2toN1.h) / 2;
+
+    // 포탈 위치 조정(우)
+    portal_rect_N2toN3.x = 700;
+    portal_rect_N2toN3.y = (WINDOW_HEIGHT - portal_rect_N2toN3.h) / 2;
+
+    // 포탈 위치 조정(상)
+    portal_rect_N2toB.x = (WINDOW_WIDTH - portal_rect_N2toB.w) / 2;
+    portal_rect_N2toB.y = 0;
+
 
     // 클로킹 관련
     is_cloaking = false;
@@ -137,21 +145,31 @@ void Nicols2::Update(float deltaTime)
             }
         }
     }
-    // 포탈과 캐릭터 충돌 확인
-    if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_HtoK))
+
+    // 포탈과 캐릭터 충돌 확인(N1) 오류 지점. n3으로 이동됨 ㅅㅂ
+    if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_N2toN1))
     {
         // 다음 맵의 플레이어 위치 수정
-        g_current_game_phase = PHASE_Entrance;
-        g_player_destination_rect = { WINDOW_WIDTH / 2, 110, 100, 100 };
+        g_current_game_phase = PHASE_Nicols1;
+        g_player_destination_rect = { 600, WINDOW_HEIGHT /2 , 100, 100 };
         g_player_direction = PlayerDirection::DOWN;
 
     }
-    // 포탈과 캐릭터 충돌 확인
-    if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_HtoN1))
+    // 포탈과 캐릭터 충돌 확인(N3)
+    else if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_N2toN3))
     {
         // 다음 맵의 플레이어 위치 수정
-        g_current_game_phase = PHASE_KimSuHwan;
+        g_current_game_phase = PHASE_Nicols3;
         g_player_destination_rect = { 110, WINDOW_HEIGHT / 2, 100, 100 };
+        g_player_direction = PlayerDirection::UP;
+
+    }
+    // 포탈과 캐릭터 충돌 확인(B)
+    else if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_N2toB))
+    {
+        // 다음 맵의 플레이어 위치 수정
+        g_current_game_phase = PHASE_Bambino;
+        g_player_destination_rect = { WINDOW_WIDTH / 2, 400, 100, 100 };
         g_player_direction = PlayerDirection::UP;
 
     }
@@ -203,8 +221,9 @@ void Nicols2::Render()
 
     // 포탈 그리기
     SDL_SetTextureAlphaMod(portal_texture, cloaking_alpha);
-    SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_HtoK);
-    SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_HtoN1);
+    SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_N2toN1);
+    SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_N2toN3);
+    SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_N2toB);
 
     // 렌더러 실행
     SDL_RenderPresent(g_renderer);

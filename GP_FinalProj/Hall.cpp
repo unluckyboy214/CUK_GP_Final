@@ -60,11 +60,11 @@ Hall::Hall()
     portal_rect_HtoN1.w = portal_width;
     portal_rect_HtoN1.h = portal_height;
 
-    // 포탈 위치 조정
+    // 포탈 위치 조정(하)
     portal_rect_HtoK.x = (WINDOW_WIDTH - portal_rect_HtoK.w) / 2;
     portal_rect_HtoK.y = 500;
 
-    // 포탈 위치 조정
+    // 포탈 위치 조정(우)
     portal_rect_HtoN1.x = 700;
     portal_rect_HtoN1.y = (WINDOW_HEIGHT - portal_rect_HtoN1.h) / 2;
 
@@ -141,7 +141,7 @@ void Hall::Update(float deltaTime)
     if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_HtoK))
     {
         // 다음 맵의 플레이어 위치 수정
-        g_current_game_phase = PHASE_Entrance;
+        g_current_game_phase = PHASE_KimSuHwan;
         g_player_destination_rect = { WINDOW_WIDTH / 2, 110, 100, 100 };
         g_player_direction = PlayerDirection::DOWN;
 
@@ -150,7 +150,7 @@ void Hall::Update(float deltaTime)
     if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_HtoN1))
     {
         // 다음 맵의 플레이어 위치 수정
-        g_current_game_phase = PHASE_KimSuHwan;
+        g_current_game_phase = PHASE_Nicols1;
         g_player_destination_rect = { 110, WINDOW_HEIGHT / 2, 100, 100 };
         g_player_direction = PlayerDirection::UP;
 

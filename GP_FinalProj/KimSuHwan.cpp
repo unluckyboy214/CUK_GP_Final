@@ -61,12 +61,12 @@ KimSuHwan::KimSuHwan()
     portal_rect_KtoH.w = portal_width;
     portal_rect_KtoH.h = portal_height;
 
-    // 포탈 위치 조정
+    // 포탈 위치 조정(하)
     portal_rect_KtoE.x = (WINDOW_WIDTH - portal_rect_KtoE.w) / 2;
     portal_rect_KtoE.y = 500;
 
-    // 포탈 위치 조정
-    portal_rect_KtoH.x = (WINDOW_WIDTH - portal_rect_KtoE.w) / 2;
+    // 포탈 위치 조정(상)
+    portal_rect_KtoH.x = (WINDOW_WIDTH - portal_rect_KtoH.w) / 2;
     portal_rect_KtoH.y = 0;
 
     // 클로킹 관련

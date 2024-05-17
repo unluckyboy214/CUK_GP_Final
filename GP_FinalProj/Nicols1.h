@@ -25,6 +25,7 @@ private:
 
     // Æ÷Å» °ü·Ã
     SDL_Texture* portal_texture;
-    SDL_Rect portal_rect_HtoK;
-    SDL_Rect portal_rect_HtoN1;
+    SDL_Rect portal_rect_N1toH;
+    SDL_Rect portal_rect_N1toN2;
+    SDL_Rect portal_rect_N1toV;
 };

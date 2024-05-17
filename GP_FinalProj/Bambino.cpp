@@ -54,19 +54,26 @@ Bambino::Bambino()
     portal_texture = SDL_CreateTextureFromSurface(g_renderer, resized_portal_surface);
     SDL_FreeSurface(resized_portal_surface);
 
-    portal_rect_HtoK.w = portal_width;
-    portal_rect_HtoK.h = portal_height;
+    portal_rect_BtoN2.w = portal_width;
+    portal_rect_BtoN2.h = portal_height;
 
-    portal_rect_HtoN1.w = portal_width;
-    portal_rect_HtoN1.h = portal_height;
+    portal_rect_BtoV.w = portal_width;
+    portal_rect_BtoV.h = portal_height;
 
-    // 포탈 위치 조정
-    portal_rect_HtoK.x = (WINDOW_WIDTH - portal_rect_HtoK.w) / 2;
-    portal_rect_HtoK.y = 500;
+    portal_rect_BtoD.w = portal_width;
+    portal_rect_BtoD.h = portal_height;
 
-    // 포탈 위치 조정
-    portal_rect_HtoN1.x = 700;
-    portal_rect_HtoN1.y = (WINDOW_HEIGHT - portal_rect_HtoN1.h) / 2;
+    // 포탈 위치 조정(하)
+    portal_rect_BtoN2.x = (WINDOW_WIDTH - portal_rect_BtoN2.w) / 2;
+    portal_rect_BtoN2.y = 500;
+
+    // 포탈 위치 조정(좌)
+    portal_rect_BtoV.x = 0;
+    portal_rect_BtoV.y = (WINDOW_HEIGHT - portal_rect_BtoV.h) / 2;
+    
+    // 포탈 위치 조정(상)
+    portal_rect_BtoD.x = (WINDOW_WIDTH - portal_rect_BtoD.w) / 2;
+    portal_rect_BtoD.y = 0;
 
     // 클로킹 관련
     is_cloaking = false;
@@ -137,21 +144,29 @@ void Bambino::Update(float deltaTime)
             }
         }
     }
-    // 포탈과 캐릭터 충돌 확인
-    if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_HtoK))
+    // 포탈과 캐릭터 충돌 확인(N2)
+    if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_BtoN2))
     {
         // 다음 맵의 플레이어 위치 수정
-        g_current_game_phase = PHASE_Entrance;
-        g_player_destination_rect = { WINDOW_WIDTH / 2, 110, 100, 100 };
+        g_current_game_phase = PHASE_Nicols2;
+        g_player_destination_rect = { WINDOW_WIDTH/2, 110, 100, 100 };
         g_player_direction = PlayerDirection::DOWN;
 
     }
-    // 포탈과 캐릭터 충돌 확인
-    if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_HtoN1))
+    // 포탈과 캐릭터 충돌 확인(V)
+    if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_BtoV))
     {
         // 다음 맵의 플레이어 위치 수정
-        g_current_game_phase = PHASE_KimSuHwan;
-        g_player_destination_rect = { 110, WINDOW_HEIGHT / 2, 100, 100 };
+        g_current_game_phase = PHASE_Virtus;
+        g_player_destination_rect = { 600, WINDOW_HEIGHT / 2, 100, 100 };
+        g_player_direction = PlayerDirection::UP;
+
+    }
+    if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_BtoD))
+    {
+        // 다음 맵의 플레이어 위치 수정
+        g_current_game_phase = PHASE_Dasol;
+        g_player_destination_rect = { WINDOW_WIDTH / 2, 400, 100, 100 };
         g_player_direction = PlayerDirection::UP;
 
     }
@@ -203,8 +218,9 @@ void Bambino::Render()
 
     // 포탈 그리기
     SDL_SetTextureAlphaMod(portal_texture, cloaking_alpha);
-    SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_HtoK);
-    SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_HtoN1);
+    SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_BtoN2);
+    SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_BtoV);
+    SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_BtoD);
 
     // 렌더러 실행
     SDL_RenderPresent(g_renderer);
