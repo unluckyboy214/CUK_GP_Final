@@ -63,6 +63,9 @@
     <ClCompile Include="LastBoss.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Nicols1.h">
@@ -105,6 +108,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="LastBoss.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

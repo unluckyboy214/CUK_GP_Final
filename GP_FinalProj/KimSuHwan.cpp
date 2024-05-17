@@ -7,6 +7,7 @@
 #include <string>
 #include <iomanip>
 #include <algorithm>
+#include <random>
 
 KimSuHwan::KimSuHwan()
 {
@@ -74,6 +75,8 @@ KimSuHwan::KimSuHwan()
     is_cloaking_on = false;
     cloaking_time = 0.0f;
     cloaking_duration = 1.0f; // 클로킹 지속 시간 (초)
+    // 몬스터 생성
+    SpawnMonster();
 }
 
 KimSuHwan::~KimSuHwan()
@@ -84,9 +87,22 @@ KimSuHwan::~KimSuHwan()
     SDL_DestroyTexture(g_flight_sheet_texture_down);
     SDL_DestroyTexture(g_flight_sheet_texture_left);
     SDL_DestroyTexture(g_flight_sheet_texture_right);
-
+    // 몬스터 해제
+    if (monster) {
+        delete monster;
+    }
 }
+void KimSuHwan::SpawnMonster() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> disX(0, WINDOW_WIDTH);
+    std::uniform_int_distribution<> disY(0, WINDOW_HEIGHT);
 
+    int x = disX(gen);
+    int y = disY(gen);
+
+    monster = new Monster(x, y);
+}
 void KimSuHwan::Update(float deltaTime)
 {
     const float moveSpeed = 500.0f; // 초당 이동할 픽셀 수
@@ -205,6 +221,10 @@ void KimSuHwan::Render()
     SDL_SetTextureAlphaMod(portal_texture, cloaking_alpha);
     SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_KtoE);
     SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_KtoH);
+    // 몬스터 그리기
+    if (monster) {
+        monster->Render();
+    }
 
     // 렌더러 실행
     SDL_RenderPresent(g_renderer);

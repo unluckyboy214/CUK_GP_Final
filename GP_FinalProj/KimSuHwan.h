@@ -2,6 +2,7 @@
 #pragma once
 
 #include "SDL.h"
+#include "Monster.h"
 
 class KimSuHwan
 {
@@ -27,4 +28,16 @@ private:
     SDL_Texture* portal_texture;
     SDL_Rect portal_rect_KtoE;
     SDL_Rect portal_rect_KtoH;
+
+    // 몬스터 관련
+    Monster* monster;
+    void SpawnMonster();
+
+    // 클로킹 관련
+    bool is_cloaking;
+    int cloaking_alpha;
+    bool is_cloaking_on;
+    float cloaking_time;
+    float cloaking_duration;
+
 };
