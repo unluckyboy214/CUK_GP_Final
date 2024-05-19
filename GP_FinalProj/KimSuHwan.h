@@ -1,4 +1,4 @@
-// Kimsuhwan.h
+//KimSuHwan.h
 #pragma once
 
 #include "SDL.h"
@@ -16,13 +16,10 @@ public:
 
 private:
     // 이미지 관련
-    SDL_Texture* texture_; // the SDL_Texture 
-    SDL_Rect source_rectangle_; // the rectangle for source image
-    SDL_Rect destination_rectangle_; // for destination
-    SDL_Texture* g_flight_sheet_texture_up;
-    SDL_Texture* g_flight_sheet_texture_down;
-    SDL_Texture* g_flight_sheet_texture_left;
-    SDL_Texture* g_flight_sheet_texture_right;
+    SDL_Texture* texture_;
+    SDL_Rect source_rectangle_;
+    SDL_Rect destination_rectangle_;
+    SDL_Texture* g_flight_sheet_texture;
 
     // 포탈 관련
     SDL_Texture* portal_texture;
@@ -32,12 +29,4 @@ private:
     // 몬스터 관련
     Monster* monster;
     void SpawnMonster();
-
-    // 클로킹 관련
-    bool is_cloaking;
-    int cloaking_alpha;
-    bool is_cloaking_on;
-    float cloaking_time;
-    float cloaking_duration;
-
 };
