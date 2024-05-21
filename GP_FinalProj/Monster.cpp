@@ -1,12 +1,10 @@
 #include "Monster.h"
-#include "globals.h"
+#include "globals.h"  // Include the globals header
 #include <SDL_image.h>
 #include <cmath>
-#include <string>
+#include <iostream>
 
-Monster::Monster(int x, int y) : x(x), y(y), health(1), currentFrame(0), animationTime(0.0f), animationSpeed(0.1f) {
-    LoadTextures();
-}
+Monster::Monster(int x, int y) : x(x), y(y), health(1), currentFrame(0), animationTime(0.0f), animationSpeed(0.1f) {}
 
 Monster::~Monster() {
     for (auto texture : textures) {
@@ -14,17 +12,7 @@ Monster::~Monster() {
     }
 }
 
-void Monster::LoadTextures() {
-    std::vector<std::string> frameFiles = {
-        "../../Resource/Monster/slime_frame1.png",
-        "../../Resource/Monster/slime_frame2.png",
-        "../../Resource/Monster/slime_frame3.png",
-        "../../Resource/Monster/slime_frame4.png",
-        "../../Resource/Monster/slime_frame5.png",
-        "../../Resource/Monster/slime_frame6.png",
-        "../../Resource/Monster/slime_frame7.png",
-    };
-
+void Monster::LoadTextures(const std::vector<std::string>& frameFiles) {
     for (const auto& file : frameFiles) {
         SDL_Surface* temp_surface = IMG_Load(file.c_str());
         if (temp_surface) {
@@ -32,14 +20,13 @@ void Monster::LoadTextures() {
             SDL_FreeSurface(temp_surface);
         }
         else {
-            printf("Failed to load monster texture: %s\n", IMG_GetError());
+            std::cerr << "Failed to load monster texture: " << IMG_GetError() << std::endl;
         }
     }
 }
 
 void Monster::Update(float deltaTime, const SDL_Rect& playerRect) {
     AdvanceFrame(deltaTime);
-    MoveTowardsPlayer(deltaTime, playerRect);
 }
 
 void Monster::AdvanceFrame(float deltaTime) {
@@ -50,24 +37,16 @@ void Monster::AdvanceFrame(float deltaTime) {
     }
 }
 
-void Monster::MoveTowardsPlayer(float deltaTime, const SDL_Rect& playerRect) {
-    float moveSpeed = 100.0f; // Adjust the speed as needed
-
-    float deltaX = playerRect.x - x;
-    float deltaY = playerRect.y - y;
-    float distance = std::sqrt(deltaX * deltaX + deltaY * deltaY);
-
-    if (distance > 0) {
-        x += static_cast<int>(moveSpeed * deltaX / distance * deltaTime);
-        y += static_cast<int>(moveSpeed * deltaY / distance * deltaTime);
-    }
-}
-
 void Monster::Render() {
     if (!textures.empty()) {
         SDL_Rect rect = { x, y, 128, 128 }; // Render size of 128x128
         SDL_RenderCopy(g_renderer, textures[currentFrame], NULL, &rect);
     }
+}
+
+bool Monster::CheckCollisionWithPlayer(const SDL_Rect& playerRect) {
+    SDL_Rect monsterRect = { x, y, 128, 128 }; // Adjust collision size to match render size
+    return SDL_HasIntersection(&monsterRect, &playerRect);
 }
 
 int Monster::getX() const {
@@ -76,9 +55,4 @@ int Monster::getX() const {
 
 int Monster::getY() const {
     return y;
-}
-
-bool Monster::CheckCollisionWithPlayer(const SDL_Rect& playerRect) {
-    SDL_Rect monsterRect = { x, y, 128, 128 }; // Adjust collision size to match render size
-    return SDL_HasIntersection(&monsterRect, &playerRect);
 }

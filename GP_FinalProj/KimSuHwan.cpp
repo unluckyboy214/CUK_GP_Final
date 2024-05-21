@@ -1,5 +1,7 @@
 #include "GameClass.h"
 #include "KimSuHwan.h"
+#include "MovingMonster.h"
+#include "RangedMonster.h"
 #include <algorithm>
 #include <random>
 
@@ -51,10 +53,15 @@ void KimSuHwan::SpawnMonsters() {
     std::uniform_int_distribution<> disX(0, WINDOW_WIDTH - 128); // Adjusting for monster size
     std::uniform_int_distribution<> disY(0, WINDOW_HEIGHT - 128); // Adjusting for monster size
 
-    for (int i = 0; i < 7; ++i) {
+    for (int i = 0; i < 4; ++i) { // Create 4 moving monsters
         int x = disX(gen);
         int y = disY(gen);
-        monsters.push_back(new Monster(x, y));
+        monsters.push_back(new MovingMonster(x, y));
+    }
+    for (int i = 0; i < 3; ++i) { // Create 3 ranged monsters
+        int x = disX(gen);
+        int y = disY(gen);
+        monsters.push_back(new RangedMonster(x, y));
     }
 }
 

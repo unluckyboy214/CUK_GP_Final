@@ -1,6 +1,7 @@
 // Bambino.cpp
 #include "GameClass.h"
 #include "Bambino.h"
+#include "globals.h"  
 #define NOMINMAX
 #include <windows.h>
 #include <atlstr.h>
