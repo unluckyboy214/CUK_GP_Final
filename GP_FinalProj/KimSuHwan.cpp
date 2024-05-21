@@ -1,4 +1,3 @@
-//KimSuHwan.cpp
 #include "GameClass.h"
 #include "KimSuHwan.h"
 #include <algorithm>
@@ -33,7 +32,7 @@ KimSuHwan::KimSuHwan()
     portal_rect_KtoH = { (WINDOW_WIDTH - 100) / 2, 0, 100, 100 };
 
     // 몬스터 생성
-    SpawnMonster();
+    SpawnMonsters();
 }
 
 KimSuHwan::~KimSuHwan()
@@ -41,21 +40,30 @@ KimSuHwan::~KimSuHwan()
     SDL_DestroyTexture(texture_);
     SDL_DestroyTexture(g_flight_sheet_texture);
     SDL_DestroyTexture(portal_texture);
-    if (monster) {
+    for (auto monster : monsters) {
         delete monster;
     }
 }
 
-void KimSuHwan::SpawnMonster() {
+void KimSuHwan::SpawnMonsters() {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> disX(0, WINDOW_WIDTH);
-    std::uniform_int_distribution<> disY(0, WINDOW_HEIGHT);
+    std::uniform_int_distribution<> disX(0, WINDOW_WIDTH - 128); // Adjusting for monster size
+    std::uniform_int_distribution<> disY(0, WINDOW_HEIGHT - 128); // Adjusting for monster size
 
-    int x = disX(gen);
-    int y = disY(gen);
+    for (int i = 0; i < 7; ++i) {
+        int x = disX(gen);
+        int y = disY(gen);
+        monsters.push_back(new Monster(x, y));
+    }
+}
 
-    monster = new Monster(x, y);
+void KimSuHwan::ResetMonsters() {
+    for (auto monster : monsters) {
+        delete monster;
+    }
+    monsters.clear();
+    SpawnMonsters();
 }
 
 void KimSuHwan::Update(float deltaTime)
@@ -90,12 +98,37 @@ void KimSuHwan::Update(float deltaTime)
         g_current_game_phase = PHASE_Entrance;
         g_player_destination_rect = { WINDOW_WIDTH / 2, 110, 100, 100 };
         g_player_direction = PlayerDirection::DOWN;
+        ResetMonsters(); // Reset monsters when leaving KimSuHwan map
     }
     if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_KtoH))
     {
         g_current_game_phase = PHASE_Hall;
         g_player_destination_rect = { WINDOW_WIDTH / 2, 400, 100, 100 };
         g_player_direction = PlayerDirection::UP;
+    }
+
+    // 몬스터와 플레이어 충돌 확인
+    for (auto it = monsters.begin(); it != monsters.end();) {
+        (*it)->Update(deltaTime, g_player_destination_rect); // Update each monster's animation and movement
+
+        if ((*it)->CheckCollisionWithPlayer(g_player_destination_rect)) {
+            g_player_health--;
+            delete* it;
+            it = monsters.erase(it);
+
+            if (g_player_health <= 0) {
+                // 게임 오버 처리
+                g_current_game_phase = PHASE_Entrance;
+                g_player_destination_rect = { WINDOW_WIDTH / 2, 110, 100, 100 };
+                g_player_direction = PlayerDirection::DOWN;
+                g_player_health = 5;
+                ResetMonsters(); // Reset monsters when health is depleted and player respawns
+                break;
+            }
+        }
+        else {
+            ++it;
+        }
     }
 }
 
@@ -111,12 +144,20 @@ void KimSuHwan::Render()
     SDL_Rect flightRect = g_player_destination_rect;
     SDL_RenderCopy(g_renderer, g_flight_sheet_texture, NULL, &flightRect);
 
+    // 플레이어 체력 그리기
+    for (int i = 0; i < g_player_health; i++)
+    {
+        SDL_Rect healthRect = { 10 + i * 20, 10, 20, 20 };
+        SDL_SetRenderDrawColor(g_renderer, 255, 0, 0, 255);
+        SDL_RenderFillRect(g_renderer, &healthRect);
+    }
+
     // 포탈 그리기
     SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_KtoE);
     SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_KtoH);
 
     // 몬스터 그리기
-    if (monster) {
+    for (auto monster : monsters) {
         monster->Render();
     }
 

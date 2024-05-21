@@ -25,6 +25,7 @@ bool g_move_left = false;
 bool g_move_right = false;
 bool g_move_up = false;
 bool g_move_down = false;
+int g_player_health = 5;
 
 void InitGame() {
     g_flag_running = true;
