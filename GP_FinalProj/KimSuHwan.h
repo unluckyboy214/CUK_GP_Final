@@ -1,32 +1,30 @@
-//KimSuHwan.h
-#pragma once
+#ifndef KIMSUHWAN_H
+#define KIMSUHWAN_H
 
-#include "SDL.h"
+#include <vector>
 #include "Monster.h"
 
-class KimSuHwan
-{
+class KimSuHwan {
 public:
     KimSuHwan();
     ~KimSuHwan();
-
-    void HandleEvents();
     void Update(float deltaTime);
     void Render();
+    void HandleEvents();
+
+    void ResetMonsters(); // Add method to reset monsters
 
 private:
-    // 이미지 관련
     SDL_Texture* texture_;
     SDL_Rect source_rectangle_;
     SDL_Rect destination_rectangle_;
     SDL_Texture* g_flight_sheet_texture;
-
-    // 포탈 관련
     SDL_Texture* portal_texture;
     SDL_Rect portal_rect_KtoE;
     SDL_Rect portal_rect_KtoH;
+    std::vector<Monster*> monsters; // Vector to store multiple monsters
 
-    // 몬스터 관련
-    Monster* monster;
-    void SpawnMonster();
+    void SpawnMonsters();
 };
+
+#endif // KIMSUHWAN_H

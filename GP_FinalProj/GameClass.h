@@ -38,6 +38,7 @@ extern bool g_move_left;
 extern bool g_move_right;
 extern bool g_move_up;
 extern bool g_move_down;
+extern int g_player_health;
 
 // Game variables
 enum class PlayerDirection {
