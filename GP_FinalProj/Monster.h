@@ -1,20 +1,21 @@
 #ifndef MONSTER_H
 #define MONSTER_H
 
-#include <vector>
 #include <SDL.h>
+#include <vector>
+#include <string>
 
 class Monster {
 public:
     Monster(int x, int y);
-    ~Monster();
-    void Update(float deltaTime, const SDL_Rect& playerRect); // Update function with player position
-    void Render();
+    virtual ~Monster();
+    virtual void Update(float deltaTime, const SDL_Rect& playerRect);
+    virtual void Render();
+    virtual bool CheckCollisionWithPlayer(const SDL_Rect& playerRect);
     int getX() const;
     int getY() const;
-    bool CheckCollisionWithPlayer(const SDL_Rect& playerRect);
 
-private:
+protected:
     int x;
     int y;
     int health;
@@ -23,9 +24,8 @@ private:
     float animationTime;
     float animationSpeed;
 
-    void LoadTextures(); // Function to load textures
+    void LoadTextures(const std::vector<std::string>& frameFiles); // Function to load textures
     void AdvanceFrame(float deltaTime); // Function to advance animation frame
-    void MoveTowardsPlayer(float deltaTime, const SDL_Rect& playerRect); // Function to move towards the player
 };
 
 #endif // MONSTER_H

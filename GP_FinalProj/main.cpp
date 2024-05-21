@@ -13,25 +13,16 @@
 #include "Sophiebara.h"
 #include "Michael.h"
 #include "LastBoss.h"
-
-///////////////////////////////////////////////// test
-// Declaration
-SDL_Window* g_window;
-SDL_Renderer* g_renderer;
-bool g_flag_running = true;
-Uint32 g_last_time_ms;
-Uint32 g_frame_per_sec = 30;
-
-// Game Phases
-int g_current_game_phase = PHASE_Entrance;
+#include "globals.h"  // Include globals
+#include "GamePhases.h"  // Include game phases
 
 int main(int argc, char* argv[])
 {
     SDL_Init(SDL_INIT_EVERYTHING);
     TTF_Init();
 
-    g_window = SDL_CreateWindow("Dungeon of Catholic (Beta)", 500, 100, 800, 600, 0);
-    g_renderer = SDL_CreateRenderer(g_window, -1, 0);
+    g_window = SDL_CreateWindow("Dungeon of Catholic (Beta)", 500, 100, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+    g_renderer = SDL_CreateRenderer(g_window, -1, SDL_RENDERER_ACCELERATED);
 
     InitGame();
 
@@ -52,9 +43,15 @@ int main(int argc, char* argv[])
     while (g_flag_running)
     {
         Uint32 cur_time_ms = SDL_GetTicks();
-        float deltaTime = (cur_time_ms - g_last_time_ms) / 1000.0f; // deltaTime 계산
+        float deltaTime = (cur_time_ms - g_last_time_ms) / 1000.0f;  // deltaTime 계산
         if (cur_time_ms - g_last_time_ms < (1000 / g_frame_per_sec))
             continue;
+
+        // Check if player's health is 0
+        if (g_player_health <= 0) {
+            g_current_game_phase = PHASE_Entrance; // Or any phase you define for game over
+            g_player_health = 5; // Reset health for new game start
+        }
 
         if (g_current_game_phase == PHASE_Entrance)
         {
