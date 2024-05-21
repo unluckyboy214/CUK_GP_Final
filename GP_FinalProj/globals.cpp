@@ -4,6 +4,7 @@
 
 SDL_Window* g_window = nullptr;
 SDL_Renderer* g_renderer = nullptr;
+std::vector<SDL_Rect> g_obstacles; // 벽이나 구조물의 배열 정의
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
 bool g_flag_running = true;

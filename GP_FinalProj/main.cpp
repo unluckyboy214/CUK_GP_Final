@@ -1,4 +1,4 @@
-// main.cpp
+ï»¿// main.cpp
 #include "GameClass.h"
 #include "Entrance.h"
 #include "KimSuHwan.h"
@@ -13,8 +13,8 @@
 #include "Sophiebara.h"
 #include "Michael.h"
 #include "LastBoss.h"
-#include "globals.h"  // Include globals
-#include "GamePhases.h"  // Include game phases
+#include "globals.h" 
+#include "GamePhases.h"
 
 int main(int argc, char* argv[])
 {
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
     while (g_flag_running)
     {
         Uint32 cur_time_ms = SDL_GetTicks();
-        float deltaTime = (cur_time_ms - g_last_time_ms) / 1000.0f;  // deltaTime °è»ê
+        float deltaTime = (cur_time_ms - g_last_time_ms) / 1000.0f;  // deltaTime ê³„ì‚°
         if (cur_time_ms - g_last_time_ms < (1000 / g_frame_per_sec))
             continue;
 

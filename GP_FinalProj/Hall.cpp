@@ -1,10 +1,10 @@
 #include "GameClass.h"
 #include "Hall.h"
+#include "ChargingMonster.h"
 #include <algorithm>
 #include <random>
 
-Hall::Hall()
-{
+Hall::Hall() {
     // 배경 로드
     SDL_Surface* temp_surface = IMG_Load("../../Resource/Map/Hall.png");
     texture_ = SDL_CreateTextureFromSurface(g_renderer, temp_surface);
@@ -33,33 +33,40 @@ Hall::Hall()
     portal_rect_HtoN1 = { 700, (WINDOW_HEIGHT - 100) / 2, 100, 100 };
 
     // 몬스터 생성
-    SpawnMonster();
+    SpawnMonsters();
 }
 
-Hall::~Hall()
-{
+Hall::~Hall() {
     SDL_DestroyTexture(texture_);
     SDL_DestroyTexture(g_flight_sheet_texture);
     SDL_DestroyTexture(portal_texture);
-    if (monster) {
+    for (auto monster : monsters) {
         delete monster;
     }
 }
 
-void Hall::SpawnMonster() {
+void Hall::SpawnMonsters() {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> disX(0, WINDOW_WIDTH);
-    std::uniform_int_distribution<> disY(0, WINDOW_HEIGHT);
+    std::uniform_int_distribution<> disX(0, WINDOW_WIDTH - 128); // Adjusting for monster size
+    std::uniform_int_distribution<> disY(0, WINDOW_HEIGHT - 128); // Adjusting for monster size
 
-    int x = disX(gen);
-    int y = disY(gen);
-
-    monster = new Monster(x, y);
+    for (int i = 0; i < 3; ++i) { // Create 3 charging monsters
+        int x = disX(gen);
+        int y = disY(gen);
+        monsters.push_back(new ChargingMonster(x, y));
+    }
 }
 
-void Hall::Update(float deltaTime)
-{
+void Hall::ResetMonsters() {
+    for (auto monster : monsters) {
+        delete monster;
+    }
+    monsters.clear();
+    SpawnMonsters();
+}
+
+void Hall::Update(float deltaTime) {
     const float moveSpeed = 500.0f;
 
     // 입력 상태에 따라 이동
@@ -85,22 +92,43 @@ void Hall::Update(float deltaTime)
     g_player_destination_rect.y = std::max(0, std::min(WINDOW_HEIGHT - g_player_destination_rect.h - 40, g_player_destination_rect.y));
 
     // 포탈과 캐릭터 충돌 확인
-    if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_HtoK))
-    {
+    if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_HtoK)) {
         g_current_game_phase = PHASE_KimSuHwan;
         g_player_destination_rect = { WINDOW_WIDTH / 2, 110, 100, 100 };
         g_player_direction = PlayerDirection::DOWN;
     }
-    if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_HtoN1))
-    {
+    if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_HtoN1)) {
         g_current_game_phase = PHASE_Nicols1;
         g_player_destination_rect = { 110, WINDOW_HEIGHT / 2, 100, 100 };
         g_player_direction = PlayerDirection::RIGHT;
     }
+
+    // 몬스터와 플레이어 충돌 확인
+    for (auto it = monsters.begin(); it != monsters.end();) {
+        (*it)->Update(deltaTime, g_player_destination_rect); // Update each monster's animation and movement
+
+        if ((*it)->CheckCollisionWithPlayer(g_player_destination_rect)) {
+            g_player_health--;
+            delete* it;
+            it = monsters.erase(it);
+
+            if (g_player_health <= 0) {
+                // 게임 오버 처리
+                g_current_game_phase = PHASE_Entrance;
+                g_player_destination_rect = { WINDOW_WIDTH / 2, 110, 100, 100 };
+                g_player_direction = PlayerDirection::DOWN;
+                g_player_health = 5;
+                ResetMonsters(); // Reset monsters when health is depleted and player respawns
+                break;
+            }
+        }
+        else {
+            ++it;
+        }
+    }
 }
 
-void Hall::Render()
-{
+void Hall::Render() {
     SDL_SetRenderDrawColor(g_renderer, 0, 255, 255, 0);
     SDL_RenderClear(g_renderer);
 
@@ -115,21 +143,25 @@ void Hall::Render()
     SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_HtoK);
     SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_HtoN1);
 
+    // 플레이어 체력 그리기
+    for (int i = 0; i < g_player_health; i++) {
+        SDL_Rect healthRect = { 10 + i * 20, 10, 20, 20 };
+        SDL_SetRenderDrawColor(g_renderer, 255, 0, 0, 255);
+        SDL_RenderFillRect(g_renderer, &healthRect);
+    }
+
     // 몬스터 그리기
-    if (monster) {
+    for (auto monster : monsters) {
         monster->Render();
     }
 
     SDL_RenderPresent(g_renderer);
 }
 
-void Hall::HandleEvents()
-{
+void Hall::HandleEvents() {
     SDL_Event event;
-    if (SDL_PollEvent(&event))
-    {
-        switch (event.type)
-        {
+    if (SDL_PollEvent(&event)) {
+        switch (event.type) {
         case SDL_QUIT:
             g_flag_running = false;
             break;
