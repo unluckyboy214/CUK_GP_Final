@@ -138,6 +138,7 @@
     <ClCompile Include="GamePhases.cpp" />
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="Hall.cpp" />
+    <ClCompile Include="Health.cpp" />
     <ClCompile Include="KimSuHwan.cpp" />
     <ClCompile Include="LastBoss.cpp" />
     <ClCompile Include="main.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="GamePhases.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="Hall.h" />
+    <ClInclude Include="Health.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="KimSuHwan.h" />
