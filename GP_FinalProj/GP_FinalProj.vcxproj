@@ -168,8 +168,6 @@
     <ClInclude Include="globals.h" />
     <ClInclude Include="Hall.h" />
     <ClInclude Include="Health.h" />
-    <ClInclude Include="HUD.h" />
-    <ClInclude Include="Inventory.h" />
     <ClInclude Include="KimSuHwan.h" />
     <ClInclude Include="LastBoss.h" />
     <ClInclude Include="Maria.h" />
