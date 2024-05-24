@@ -56,74 +56,87 @@ int main(int argc, char* argv[]) {
             g_player_health = 5; // Reset health for new game start
         }
 
+        // 맵 전환 시 minimap 아이콘 업데이트
         if (g_current_game_phase == PHASE_Entrance) {
+            minimap.UpdatePlayerPosition(0); // 첫 번째 맵
             entrance.HandleEvents();
             entrance.Update(deltaTime);
             entrance.Render();
         }
         else if (g_current_game_phase == PHASE_KimSuHwan) {
+            minimap.UpdatePlayerPosition(1); // 두 번째 맵
             kimsuhwan.HandleEvents();
             kimsuhwan.Update(deltaTime);
             kimsuhwan.Render();
         }
         else if (g_current_game_phase == PHASE_Hall) {
+            minimap.UpdatePlayerPosition(2); // 세 번째 맵
             hall.HandleEvents();
             hall.Update(deltaTime);
             hall.Render();
         }
         else if (g_current_game_phase == PHASE_Nicols1) {
+            minimap.UpdatePlayerPosition(3); // 네 번째 맵
             nicols1.HandleEvents();
             nicols1.Update(deltaTime);
             nicols1.Render();
         }
         else if (g_current_game_phase == PHASE_Nicols2) {
+            minimap.UpdatePlayerPosition(4); // 다섯 번째 맵
             nicols2.HandleEvents();
             nicols2.Update(deltaTime);
             nicols2.Render();
         }
         else if (g_current_game_phase == PHASE_Nicols3) {
+            minimap.UpdatePlayerPosition(5); // 여섯 번째 맵
             nicols3.HandleEvents();
             nicols3.Update(deltaTime);
             nicols3.Render();
         }
         else if (g_current_game_phase == PHASE_Maria) {
+            minimap.UpdatePlayerPosition(6); // 일곱 번째 맵
             maria.HandleEvents();
             maria.Update(deltaTime);
             maria.Render();
         }
         else if (g_current_game_phase == PHASE_Virtus) {
+            minimap.UpdatePlayerPosition(7); // 여덟 번째 맵
             virtus.HandleEvents();
             virtus.Update(deltaTime);
             virtus.Render();
         }
         else if (g_current_game_phase == PHASE_Bambino) {
+            minimap.UpdatePlayerPosition(8); // 아홉 번째 맵
             bambino.HandleEvents();
             bambino.Update(deltaTime);
             bambino.Render();
         }
         else if (g_current_game_phase == PHASE_Dasol) {
+            minimap.UpdatePlayerPosition(9); // 열 번째 맵
             dasol.HandleEvents();
             dasol.Update(deltaTime);
             dasol.Render();
         }
         else if (g_current_game_phase == PHASE_Sophiebara) {
+            minimap.UpdatePlayerPosition(10); // 열한 번째 맵
             sophiebara.HandleEvents();
             sophiebara.Update(deltaTime);
             sophiebara.Render();
         }
         else if (g_current_game_phase == PHASE_Michael) {
+            minimap.UpdatePlayerPosition(11); // 열두 번째 맵
             michael.HandleEvents();
             michael.Update(deltaTime);
             michael.Render();
         }
         else if (g_current_game_phase == PHASE_LastBoss) {
+            minimap.UpdatePlayerPosition(12); // 열세 번째 맵
             lastboss.HandleEvents();
             lastboss.Update(deltaTime);
             lastboss.Render();
         }
 
         minimap.Render(g_player_destination_rect.x, g_player_destination_rect.y);
-        health.Update(g_player_health);
         health.Render();
 
         SDL_RenderPresent(g_renderer);
