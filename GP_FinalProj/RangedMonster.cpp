@@ -27,30 +27,37 @@ void RangedMonster::Update(float deltaTime, const SDL_Rect& playerRect) {
 
     // Update projectile positions and check collisions
     for (auto it = projectiles.begin(); it != projectiles.end();) {
-        it->rect.x += static_cast<int>(it->velX * deltaTime);
-        it->rect.y += static_cast<int>(it->velY * deltaTime);
+        if (it->active) {
+            it->rect.x += static_cast<int>(it->velX * deltaTime);
+            it->rect.y += static_cast<int>(it->velY * deltaTime);
 
-        // Check if the projectile is out of the screen bounds
-        if (it->rect.x < 0 || it->rect.x > WINDOW_WIDTH || it->rect.y < 0 || it->rect.y > WINDOW_HEIGHT) {
-            it = projectiles.erase(it);
-        }
-        else {
-            // Check collision with the player
-            if (SDL_HasIntersection(&it->rect, &playerRect)) {
-                g_player_health--; // Reduce player health
+            // Check if the projectile is out of the screen bounds
+            if (it->rect.x < 0 || it->rect.x > WINDOW_WIDTH || it->rect.y < 0 || it->rect.y > WINDOW_HEIGHT) {
+                it->active = false;
                 it = projectiles.erase(it);
-
-                // Check if player health is 0
-                if (g_player_health <= 0) {
-                    // Reset the game state or set to game over phase
-                    g_current_game_phase = PHASE_Entrance; // Or any phase you define for game over
-                    g_player_health = 5; // Reset health for new game start
-                    break;
-                }
             }
             else {
-                ++it;
+                // Check collision with the player
+                if (SDL_HasIntersection(&it->rect, &playerRect)) {
+                    g_player_health--; // Reduce player health
+                    it->active = false;
+                    it = projectiles.erase(it);
+
+                    // Check if player health is 0
+                    if (g_player_health <= 0) {
+                        // Reset the game state or set to game over phase
+                        g_current_game_phase = PHASE_Entrance; // Or any phase you define for game over
+                        g_player_health = 5; // Reset health for new game start
+                        break;
+                    }
+                }
+                else {
+                    ++it;
+                }
             }
+        }
+        else {
+            ++it;
         }
     }
 }
@@ -65,8 +72,12 @@ void RangedMonster::ShootProjectile(const SDL_Rect& playerRect) {
         float velY = deltaY / distance * 200.0f; // Adjust speed as needed
 
         SDL_Rect projectileRect = { x + 64, y + 64, 16, 16 }; // Initial projectile position and size
-        projectiles.push_back({ projectileRect, velX, velY });
+        projectiles.push_back({ projectileRect, velX, velY, true });
     }
+}
+
+std::vector<Projectile>& RangedMonster::GetProjectiles() {
+    return projectiles;
 }
 
 void RangedMonster::Render() {
@@ -75,6 +86,8 @@ void RangedMonster::Render() {
     // Render projectiles
     SDL_SetRenderDrawColor(g_renderer, 255, 0, 0, 255); // Red color for projectiles
     for (const auto& projectile : projectiles) {
-        SDL_RenderFillRect(g_renderer, &projectile.rect);
+        if (projectile.active) {
+            SDL_RenderFillRect(g_renderer, &projectile.rect);
+        }
     }
 }

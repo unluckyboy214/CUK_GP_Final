@@ -1,7 +1,8 @@
-// Nicols1.h
 #pragma once
 
 #include "SDL.h"
+
+class RangedMonster;
 
 class Nicols1
 {
@@ -28,4 +29,13 @@ private:
     SDL_Rect portal_rect_N1toH;
     SDL_Rect portal_rect_N1toN2;
     SDL_Rect portal_rect_N1toV;
+
+    // 바위 관련
+    SDL_Texture* rock_texture;
+    SDL_Rect rockRect;
+
+    // 몬스터 관련
+    RangedMonster* rangedMonster;
+
+    void SpawnMonsters();
 };
