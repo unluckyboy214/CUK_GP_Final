@@ -31,13 +31,7 @@ void ChargingMonster::LoadTextures() {
             if (texture) {
                 idleTextures.push_back(texture);
             }
-            else {
-                std::cerr << "Failed to create idle texture from surface: " << SDL_GetError() << std::endl;
-            }
             SDL_FreeSurface(temp_surface);
-        }
-        else {
-            std::cerr << "Failed to load idle texture: " << IMG_GetError() << std::endl;
         }
     }
 
@@ -56,13 +50,7 @@ void ChargingMonster::LoadTextures() {
             if (texture) {
                 chargingTextures.push_back(texture);
             }
-            else {
-                std::cerr << "Failed to create charging texture from surface: " << SDL_GetError() << std::endl;
-            }
             SDL_FreeSurface(temp_surface);
-        }
-        else {
-            std::cerr << "Failed to load charging texture: " << IMG_GetError() << std::endl;
         }
     }
 
@@ -79,13 +67,7 @@ void ChargingMonster::LoadTextures() {
             if (texture) {
                 runningTextures.push_back(texture);
             }
-            else {
-                std::cerr << "Failed to create running texture from surface: " << SDL_GetError() << std::endl;
-            }
             SDL_FreeSurface(temp_surface);
-        }
-        else {
-            std::cerr << "Failed to load running texture: " << IMG_GetError() << std::endl;
         }
     }
 
@@ -93,13 +75,7 @@ void ChargingMonster::LoadTextures() {
     SDL_Surface* temp_surface = IMG_Load("../../Resource/Monster/charge_stun_frame.png");
     if (temp_surface) {
         stunnedTexture = SDL_CreateTextureFromSurface(g_renderer, temp_surface);
-        if (!stunnedTexture) {
-            std::cerr << "Failed to create stunned texture from surface: " << SDL_GetError() << std::endl;
-        }
         SDL_FreeSurface(temp_surface);
-    }
-    else {
-        std::cerr << "Failed to load stunned texture: " << IMG_GetError() << std::endl;
     }
 }
 
@@ -112,7 +88,6 @@ void ChargingMonster::Update(float deltaTime, const SDL_Rect& playerRect) {
         if (stateTimer <= 0.0f) {
             stateTimer = IDLE_DELAY;
             if (std::abs(playerRect.x - x) <= DETECTION_RANGE && std::abs(playerRect.y - y) <= DETECTION_RANGE) {
-                std::cout << "Player detected, starting charge" << std::endl;
                 state = Charging;
                 stateTimer = CHARGE_DURATION;
                 directionX = playerRect.x - x;
@@ -127,7 +102,6 @@ void ChargingMonster::Update(float deltaTime, const SDL_Rect& playerRect) {
         break;
     case Charging:
         if (stateTimer <= 0.0f) {
-            std::cout << "Charging complete, starting run" << std::endl;
             state = Running;
         }
         break;
@@ -150,20 +124,17 @@ void ChargingMonster::Update(float deltaTime, const SDL_Rect& playerRect) {
         }
 
         if (collisionDetected) {
-            std::cout << "Collision detected, stunned" << std::endl;
             state = Stunned;
             stateTimer = STUN_DURATION;
         }
         else {
             x = nextX;
             y = nextY;
-            std::cout << "New Monster Position: (" << x << ", " << y << ")" << std::endl;
         }
         break;
     }
     case Stunned:
         if (stateTimer <= 0.0f) {
-            std::cout << "Stunned state complete, returning to idle" << std::endl;
             state = Idle;
             stateTimer = IDLE_DELAY; // Reset idle delay
         }
