@@ -81,6 +81,9 @@
     <ClCompile Include="ChargingMonster.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Minimap.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Nicols1.h">
@@ -141,6 +144,15 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="ChargingMonster.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Minimap.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

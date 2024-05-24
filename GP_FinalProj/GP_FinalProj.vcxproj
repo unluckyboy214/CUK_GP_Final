@@ -144,6 +144,7 @@
     <ClCompile Include="Entrance.cpp" />
     <ClCompile Include="Maria.cpp" />
     <ClCompile Include="Michael.cpp" />
+    <ClCompile Include="Minimap.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MovingMonster.cpp" />
     <ClCompile Include="Nicols1.cpp" />
@@ -162,10 +163,13 @@
     <ClInclude Include="GamePhases.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="Hall.h" />
+    <ClInclude Include="HUD.h" />
+    <ClInclude Include="Inventory.h" />
     <ClInclude Include="KimSuHwan.h" />
     <ClInclude Include="LastBoss.h" />
     <ClInclude Include="Maria.h" />
     <ClInclude Include="Michael.h" />
+    <ClInclude Include="Minimap.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="MovingMonster.h" />
     <ClInclude Include="Nicols1.h" />
