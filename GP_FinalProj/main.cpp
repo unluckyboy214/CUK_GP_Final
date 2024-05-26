@@ -16,12 +16,18 @@
 #include "GamePhases.h"
 #include "Minimap.h"
 #include "Health.h"
+#include "Chisam.h"
 #include <iostream>
+#include <ctime>
+#include <cstdlib>
+#include <SDL_image.h> // Include SDL_image
 
 int main(int argc, char* argv[]) {
     SDL_Init(SDL_INIT_EVERYTHING);
     TTF_Init();
+    IMG_Init(IMG_INIT_PNG); // Initialize SDL_image
 
+    TTF_Font* font = TTF_OpenFont("../../Resource/YEONGJUSeonbi.ttf", 24); // 적절한 경로로 변경
     g_window = SDL_CreateWindow("Dungeon of Catholic (Beta)", 500, 100, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
     g_renderer = SDL_CreateRenderer(g_window, -1, SDL_RENDERER_ACCELERATED);
 
@@ -43,12 +49,29 @@ int main(int argc, char* argv[]) {
     Sophiebara sophiebara;
     Michael michael;
     LastBoss lastboss;
+    Player player; // Player 객체 생성
+    // Chisam 객체 생성
+    Chisam chisam(WINDOW_WIDTH / 20, WINDOW_HEIGHT / 20, g_renderer, font);
 
     while (g_flag_running) {
+
         Uint32 cur_time_ms = SDL_GetTicks();
         float deltaTime = (cur_time_ms - g_last_time_ms) / 1000.0f;  // deltaTime 계산
         if (cur_time_ms - g_last_time_ms < (1000 / g_frame_per_sec))
             continue;
+
+
+        SDL_Event e;
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_QUIT) {
+                g_flag_running = false;
+            }
+            chisam.HandleEvents(e); // Chisam 이벤트 처리
+            player.HandleEvents(e); // Player 이벤트 처리
+        }
+
+        // 플레이어 업데이트
+        player.Update(deltaTime);
 
         // Check if player's health is 0
         if (g_player_health <= 0) {
@@ -62,6 +85,7 @@ int main(int argc, char* argv[]) {
             entrance.HandleEvents();
             entrance.Update(deltaTime);
             entrance.Render();
+            chisam.Render(); // Render Chisam
         }
         else if (g_current_game_phase == PHASE_KimSuHwan) {
             minimap.UpdatePlayerPosition(1); // 두 번째 맵

@@ -87,6 +87,12 @@
     <ClCompile Include="Health.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Chisam.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Nicols1.h">
@@ -149,16 +155,16 @@
     <ClInclude Include="ChargingMonster.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="HUD.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Inventory.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Minimap.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Health.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Chisam.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
