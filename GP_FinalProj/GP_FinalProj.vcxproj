@@ -154,6 +154,7 @@
     <ClCompile Include="Nicols1.cpp" />
     <ClCompile Include="Nicols2.cpp" />
     <ClCompile Include="Nicols3.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="RangedMonster.cpp" />
     <ClCompile Include="Sophiebara.cpp" />
     <ClCompile Include="Virtus.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Nicols1.h" />
     <ClInclude Include="Nicols2.h" />
     <ClInclude Include="Nicols3.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="RangedMonster.h" />
     <ClInclude Include="Sophiebara.h" />
     <ClInclude Include="Virtus.h" />

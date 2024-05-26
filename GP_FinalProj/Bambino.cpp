@@ -11,7 +11,7 @@
 
 Bambino::Bambino()
 {
-    // ¹è°æ ·Îµå
+    // ï¿½ï¿½ï¿½ ï¿½Îµï¿½
     SDL_Surface* temp_surface = IMG_Load("../../Resource/Map/Bambino.png");
     texture_ = SDL_CreateTextureFromSurface(g_renderer, temp_surface);
     SDL_FreeSurface(temp_surface);
@@ -24,7 +24,7 @@ Bambino::Bambino()
     destination_rectangle_.w = WINDOW_WIDTH;
     destination_rectangle_.h = WINDOW_HEIGHT;
 
-    // ºñÇà±â ·Îµå
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½
     SDL_Surface* flight_sheet_surface_up = IMG_Load("../../Resource/Character/Isacc.png");
     g_flight_sheet_texture_up = SDL_CreateTextureFromSurface(g_renderer, flight_sheet_surface_up);
     SDL_FreeSurface(flight_sheet_surface_up);
@@ -41,10 +41,10 @@ Bambino::Bambino()
     g_flight_sheet_texture_right = SDL_CreateTextureFromSurface(g_renderer, flight_sheet_surface_right);
     SDL_FreeSurface(flight_sheet_surface_right);
 
-    // Æ÷Å» ·Îµå
+    // ï¿½ï¿½Å» ï¿½Îµï¿½
     SDL_Surface* portal_surface = IMG_Load("../../Resource/Map/portal.png");
 
-    // Æ÷Å» Å©±â Á¶Á¤
+    // ï¿½ï¿½Å» Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     int portal_width = 100;
     int portal_height = 100;
     SDL_Surface* resized_portal_surface = SDL_CreateRGBSurface(0, portal_width, portal_height, 32, 0, 0, 0, 0);
@@ -64,24 +64,24 @@ Bambino::Bambino()
     portal_rect_BtoD.w = portal_width;
     portal_rect_BtoD.h = portal_height;
 
-    // Æ÷Å» À§Ä¡ Á¶Á¤(ÇÏ)
+    // ï¿½ï¿½Å» ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½)
     portal_rect_BtoN2.x = (WINDOW_WIDTH - portal_rect_BtoN2.w) / 2;
     portal_rect_BtoN2.y = 500;
 
-    // Æ÷Å» À§Ä¡ Á¶Á¤(ÁÂ)
+    // ï¿½ï¿½Å» ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½)
     portal_rect_BtoV.x = 0;
     portal_rect_BtoV.y = (WINDOW_HEIGHT - portal_rect_BtoV.h) / 2;
     
-    // Æ÷Å» À§Ä¡ Á¶Á¤(»ó)
+    // ï¿½ï¿½Å» ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½)
     portal_rect_BtoD.x = (WINDOW_WIDTH - portal_rect_BtoD.w) / 2;
     portal_rect_BtoD.y = 0;
 
-    // Å¬·ÎÅ· °ü·Ã
+    // Å¬ï¿½ï¿½Å· ï¿½ï¿½ï¿½ï¿½
     is_cloaking = false;
     cloaking_alpha = 255;
     is_cloaking_on = false;
     cloaking_time = 0.0f;
-    cloaking_duration = 1.0f; // Å¬·ÎÅ· Áö¼Ó ½Ã°£ (ÃÊ)
+    cloaking_duration = 1.0f; // Å¬ï¿½ï¿½Å· ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ (ï¿½ï¿½)
 }
 
 Bambino::~Bambino()
@@ -97,9 +97,9 @@ Bambino::~Bambino()
 
 void Bambino::Update(float deltaTime)
 {
-    const float moveSpeed = 500.0f; // ÃÊ´ç ÀÌµ¿ÇÒ ÇÈ¼¿ ¼ö
+    const float moveSpeed = 500.0f; // ï¿½Ê´ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ ï¿½È¼ï¿½ ï¿½ï¿½
 
-    // ÀÔ·Â »óÅÂ¿¡ µû¶ó ÀÌµ¿
+    // ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
     if (g_move_left) {
         g_player_destination_rect.x -= moveSpeed * deltaTime;
         g_player_direction = PlayerDirection::LEFT;
@@ -117,11 +117,11 @@ void Bambino::Update(float deltaTime)
         g_player_direction = PlayerDirection::DOWN;
     }
 
-    // À©µµ¿ì °æ°è¸¦ ¹þ¾î³ªÁö ¾Êµµ·Ï Á¦ÇÑ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½è¸¦ ï¿½ï¿½ï¿½î³ªï¿½ï¿½ ï¿½Êµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     g_player_destination_rect.x = std::max(0, std::min(WINDOW_WIDTH - g_player_destination_rect.w - 40, g_player_destination_rect.x));
     g_player_destination_rect.y = std::max(0, std::min(WINDOW_HEIGHT - g_player_destination_rect.h - 40, g_player_destination_rect.y));
 
-    // Å¬·ÎÅ· »óÅÂ ¾÷µ¥ÀÌÆ®
+    // Å¬ï¿½ï¿½Å· ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     if (is_cloaking)
     {
         if (is_cloaking_on)
@@ -145,19 +145,19 @@ void Bambino::Update(float deltaTime)
             }
         }
     }
-    // Æ÷Å»°ú Ä³¸¯ÅÍ Ãæµ¹ È®ÀÎ(N2)
+    // ï¿½ï¿½Å»ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½æµ¹ È®ï¿½ï¿½(N2)
     if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_BtoN2))
     {
-        // ´ÙÀ½ ¸ÊÀÇ ÇÃ·¹ÀÌ¾î À§Ä¡ ¼öÁ¤
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
         g_current_game_phase = PHASE_Nicols2;
         g_player_destination_rect = { WINDOW_WIDTH/2, 110, 100, 100 };
         g_player_direction = PlayerDirection::DOWN;
 
     }
-    // Æ÷Å»°ú Ä³¸¯ÅÍ Ãæµ¹ È®ÀÎ(V)
+    // ï¿½ï¿½Å»ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½æµ¹ È®ï¿½ï¿½(V)
     if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_BtoV))
     {
-        // ´ÙÀ½ ¸ÊÀÇ ÇÃ·¹ÀÌ¾î À§Ä¡ ¼öÁ¤
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
         g_current_game_phase = PHASE_Virtus;
         g_player_destination_rect = { 600, WINDOW_HEIGHT / 2, 100, 100 };
         g_player_direction = PlayerDirection::UP;
@@ -165,7 +165,7 @@ void Bambino::Update(float deltaTime)
     }
     if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_BtoD))
     {
-        // ´ÙÀ½ ¸ÊÀÇ ÇÃ·¹ÀÌ¾î À§Ä¡ ¼öÁ¤
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
         g_current_game_phase = PHASE_Dasol;
         g_player_destination_rect = { WINDOW_WIDTH / 2, 400, 100, 100 };
         g_player_direction = PlayerDirection::UP;
@@ -175,14 +175,14 @@ void Bambino::Update(float deltaTime)
 
 void Bambino::Render()
 {
-    // ·»´õ·¯ ÃÊ±âÈ­
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
     SDL_SetRenderDrawColor(g_renderer, 0, 255, 255, 0);
     SDL_RenderClear(g_renderer); // clear the renderer to the draw color
 
-    // ¹è°æ
+    // ï¿½ï¿½ï¿½
     SDL_RenderCopy(g_renderer, texture_, &source_rectangle_, &destination_rectangle_);
 
-    // ºñÇà±â
+    // ï¿½ï¿½ï¿½ï¿½ï¿½
     SDL_Rect flightRect = g_player_destination_rect;
 
     switch (g_player_direction) {
@@ -210,20 +210,20 @@ void Bambino::Render()
         break;
     }
 
-    // Å¬·ÎÅ· °ü·Ã
+    // Å¬ï¿½ï¿½Å· ï¿½ï¿½ï¿½ï¿½
     if (flightTexture != nullptr)
     {
         SDL_SetTextureAlphaMod(flightTexture, cloaking_alpha);
         SDL_RenderCopy(g_renderer, flightTexture, NULL, &flightRect);
     }
 
-    // Æ÷Å» ±×¸®±â
+    // ï¿½ï¿½Å» ï¿½×¸ï¿½ï¿½ï¿½
     SDL_SetTextureAlphaMod(portal_texture, cloaking_alpha);
     SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_BtoN2);
     SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_BtoV);
     SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_BtoD);
 
-    // ·»´õ·¯ ½ÇÇà
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     SDL_RenderPresent(g_renderer);
 }
 

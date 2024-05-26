@@ -51,7 +51,7 @@ enum class PlayerDirection {
 extern SDL_Rect g_player_destination_rect;
 extern PlayerDirection g_player_direction;
 
-// Å¬·ÎÅ· °ü·Ã
+// Å¬ï¿½ï¿½Å· ï¿½ï¿½ï¿½ï¿½
 extern bool is_cloaking;
 extern int cloaking_alpha;
 extern bool is_cloaking_on;

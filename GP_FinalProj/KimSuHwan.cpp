@@ -1,3 +1,4 @@
+// KimSuHwan.cpp
 #include "GameClass.h"
 #include "KimSuHwan.h"
 #include "MovingMonster.h"
@@ -7,7 +8,7 @@
 
 KimSuHwan::KimSuHwan()
 {
-    // ¹è°æ ·Îµå
+    // í…ìŠ¤ì²˜ ë¡œë“œ
     SDL_Surface* temp_surface = IMG_Load("../../Resource/Map/KimSuHwan.png");
     texture_ = SDL_CreateTextureFromSurface(g_renderer, temp_surface);
     SDL_FreeSurface(temp_surface);
@@ -15,12 +16,7 @@ KimSuHwan::KimSuHwan()
     SDL_QueryTexture(texture_, NULL, NULL, &source_rectangle_.w, &source_rectangle_.h);
     destination_rectangle_ = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
 
-    // Ä³¸¯ÅÍ ·Îµå
-    SDL_Surface* flight_sheet_surface = IMG_Load("../../Resource/Character/Isacc.png");
-    g_flight_sheet_texture = SDL_CreateTextureFromSurface(g_renderer, flight_sheet_surface);
-    SDL_FreeSurface(flight_sheet_surface);
-
-    // Æ÷Å» ·Îµå
+    // í¬íƒˆ ë¡œë“œ
     SDL_Surface* portal_surface = IMG_Load("../../Resource/Map/portal.png");
     SDL_Surface* resized_portal_surface = SDL_CreateRGBSurface(0, 100, 100, 32, 0, 0, 0, 0);
     SDL_Rect resized_portal_rect = { 0, 0, 100, 100 };
@@ -33,14 +29,13 @@ KimSuHwan::KimSuHwan()
     portal_rect_KtoE = { (WINDOW_WIDTH - 100) / 2, 500, 100, 100 };
     portal_rect_KtoH = { (WINDOW_WIDTH - 100) / 2, 0, 100, 100 };
 
-    // ¸ó½ºÅÍ »ı¼º
+    // ëª¬ìŠ¤í„° ìƒì„±
     SpawnMonsters();
 }
 
 KimSuHwan::~KimSuHwan()
 {
     SDL_DestroyTexture(texture_);
-    SDL_DestroyTexture(g_flight_sheet_texture);
     SDL_DestroyTexture(portal_texture);
     for (auto monster : monsters) {
         delete monster;
@@ -75,62 +70,43 @@ void KimSuHwan::ResetMonsters() {
 
 void KimSuHwan::Update(float deltaTime)
 {
-    const float moveSpeed = 500.0f;
+    player_.Update(deltaTime); // í”Œë ˆì´ì–´ ì—…ë°ì´íŠ¸
 
-    // ÀÔ·Â »óÅÂ¿¡ µû¶ó ÀÌµ¿
-    if (g_move_left) {
-        g_player_destination_rect.x -= moveSpeed * deltaTime;
-        g_player_direction = PlayerDirection::LEFT;
-    }
-    if (g_move_right) {
-        g_player_destination_rect.x += moveSpeed * deltaTime;
-        g_player_direction = PlayerDirection::RIGHT;
-    }
-    if (g_move_up) {
-        g_player_destination_rect.y -= moveSpeed * deltaTime;
-        g_player_direction = PlayerDirection::UP;
-    }
-    if (g_move_down) {
-        g_player_destination_rect.y += moveSpeed * deltaTime;
-        g_player_direction = PlayerDirection::DOWN;
-    }
-
-    // À©µµ¿ì °æ°è¸¦ ¹ş¾î³ªÁö ¾Êµµ·Ï Á¦ÇÑ
-    g_player_destination_rect.x = std::max(0, std::min(WINDOW_WIDTH - g_player_destination_rect.w - 40, g_player_destination_rect.x));
-    g_player_destination_rect.y = std::max(0, std::min(WINDOW_HEIGHT - g_player_destination_rect.h - 40, g_player_destination_rect.y));
-
-    // Æ÷Å»°ú Ä³¸¯ÅÍ Ãæµ¹ È®ÀÎ
-    if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_KtoE))
+    // í¬íƒˆê³¼ ìºë¦­í„° ì¶©ëŒ í™•ì¸
+    if (SDL_HasIntersection(&player_.GetRect(), &portal_rect_KtoE))
     {
         g_current_game_phase = PHASE_Entrance;
-        g_player_destination_rect = { WINDOW_WIDTH / 2, 110, 100, 100 };
-        g_player_direction = PlayerDirection::DOWN;
+        player_ = Player(); // í”Œë ˆì´ì–´ ì´ˆê¸°í™”
         ResetMonsters(); // Reset monsters when leaving KimSuHwan map
     }
-    if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_KtoH))
+    if (SDL_HasIntersection(&player_.GetRect(), &portal_rect_KtoH))
     {
         g_current_game_phase = PHASE_Hall;
-        g_player_destination_rect = { WINDOW_WIDTH / 2, 400, 100, 100 };
-        g_player_direction = PlayerDirection::UP;
+        player_ = Player(); // í”Œë ˆì´ì–´ ì´ˆê¸°í™”
     }
 
-    // ¸ó½ºÅÍ¿Í ÇÃ·¹ÀÌ¾î Ãæµ¹ È®ÀÎ
+    // ëª¬ìŠ¤í„°ì™€ í”Œë ˆì´ì–´ ì¶©ëŒ í™•ì¸ ë° íŒ¨ë§ ì²˜ë¦¬
     for (auto it = monsters.begin(); it != monsters.end();) {
-        (*it)->Update(deltaTime, g_player_destination_rect); // Update each monster's animation and movement
+        (*it)->Update(deltaTime, player_.GetRect()); // Update each monster's animation and movement
 
-        if ((*it)->CheckCollisionWithPlayer(g_player_destination_rect)) {
-            g_player_health--;
-            delete* it;
-            it = monsters.erase(it);
+        if ((*it)->CheckCollisionWithPlayer(player_.GetRect())) {
+            if (player_.IsParrying()) { // íŒ¨ë§ ìƒíƒœì´ë©´
+                dynamic_cast<MovingMonster*>(*it)->ParryEffect(player_.GetRect()); // íŒ¨ë§ íš¨ê³¼ ì ìš©
+                // ì—¬ê¸°ì„œ ì´í™íŠ¸ë¥¼ ì¶œë ¥í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤ (ì˜ˆ: íŒ¨ë§ ì´í™íŠ¸ ì¶œë ¥ í•¨ìˆ˜ í˜¸ì¶œ)
+            }
+            else {
+                g_player_health--;
+                delete* it;
+                it = monsters.erase(it);
 
-            if (g_player_health <= 0) {
-                // °ÔÀÓ ¿À¹ö Ã³¸®
-                g_current_game_phase = PHASE_Entrance;
-                g_player_destination_rect = { WINDOW_WIDTH / 2, 110, 100, 100 };
-                g_player_direction = PlayerDirection::DOWN;
-                g_player_health = 5;
-                ResetMonsters(); // Reset monsters when health is depleted and player respawns
-                break;
+                if (g_player_health <= 0) {
+                    // ê²Œì„ ì˜¤ë²„ ì²˜ë¦¬
+                    g_current_game_phase = PHASE_Entrance;
+                    player_ = Player(); // í”Œë ˆì´ì–´ ì´ˆê¸°í™”
+                    g_player_health = 5;
+                    ResetMonsters(); // Reset monsters when health is depleted and player respawns
+                    break;
+                }
             }
         }
         else {
@@ -144,14 +120,13 @@ void KimSuHwan::Render()
     SDL_SetRenderDrawColor(g_renderer, 0, 255, 255, 0);
     SDL_RenderClear(g_renderer);
 
-    // ¹è°æ
+    // ë°°ê²½ ê·¸ë¦¬ê¸°
     SDL_RenderCopy(g_renderer, texture_, &source_rectangle_, &destination_rectangle_);
 
-    // Ä³¸¯ÅÍ
-    SDL_Rect flightRect = g_player_destination_rect;
-    SDL_RenderCopy(g_renderer, g_flight_sheet_texture, NULL, &flightRect);
+    // í”Œë ˆì´ì–´ ê·¸ë¦¬ê¸°
+    player_.Render();
 
-    // ÇÃ·¹ÀÌ¾î Ã¼·Â ±×¸®±â
+    // í”Œë ˆì´ì–´ ì²´ë ¥ ê·¸ë¦¬ê¸°
     for (int i = 0; i < g_player_health; i++)
     {
         SDL_Rect healthRect = { 10 + i * 20, 10, 20, 20 };
@@ -159,11 +134,11 @@ void KimSuHwan::Render()
         SDL_RenderFillRect(g_renderer, &healthRect);
     }
 
-    // Æ÷Å» ±×¸®±â
+    // í¬íƒˆ ê·¸ë¦¬ê¸°
     SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_KtoE);
     SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_KtoH);
 
-    // ¸ó½ºÅÍ ±×¸®±â
+    // ëª¬ìŠ¤í„° ê·¸ë¦¬ê¸°
     for (auto monster : monsters) {
         monster->Render();
     }
@@ -182,44 +157,8 @@ void KimSuHwan::HandleEvents()
             g_flag_running = false;
             break;
 
-        case SDL_KEYDOWN:
-            switch (event.key.keysym.sym) {
-            case SDLK_LEFT:
-                g_move_left = true;
-                break;
-            case SDLK_RIGHT:
-                g_move_right = true;
-                break;
-            case SDLK_UP:
-                g_move_up = true;
-                break;
-            case SDLK_DOWN:
-                g_move_down = true;
-                break;
-            }
-            break;
-
-        case SDL_KEYUP:
-            switch (event.key.keysym.sym) {
-            case SDLK_LEFT:
-                g_move_left = false;
-                break;
-            case SDLK_RIGHT:
-                g_move_right = false;
-                break;
-            case SDLK_UP:
-                g_move_up = false;
-                break;
-            case SDLK_DOWN:
-                g_move_down = false;
-                break;
-            }
-            break;
-
-        case SDL_MOUSEBUTTONDOWN:
-            if (event.button.button == SDL_BUTTON_RIGHT) {
-                g_current_game_phase = PHASE_Hall;
-            }
+        default:
+            player_.HandleEvents(event); // í”Œë ˆì´ì–´ ì´ë²¤íŠ¸ ì²˜ë¦¬
             break;
         }
     }

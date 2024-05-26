@@ -1,8 +1,11 @@
+// KimSuHwan.h
 #ifndef KIMSUHWAN_H
 #define KIMSUHWAN_H
 
+#include <SDL.h>
 #include <vector>
 #include "Monster.h"
+#include "Player.h"
 
 class KimSuHwan {
 public:
@@ -12,19 +15,18 @@ public:
     void Render();
     void HandleEvents();
 
-    void ResetMonsters(); // Add method to reset monsters
-
 private:
+    void SpawnMonsters();
+    void ResetMonsters();
+
     SDL_Texture* texture_;
+    SDL_Texture* portal_texture;
     SDL_Rect source_rectangle_;
     SDL_Rect destination_rectangle_;
-    SDL_Texture* g_flight_sheet_texture;
-    SDL_Texture* portal_texture;
     SDL_Rect portal_rect_KtoE;
     SDL_Rect portal_rect_KtoH;
-    std::vector<Monster*> monsters; // Vector to store multiple monsters
-
-    void SpawnMonsters();
+    std::vector<Monster*> monsters;
+    Player player_; // Player 객체 추가
 };
 
 #endif // KIMSUHWAN_H

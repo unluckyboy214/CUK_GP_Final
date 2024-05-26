@@ -2,7 +2,7 @@
 #include "globals.h"
 #include <cmath>
 #include <iostream>
-#include <SDL_image.h> // SDL_image Çì´õ ÆÄÀÏ Æ÷ÇÔ
+#include <SDL_image.h> // SDL_image ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 constexpr float MONSTER_SPEED = 400.0f; // Adjust this value as needed
 constexpr int DETECTION_RANGE = 300; // Detection range to start charging
