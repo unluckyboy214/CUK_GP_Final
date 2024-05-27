@@ -7,7 +7,7 @@
 class KimSuHwan : public Map {
 public:
     KimSuHwan();
-    //void SpawnMonsters() override;
+    void SpawnMonsters() override;
 };
 
 #endif

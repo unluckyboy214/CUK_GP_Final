@@ -14,7 +14,7 @@ public:
     virtual void Update(float deltaTime);
     virtual void Render();
     virtual void HandleEvents();
-    //virtual void SpawnMonsters() = 0; // 순수 가상 함수
+    virtual void SpawnMonsters() = 0; // 순수 가상 함수
 
 protected:
     SDL_Texture* texture_;

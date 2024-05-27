@@ -4,13 +4,12 @@
 #include <SDL_image.h>
 #include <random>
 
-
 Map::Map(const char* backgroundPath, const SDL_Rect& portalRect)
     : portal_rect_(portalRect)
 {
     LoadBackground(backgroundPath);
     LoadPortal();
-    //SpawnMonsters();
+    // SpawnMonsters()를 여기서 호출하지 않습니다.
 }
 
 Map::~Map() {
@@ -45,7 +44,7 @@ void Map::Update(float deltaTime) {
     player_.Update(deltaTime);
 
     if (SDL_HasIntersection(&player_.GetRect(), &portal_rect_)) {
-        // Implement phase transition logic
+        // 페이즈 전환 로직 구현
     }
 
     for (auto it = monsters.begin(); it != monsters.end();) {
@@ -57,7 +56,7 @@ void Map::Update(float deltaTime) {
             it = monsters.erase(it);
 
             if (g_player_health <= 0) {
-                // Handle game over logic
+                // 게임 오버 로직 처리
                 ResetMonsters();
                 break;
             }
@@ -102,5 +101,5 @@ void Map::ResetMonsters() {
         delete monster;
     }
     monsters.clear();
-    //SpawnMonsters();
+    SpawnMonsters();
 }
