@@ -17,18 +17,19 @@ Minimap::Minimap(SDL_Renderer* renderer) : renderer(renderer), currentMapIndex(0
     playerRect = { 0, 0, 16, 16 }; // 플레이어 아이콘 크기 설정
 
     // 미니맵의 각 위치를 저장하는 Rect 초기화
-    mapRects.push_back({ 10, 140, 32, 32 }); // start 위치
-    mapRects.push_back({ 10, 115, 32, 32 });
-    mapRects.push_back({ 10, 95, 32, 32 });
-    mapRects.push_back({ 50, 95, 32, 32 });
-    mapRects.push_back({ 52, 52, 32, 32 });
-    mapRects.push_back({ 52, 94, 32, 32 });
-    mapRects.push_back({ 94, 10, 32, 32 });
-    mapRects.push_back({ 94, 52, 32, 32 });
-    mapRects.push_back({ 94, 94, 32, 32 });
-    mapRects.push_back({ 136, 10, 32, 32 });
-    mapRects.push_back({ 136, 52, 32, 32 });
-    mapRects.push_back({ 136, 94, 32, 32 });
+    mapRects.push_back({ 10, 140, 32, 32 }); // 정문 위치
+    mapRects.push_back({ 10, 115, 32, 32 }); // 김수환 위치
+    mapRects.push_back({ 10, 95, 32, 32 }); // 광장 위치
+    mapRects.push_back({ 50, 95, 32, 32 }); // 니콜스1 위치
+    mapRects.push_back({ 90, 95, 32, 32 }); // 니콜스2 위치
+    mapRects.push_back({ 130, 95, 32, 32 }); // 니콜스3 위치
+    mapRects.push_back({ 130, 115, 32, 32 }); // 마리아 위치
+    mapRects.push_back({ 50, 70, 32, 32 }); // 비르투스 위치
+    mapRects.push_back({ 90, 70, 32, 32 }); // 밤비노 위치
+    mapRects.push_back({ 90, 50, 32, 32 }); // 다솔 위치
+    mapRects.push_back({ 126, 50, 32, 32 }); // 학생회관 위치
+    mapRects.push_back({ 126, 28, 32, 32 }); // 미카엘 위치
+    mapRects.push_back({ 126, 5, 32, 32 }); // 최종장 위치
 
     playerRect.x = mapRects[currentMapIndex].x;
     playerRect.y = mapRects[currentMapIndex].y;
