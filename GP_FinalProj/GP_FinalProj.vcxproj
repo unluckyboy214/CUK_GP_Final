@@ -147,6 +147,7 @@
     <ClCompile Include="LastBoss.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Entrance.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="Maria.cpp" />
     <ClCompile Include="Michael.cpp" />
     <ClCompile Include="Minimap.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="Health.h" />
     <ClInclude Include="KimSuHwan.h" />
     <ClInclude Include="LastBoss.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="Maria.h" />
     <ClInclude Include="Michael.h" />
     <ClInclude Include="Minimap.h" />
