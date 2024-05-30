@@ -8,6 +8,7 @@ class Hall : public Map {
 public:
     Hall();
     void SpawnMonsters() override;
+    void TransitionToNextMap() override;
 };
 
 #endif // HALL_H

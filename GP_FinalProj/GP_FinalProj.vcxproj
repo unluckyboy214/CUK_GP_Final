@@ -161,6 +161,7 @@
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RangedMonster.cpp" />
+    <ClCompile Include="ScriptWindow.cpp" />
     <ClCompile Include="Sophiebara.cpp" />
     <ClCompile Include="Virtus.cpp" />
   </ItemGroup>
@@ -191,6 +192,7 @@
     <ClInclude Include="NPC.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RangedMonster.h" />
+    <ClInclude Include="ScriptWindow.h" />
     <ClInclude Include="Sophiebara.h" />
     <ClInclude Include="Statue.h" />
     <ClInclude Include="Virtus.h" />

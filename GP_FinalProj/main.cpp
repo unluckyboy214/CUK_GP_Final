@@ -68,6 +68,7 @@ int main(int argc, char* argv[]) {
         }
 
         player.Update(deltaTime);
+        g_player_destination_rect = player.GetRect();
 
         if (g_player_health <= 0) {
             g_current_game_phase = PHASE_Entrance;

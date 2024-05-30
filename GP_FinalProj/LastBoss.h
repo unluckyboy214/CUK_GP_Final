@@ -10,6 +10,7 @@ public:
     LastBoss();
     ~LastBoss();
     void SpawnMonsters() override;
+    void TransitionToNextMap() override;
     void Update(float deltaTime) override;
     void Render() override;
     void HandleEvents() override;

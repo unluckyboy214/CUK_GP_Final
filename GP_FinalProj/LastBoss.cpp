@@ -102,3 +102,7 @@ void LastBoss::HandleEvents() {
         Map::HandleEvents(); // 기본 맵 이벤트 처리 호출
     }
 }
+
+void LastBoss::TransitionToNextMap() {
+    // LastBoss 맵에서 다음 맵으로 전환하는 로직 구현
+}

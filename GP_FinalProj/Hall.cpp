@@ -21,3 +21,7 @@ void Hall::SpawnMonsters() {
         monsters.push_back(new ChargingMonster(x, y));
     }
 }
+
+void Hall::TransitionToNextMap() {
+    // Hall 맵에서 다음 맵으로 전환하는 로직 구현
+}

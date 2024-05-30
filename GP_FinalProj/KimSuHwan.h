@@ -10,6 +10,7 @@ class KimSuHwan : public Map {
 public:
     KimSuHwan();
     void SpawnMonsters() override;
+    void TransitionToNextMap() override;
 
 private:
     K_Npc* npc;  // NPC ��ü

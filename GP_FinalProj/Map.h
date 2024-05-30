@@ -15,6 +15,7 @@ public:
     virtual void Render();
     virtual void HandleEvents();
     virtual void SpawnMonsters() = 0; // 순수 가상 함수
+    virtual void TransitionToNextMap() = 0; // 다음 맵으로 전환하는 가상 함수 추가
 
 protected:
     SDL_Texture* texture_;

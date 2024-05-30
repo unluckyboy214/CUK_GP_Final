@@ -1,18 +1,19 @@
-#pragma once
+// K_Npc.h
 #ifndef K_NPC_H
 #define K_NPC_H
 
+#include <SDL.h>
+
 class K_Npc {
 public:
-    K_Npc();
-    void interact();
-    void HandleEvents();
-    void Update(float deltaTime);
-    void Render();
-    // 기타 멤버 함수 및 변수
-
+    K_Npc(const char* texturePath, int x, int y, int width, int height, SDL_Renderer* renderer);
+    void Render(SDL_Renderer* renderer);
+    bool CheckCollision(const SDL_Rect& playerRect);
+    // Other NPC related methods and properties
 private:
-    // NPC의 상태나 속성에 대한 변수들
+    SDL_Rect m_rect;
+    SDL_Texture* m_texture;
+    // Other NPC related properties
 };
 
 #endif

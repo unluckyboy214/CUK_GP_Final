@@ -1,23 +1,18 @@
+// K_Npc.cpp
 #include "K_Npc.h"
-#include <iostream>
+#include <SDL_image.h>
 
-K_Npc::K_Npc() {
-    // NPC 초기화
+K_Npc::K_Npc(const char* texturePath, int x, int y, int width, int height, SDL_Renderer* renderer) {
+    m_rect = { x, y, width, height };
+    SDL_Surface* surface = IMG_Load(texturePath);
+    m_texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
 }
 
-void K_Npc::interact() {
-    std::cout << "Interacting with K_Npc." << std::endl;
-    // NPC 상호작용 로직
+void K_Npc::Render(SDL_Renderer* renderer) {
+    SDL_RenderCopy(renderer, m_texture, NULL, &m_rect);
 }
 
-void K_Npc::HandleEvents() {
-    // NPC 이벤트 처리 로직
-}
-
-void K_Npc::Update(float deltaTime) {
-    // NPC 업데이트 로직
-}
-
-void K_Npc::Render() {
-    // NPC 렌더링 로직
+bool K_Npc::CheckCollision(const SDL_Rect& playerRect) {
+    return SDL_HasIntersection(&m_rect, &playerRect);
 }
