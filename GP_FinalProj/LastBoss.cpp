@@ -1,267 +1,104 @@
-// LastBoss.cpp
 #include "GameClass.h"
 #include "LastBoss.h"
-#define NOMINMAX
-#include <windows.h>
-#include <atlstr.h>
-#include <string>
-#include <iomanip>
-#include <algorithm>
+#include "BossMonster.h"
+#include <SDL_image.h>
 
 LastBoss::LastBoss()
-{
-    // 배경 로드
-    SDL_Surface* temp_surface = IMG_Load("../../Resource/Map/LastBoss.png");
-    texture_ = SDL_CreateTextureFromSurface(g_renderer, temp_surface);
-    SDL_FreeSurface(temp_surface);
+    : Map("../../Resource/Map/LastBoss.png", { (WINDOW_WIDTH - 100) / 2, 0, 100, 100 }), showBossIntro(true), bossIntroTotalTimer(4.0f), currentFrame(0), frameDuration(1.0f), frameTimer(0.0f), bossMonster(nullptr) {
+    SpawnMonsters();
 
-    SDL_QueryTexture(texture_, NULL, NULL, &source_rectangle_.w, &source_rectangle_.h);
-    source_rectangle_.x = 0;
-    source_rectangle_.y = 0;
-    destination_rectangle_.x = 0;
-    destination_rectangle_.y = 0;
-    destination_rectangle_.w = WINDOW_WIDTH;
-    destination_rectangle_.h = WINDOW_HEIGHT;
-
-    // 비행기 로드
-    SDL_Surface* flight_sheet_surface_up = IMG_Load("../../Resource/Character/Isacc.png");
-    g_flight_sheet_texture_up = SDL_CreateTextureFromSurface(g_renderer, flight_sheet_surface_up);
-    SDL_FreeSurface(flight_sheet_surface_up);
-
-    SDL_Surface* flight_sheet_surface_down = IMG_Load("../../Resource/Character/Isacc.png");
-    g_flight_sheet_texture_down = SDL_CreateTextureFromSurface(g_renderer, flight_sheet_surface_down);
-    SDL_FreeSurface(flight_sheet_surface_down);
-
-    SDL_Surface* flight_sheet_surface_left = IMG_Load("../../Resource/Character/Isacc.png");
-    g_flight_sheet_texture_left = SDL_CreateTextureFromSurface(g_renderer, flight_sheet_surface_left);
-    SDL_FreeSurface(flight_sheet_surface_left);
-
-    SDL_Surface* flight_sheet_surface_right = IMG_Load("../../Resource/Character/Isacc.png");
-    g_flight_sheet_texture_right = SDL_CreateTextureFromSurface(g_renderer, flight_sheet_surface_right);
-    SDL_FreeSurface(flight_sheet_surface_right);
-
-    // 포탈 로드
-    SDL_Surface* portal_surface = IMG_Load("../../Resource/Map/portal.png");
-
-    // 포탈 크기 조정
-    int portal_width = 100;
-    int portal_height = 100;
-    SDL_Surface* resized_portal_surface = SDL_CreateRGBSurface(0, portal_width, portal_height, 32, 0, 0, 0, 0);
-    SDL_Rect resized_portal_rect = { 0, 0, portal_width, portal_height };
-    SDL_BlitScaled(portal_surface, NULL, resized_portal_surface, &resized_portal_rect);
-    SDL_FreeSurface(portal_surface);
-
-    portal_texture = SDL_CreateTextureFromSurface(g_renderer, resized_portal_surface);
-    SDL_FreeSurface(resized_portal_surface);
-
-    portal_rect_LtoMi.w = portal_width;
-    portal_rect_LtoMi.h = portal_height;
-
-    // 포탈 위치 조정
-    portal_rect_LtoMi.x = (WINDOW_WIDTH - portal_rect_LtoMi.w) / 2;
-    portal_rect_LtoMi.y = 500;
-
-
-    // 클로킹 관련
-    is_cloaking = false;
-    cloaking_alpha = 255;
-    is_cloaking_on = false;
-    cloaking_time = 0.0f;
-    cloaking_duration = 1.0f; // 클로킹 지속 시간 (초)
+    // 보스 인트로 프레임 로드 (예제: 4 프레임)
+    for (int i = 1; i <= 4; ++i) {
+        std::string path = "../../Resource/Intro/boss_intro_frame" + std::to_string(i) + ".png";
+        SDL_Surface* surface = IMG_Load(path.c_str());
+        bossIntroFrames.push_back(SDL_CreateTextureFromSurface(g_renderer, surface));
+        SDL_FreeSurface(surface);
+    }
 }
 
-LastBoss::~LastBoss()
-{
-    // Free textures
-    SDL_DestroyTexture(texture_);
-    SDL_DestroyTexture(g_flight_sheet_texture_up);
-    SDL_DestroyTexture(g_flight_sheet_texture_down);
-    SDL_DestroyTexture(g_flight_sheet_texture_left);
-    SDL_DestroyTexture(g_flight_sheet_texture_right);
-
+LastBoss::~LastBoss() {
+    for (auto texture : bossIntroFrames) {
+        SDL_DestroyTexture(texture);
+    }
 }
 
-void LastBoss::Update(float deltaTime)
-{
-    const float moveSpeed = 500.0f; // 초당 이동할 픽셀 수
+void LastBoss::SpawnMonsters() {
+    int bossX = (WINDOW_WIDTH - 128) / 2;
+    int bossY = 0; // 맵의 가장 위쪽
+    bossMonster = new BossMonster(bossX, bossY);
+    monsters.push_back(bossMonster);
+}
 
-    // 입력 상태에 따라 이동
-    if (g_move_left) {
-        g_player_destination_rect.x -= moveSpeed * deltaTime;
-        g_player_direction = PlayerDirection::LEFT;
-    }
-    if (g_move_right) {
-        g_player_destination_rect.x += moveSpeed * deltaTime;
-        g_player_direction = PlayerDirection::RIGHT;
-    }
-    if (g_move_up) {
-        g_player_destination_rect.y -= moveSpeed * deltaTime;
-        g_player_direction = PlayerDirection::UP;
-    }
-    if (g_move_down) {
-        g_player_destination_rect.y += moveSpeed * deltaTime;
-        g_player_direction = PlayerDirection::DOWN;
-    }
-
-    // 윈도우 경계를 벗어나지 않도록 제한
-    g_player_destination_rect.x = std::max(0, std::min(WINDOW_WIDTH - g_player_destination_rect.w - 40, g_player_destination_rect.x));
-    g_player_destination_rect.y = std::max(0, std::min(WINDOW_HEIGHT - g_player_destination_rect.h - 40, g_player_destination_rect.y));
-
-    // 클로킹 상태 업데이트
-    if (is_cloaking)
-    {
-        if (is_cloaking_on)
-        {
-            cloaking_time += deltaTime;
-            cloaking_alpha = std::max(0, 255 - static_cast<int>((cloaking_time / cloaking_duration) * 255));
-            if (cloaking_time >= cloaking_duration)
-            {
-                is_cloaking = false;
-                cloaking_time = 0.0f;
+void LastBoss::Update(float deltaTime) {
+    if (showBossIntro) {
+        bossIntroTotalTimer -= deltaTime;
+        frameTimer += deltaTime;
+        if (frameTimer >= frameDuration) {
+            frameTimer = 0.0f;
+            currentFrame++;
+            if (currentFrame >= bossIntroFrames.size()) {
+                showBossIntro = false;
+                return;
             }
         }
-        else
-        {
-            cloaking_time += deltaTime;
-            cloaking_alpha = std::min(255, static_cast<int>((cloaking_time / cloaking_duration) * 255));
-            if (cloaking_time >= cloaking_duration)
-            {
-                is_cloaking = false;
-                cloaking_time = 0.0f;
-            }
-        }
-    }
-    // 포탈과 캐릭터 충돌 확인
-    if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_LtoMi))
-    {
-        // 다음 맵의 플레이어 위치 수정
-        g_current_game_phase = PHASE_Michael;
-        g_player_destination_rect = { WINDOW_WIDTH / 2, 110, 100, 100 };
-        g_player_direction = PlayerDirection::DOWN;
-
+        return;
     }
 
+    Map::Update(deltaTime); // 기본 맵 업데이트 호출
 }
 
-void LastBoss::Render()
-{
-    // 렌더러 초기화
-    SDL_SetRenderDrawColor(g_renderer, 0, 255, 255, 0);
-    SDL_RenderClear(g_renderer); // clear the renderer to the draw color
-
-    // 배경
-    SDL_RenderCopy(g_renderer, texture_, &source_rectangle_, &destination_rectangle_);
-
-    // 비행기
-    SDL_Rect flightRect = g_player_destination_rect;
-
-    switch (g_player_direction) {
-    case PlayerDirection::UP:
-    case PlayerDirection::DOWN:
-    case PlayerDirection::LEFT:
-    case PlayerDirection::RIGHT:
-        break;
+void LastBoss::Render() {
+    if (showBossIntro) {
+        SDL_RenderCopy(g_renderer, bossIntroFrames[currentFrame], NULL, &destination_rectangle_);
+        SDL_RenderPresent(g_renderer);
+        return;
     }
 
-    SDL_Texture* flightTexture = nullptr;
+    Map::Render(); // 기본 맵 렌더 호출
 
-    switch (g_player_direction) {
-    case PlayerDirection::UP:
-        flightTexture = g_flight_sheet_texture_up;
-        break;
-    case PlayerDirection::DOWN:
-        flightTexture = g_flight_sheet_texture_down;
-        break;
-    case PlayerDirection::LEFT:
-        flightTexture = g_flight_sheet_texture_left;
-        break;
-    case PlayerDirection::RIGHT:
-        flightTexture = g_flight_sheet_texture_right;
-        break;
+    // 보스 HP 표시
+    if (bossMonster) {
+        RenderBossHP();
     }
-
-    // 클로킹 관련
-    if (flightTexture != nullptr)
-    {
-        SDL_SetTextureAlphaMod(flightTexture, cloaking_alpha);
-        SDL_RenderCopy(g_renderer, flightTexture, NULL, &flightRect);
-    }
-
-    // 포탈 그리기
-    SDL_SetTextureAlphaMod(portal_texture, cloaking_alpha);
-    SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_LtoMi);
-
-    // 렌더러 실행
-    SDL_RenderPresent(g_renderer);
 }
 
-void LastBoss::HandleEvents()
-{
+void LastBoss::RenderBossHP() {
+    int bossHP = bossMonster->getHP();
+    int maxHP = 20; // 최대 HP 설정
+
+    // HP 바 배경
+    SDL_Rect hpBarBg = { (WINDOW_WIDTH - 400) / 2, 20, 400, 40 };
+    SDL_SetRenderDrawColor(g_renderer, 50, 50, 50, 255); // 짙은 회색
+    SDL_RenderFillRect(g_renderer, &hpBarBg);
+
+    // 현재 HP 바
+    SDL_Rect hpBarValue = { (WINDOW_WIDTH - 400) / 2, 20, 400 * bossHP / maxHP, 40 };
+    SDL_SetRenderDrawColor(g_renderer, 255, 0, 0, 255); // 붉은 색
+    SDL_RenderFillRect(g_renderer, &hpBarValue);
+
+    // 테두리
+    SDL_SetRenderDrawColor(g_renderer, 255, 255, 255, 255); // 흰색
+    SDL_RenderDrawRect(g_renderer, &hpBarBg);
+}
+
+void LastBoss::HandleEvents() {
     SDL_Event event;
-    if (SDL_PollEvent(&event))
-    {
-        switch (event.type)
-        {
-        case SDL_QUIT:
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
             g_flag_running = false;
-            break;
-
-        case SDL_KEYDOWN:
-            switch (event.key.keysym.sym) {
-            case SDLK_LEFT:
-                g_move_left = true;
-                break;
-            case SDLK_RIGHT:
-                g_move_right = true;
-                break;
-            case SDLK_UP:
-                g_move_up = true;
-                break;
-            case SDLK_DOWN:
-                g_move_down = true;
-                break;
-
-            case SDLK_c:
-                if (!is_cloaking)
-                {
-                    is_cloaking = true;
-                    is_cloaking_on = true;
-                    cloaking_time = 0.0f;
-                }
-                break;
-            case SDLK_v:
-                if (!is_cloaking)
-                {
-                    is_cloaking = true;
-                    is_cloaking_on = false;
-                    cloaking_time = 0.0f;
-                }
-                break;
-            }
-            break;
-
-        case SDL_KEYUP:
-            switch (event.key.keysym.sym) {
-            case SDLK_LEFT:
-                g_move_left = false;
-                break;
-            case SDLK_RIGHT:
-                g_move_right = false;
-                break;
-            case SDLK_UP:
-                g_move_up = false;
-                break;
-            case SDLK_DOWN:
-                g_move_down = false;
-                break;
-            }
-            break;
-
-        case SDL_MOUSEBUTTONDOWN:
-            if (event.button.button == SDL_BUTTON_RIGHT) {
-                g_current_game_phase = PHASE_Entrance;
-            }
-            break;
         }
+
+        if (showBossIntro) {
+            if (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_KEYDOWN) {
+                frameTimer = 0.0f;
+                currentFrame++;
+                if (currentFrame >= bossIntroFrames.size()) {
+                    showBossIntro = false;
+                }
+            }
+            return; // 보스 인트로가 표시되는 동안 다른 이벤트 처리 중지
+        }
+
+        Map::HandleEvents(); // 기본 맵 이벤트 처리 호출
     }
 }
