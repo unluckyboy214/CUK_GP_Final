@@ -72,7 +72,6 @@ void Map::Render() {
     SDL_RenderClear(g_renderer);
 
     SDL_RenderCopy(g_renderer, texture_, &source_rectangle_, &destination_rectangle_);
-    player_.Render();
     SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_);
 
     for (auto monster : monsters) {
@@ -80,6 +79,7 @@ void Map::Render() {
     }
 
     SDL_RenderPresent(g_renderer);
+    //player_.Render();
 }
 
 void Map::HandleEvents() {
@@ -90,7 +90,7 @@ void Map::HandleEvents() {
             g_flag_running = false;
             break;
         default:
-            player_.HandleEvents(event);
+            player_.HandleEvents(event, monsters); // 몬스터 목록 전달
             break;
         }
     }
@@ -102,4 +102,8 @@ void Map::ResetMonsters() {
     }
     monsters.clear();
     SpawnMonsters();
+}
+
+const std::vector<Monster*>& Map::GetMonsters() const {
+    return monsters;
 }

@@ -5,7 +5,7 @@
 #include <algorithm>
 
 Nicols1::Nicols1() {
-    // ¹è°æ ·Îµå
+    // ï¿½ï¿½ï¿½ ï¿½Îµï¿½
     SDL_Surface* temp_surface = IMG_Load("../../Resource/Map/Nicols1.png");
     texture_ = SDL_CreateTextureFromSurface(g_renderer, temp_surface);
     SDL_FreeSurface(temp_surface);
@@ -13,7 +13,7 @@ Nicols1::Nicols1() {
     SDL_QueryTexture(texture_, NULL, NULL, &source_rectangle_.w, &source_rectangle_.h);
     destination_rectangle_ = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
 
-    // Ä³¸¯ÅÍ ·Îµå
+    // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½
     SDL_Surface* flight_sheet_surface = IMG_Load("../../Resource/Character/Isacc.png");
     g_flight_sheet_texture_up = SDL_CreateTextureFromSurface(g_renderer, flight_sheet_surface);
     g_flight_sheet_texture_down = SDL_CreateTextureFromSurface(g_renderer, flight_sheet_surface);
@@ -21,7 +21,7 @@ Nicols1::Nicols1() {
     g_flight_sheet_texture_right = SDL_CreateTextureFromSurface(g_renderer, flight_sheet_surface);
     SDL_FreeSurface(flight_sheet_surface);
 
-    // Æ÷Å» ·Îµå
+    // ï¿½ï¿½Å» ï¿½Îµï¿½
     SDL_Surface* portal_surface = IMG_Load("../../Resource/Map/portal.png");
     SDL_Surface* resized_portal_surface = SDL_CreateRGBSurface(0, 100, 100, 32, 0, 0, 0, 0);
     SDL_Rect resized_portal_rect = { 0, 0, 100, 100 };
@@ -35,7 +35,7 @@ Nicols1::Nicols1() {
     portal_rect_N1toN2 = { WINDOW_WIDTH - 100, (WINDOW_HEIGHT - 100) / 2, 100, 100 };
     portal_rect_N1toV = { (WINDOW_WIDTH - 100) / 2, 0, 100, 100 };
 
-    // ¹ÙÀ§ ÀÌ¹ÌÁö ·Îµå
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½Îµï¿½
     SDL_Surface* rock_surface = IMG_Load("../../Resource/Map/rock.png");
     rock_texture = SDL_CreateTextureFromSurface(g_renderer, rock_surface);
     SDL_FreeSurface(rock_surface);
@@ -43,7 +43,7 @@ Nicols1::Nicols1() {
     // Initialize rock
     rockRect = { WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 - 50, 100, 100 }; // Center of the map
 
-    // ¸ó½ºÅÍ »ý¼º
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     SpawnMonsters();
 }
 
@@ -54,7 +54,7 @@ Nicols1::~Nicols1() {
     SDL_DestroyTexture(g_flight_sheet_texture_left);
     SDL_DestroyTexture(g_flight_sheet_texture_right);
     SDL_DestroyTexture(portal_texture);
-    SDL_DestroyTexture(rock_texture); // ¹ÙÀ§ ÅØ½ºÃ³ ÇØÁ¦
+    SDL_DestroyTexture(rock_texture); // ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Ã³ ï¿½ï¿½ï¿½ï¿½
     delete rangedMonster; // Free the memory allocated for the RangedMonster
 }
 
@@ -65,7 +65,7 @@ void Nicols1::SpawnMonsters() {
 void Nicols1::Update(float deltaTime) {
     const float moveSpeed = 500.0f;
 
-    // ÀÔ·Â »óÅÂ¿¡ µû¶ó ÀÌµ¿
+    // ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
     if (g_move_left) {
         g_player_destination_rect.x -= static_cast<int>(moveSpeed * deltaTime);
         g_player_direction = PlayerDirection::LEFT;
@@ -83,16 +83,16 @@ void Nicols1::Update(float deltaTime) {
         g_player_direction = PlayerDirection::DOWN;
     }
 
-    // À©µµ¿ì °æ°è¸¦ ¹þ¾î³ªÁö ¾Êµµ·Ï Á¦ÇÑ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½è¸¦ ï¿½ï¿½ï¿½î³ªï¿½ï¿½ ï¿½Êµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     g_player_destination_rect.x = std::max(0, std::min(WINDOW_WIDTH - g_player_destination_rect.w - 40, g_player_destination_rect.x));
     g_player_destination_rect.y = std::max(0, std::min(WINDOW_HEIGHT - g_player_destination_rect.h - 40, g_player_destination_rect.y));
 
-    // ¹ÙÀ§¿Í Ãæµ¹ È®ÀÎ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½æµ¹ È®ï¿½ï¿½
     SDL_Rect reducedRockRect = {
-    rockRect.x + rockRect.w * 0.2, // ¿ÞÂÊ º¯À» 10% ÁÙÀÌ±â
-    rockRect.y + rockRect.h * 0.2, // À§ÂÊ º¯À» 30% ÁÙÀÌ±â
-    rockRect.w * 0.3,              // ÆøÀ» 70%·Î ÁÙÀÌ±â
-    rockRect.h * 0.4               // ³ôÀÌ¸¦ 40%·Î ÁÙÀÌ±â
+    rockRect.x + rockRect.w * 0.2, // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 10% ï¿½ï¿½ï¿½Ì±ï¿½
+    rockRect.y + rockRect.h * 0.2, // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 30% ï¿½ï¿½ï¿½Ì±ï¿½
+    rockRect.w * 0.3,              // ï¿½ï¿½ï¿½ï¿½ 70%ï¿½ï¿½ ï¿½ï¿½ï¿½Ì±ï¿½
+    rockRect.h * 0.4               // ï¿½ï¿½ï¿½Ì¸ï¿½ 40%ï¿½ï¿½ ï¿½ï¿½ï¿½Ì±ï¿½
     };
 
     if (SDL_HasIntersection(&g_player_destination_rect, &reducedRockRect)) {
@@ -102,7 +102,7 @@ void Nicols1::Update(float deltaTime) {
         if (g_move_down) g_player_destination_rect.y -= static_cast<int>(moveSpeed * deltaTime);
     }
 
-    // Æ÷Å»°ú Ä³¸¯ÅÍ Ãæµ¹ È®ÀÎ
+    // ï¿½ï¿½Å»ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½æµ¹ È®ï¿½ï¿½
     if (SDL_HasIntersection(&g_player_destination_rect, &portal_rect_N1toH)) {
         g_current_game_phase = PHASE_Hall;
         g_player_destination_rect = { 600, WINDOW_HEIGHT / 2, 100, 100 };
@@ -119,13 +119,13 @@ void Nicols1::Update(float deltaTime) {
         g_player_direction = PlayerDirection::UP;
     }
 
-    // ¸ó½ºÅÍ¿Í ÇÃ·¹ÀÌ¾î Ãæµ¹ È®ÀÎ
+    // ï¿½ï¿½ï¿½Í¿ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½æµ¹ È®ï¿½ï¿½
     rangedMonster->Update(deltaTime, g_player_destination_rect);
 
     if (rangedMonster->CheckCollisionWithPlayer(g_player_destination_rect)) {
         g_player_health--;
         if (g_player_health <= 0) {
-            // °ÔÀÓ ¿À¹ö Ã³¸®
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
             g_current_game_phase = PHASE_Entrance;
             g_player_destination_rect = { WINDOW_WIDTH / 2, 110, 100, 100 };
             g_player_direction = PlayerDirection::DOWN;
@@ -135,7 +135,7 @@ void Nicols1::Update(float deltaTime) {
         }
     }
 
-    // Åõ»çÃ¼¿Í ¹ÙÀ§ Ãæµ¹ È®ÀÎ
+    // ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½æµ¹ È®ï¿½ï¿½
     for (auto& projectile : rangedMonster->GetProjectiles()) {
         if (projectile.active && SDL_HasIntersection(&projectile.rect, &reducedRockRect)) {
             projectile.active = false; // Deactivate projectile on collision
@@ -147,29 +147,29 @@ void Nicols1::Render() {
     SDL_SetRenderDrawColor(g_renderer, 0, 255, 255, 0);
     SDL_RenderClear(g_renderer);
 
-    // ¹è°æ
+    // ï¿½ï¿½ï¿½
     SDL_RenderCopy(g_renderer, texture_, &source_rectangle_, &destination_rectangle_);
 
-    // Ä³¸¯ÅÍ
+    // Ä³ï¿½ï¿½ï¿½ï¿½
     SDL_Rect flightRect = g_player_destination_rect;
     SDL_RenderCopy(g_renderer, g_flight_sheet_texture_up, NULL, &flightRect);
 
-    // ÇÃ·¹ÀÌ¾î Ã¼·Â ±×¸®±â
+    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Ã¼ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
     for (int i = 0; i < g_player_health; i++) {
         SDL_Rect healthRect = { 10 + i * 20, 10, 20, 20 };
         SDL_SetRenderDrawColor(g_renderer, 255, 0, 0, 255);
         SDL_RenderFillRect(g_renderer, &healthRect);
     }
 
-    // Æ÷Å» ±×¸®±â
+    // ï¿½ï¿½Å» ï¿½×¸ï¿½ï¿½ï¿½
     SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_N1toH);
     SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_N1toN2);
     SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_N1toV);
 
-    // ¹ÙÀ§ ±×¸®±â
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
     SDL_RenderCopy(g_renderer, rock_texture, NULL, &rockRect);
 
-    // ¸ó½ºÅÍ ±×¸®±â
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
     rangedMonster->Render();
 
     SDL_RenderPresent(g_renderer);

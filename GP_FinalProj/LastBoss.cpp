@@ -7,7 +7,7 @@ LastBoss::LastBoss()
     : Map("../../Resource/Map/LastBoss.png", { (WINDOW_WIDTH - 100) / 2, 0, 100, 100 }), showBossIntro(true), bossIntroTotalTimer(4.0f), currentFrame(0), frameDuration(1.0f), frameTimer(0.0f), bossMonster(nullptr) {
     SpawnMonsters();
 
-    // º¸½º ÀÎÆ®·Î ÇÁ·¹ÀÓ ·Îµå (¿¹Á¦: 4 ÇÁ·¹ÀÓ)
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ (ï¿½ï¿½ï¿½ï¿½: 4 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
     for (int i = 1; i <= 4; ++i) {
         std::string path = "../../Resource/Intro/boss_intro_frame" + std::to_string(i) + ".png";
         SDL_Surface* surface = IMG_Load(path.c_str());
@@ -24,7 +24,7 @@ LastBoss::~LastBoss() {
 
 void LastBoss::SpawnMonsters() {
     int bossX = (WINDOW_WIDTH - 128) / 2;
-    int bossY = 0; // ¸ÊÀÇ °¡Àå À§ÂÊ
+    int bossY = 0; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     bossMonster = new BossMonster(bossX, bossY);
     monsters.push_back(bossMonster);
 }
@@ -44,7 +44,7 @@ void LastBoss::Update(float deltaTime) {
         return;
     }
 
-    Map::Update(deltaTime); // ±âº» ¸Ê ¾÷µ¥ÀÌÆ® È£Ãâ
+    Map::Update(deltaTime); // ï¿½âº» ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® È£ï¿½ï¿½
 }
 
 void LastBoss::Render() {
@@ -54,9 +54,9 @@ void LastBoss::Render() {
         return;
     }
 
-    Map::Render(); // ±âº» ¸Ê ·»´õ È£Ãâ
+    Map::Render(); // ï¿½âº» ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½
 
-    // º¸½º HP Ç¥½Ã
+    // ï¿½ï¿½ï¿½ï¿½ HP Ç¥ï¿½ï¿½
     if (bossMonster) {
         RenderBossHP();
     }
@@ -64,20 +64,20 @@ void LastBoss::Render() {
 
 void LastBoss::RenderBossHP() {
     int bossHP = bossMonster->getHP();
-    int maxHP = 20; // ÃÖ´ë HP ¼³Á¤
+    int maxHP = 20; // ï¿½Ö´ï¿½ HP ï¿½ï¿½ï¿½ï¿½
 
-    // HP ¹Ù ¹è°æ
+    // HP ï¿½ï¿½ ï¿½ï¿½ï¿½
     SDL_Rect hpBarBg = { (WINDOW_WIDTH - 400) / 2, 20, 400, 40 };
-    SDL_SetRenderDrawColor(g_renderer, 50, 50, 50, 255); // Â£Àº È¸»ö
+    SDL_SetRenderDrawColor(g_renderer, 50, 50, 50, 255); // Â£ï¿½ï¿½ È¸ï¿½ï¿½
     SDL_RenderFillRect(g_renderer, &hpBarBg);
 
-    // ÇöÀç HP ¹Ù
+    // ï¿½ï¿½ï¿½ï¿½ HP ï¿½ï¿½
     SDL_Rect hpBarValue = { (WINDOW_WIDTH - 400) / 2, 20, 400 * bossHP / maxHP, 40 };
-    SDL_SetRenderDrawColor(g_renderer, 255, 0, 0, 255); // ºÓÀº »ö
+    SDL_SetRenderDrawColor(g_renderer, 255, 0, 0, 255); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     SDL_RenderFillRect(g_renderer, &hpBarValue);
 
-    // Å×µÎ¸®
-    SDL_SetRenderDrawColor(g_renderer, 255, 255, 255, 255); // Èò»ö
+    // ï¿½×µÎ¸ï¿½
+    SDL_SetRenderDrawColor(g_renderer, 255, 255, 255, 255); // ï¿½ï¿½ï¿½
     SDL_RenderDrawRect(g_renderer, &hpBarBg);
 }
 
@@ -96,9 +96,9 @@ void LastBoss::HandleEvents() {
                     showBossIntro = false;
                 }
             }
-            return; // º¸½º ÀÎÆ®·Î°¡ Ç¥½ÃµÇ´Â µ¿¾È ´Ù¸¥ ÀÌº¥Æ® Ã³¸® ÁßÁö
+            return; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½Î°ï¿½ Ç¥ï¿½ÃµÇ´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½Ìºï¿½Æ® Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
 
-        Map::HandleEvents(); // ±âº» ¸Ê ÀÌº¥Æ® Ã³¸® È£Ãâ
+        Map::HandleEvents(); // ï¿½âº» ï¿½ï¿½ ï¿½Ìºï¿½Æ® Ã³ï¿½ï¿½ È£ï¿½ï¿½
     }
 }

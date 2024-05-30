@@ -2,22 +2,22 @@
 #include <iostream>
 
 K_Npc::K_Npc() {
-    // NPC ÃÊ±âÈ­
+    // NPC ï¿½Ê±ï¿½È­
 }
 
 void K_Npc::interact() {
     std::cout << "Interacting with K_Npc." << std::endl;
-    // NPC »óÈ£ÀÛ¿ë ·ÎÁ÷
+    // NPC ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½
 }
 
 void K_Npc::HandleEvents() {
-    // NPC ÀÌº¥Æ® Ã³¸® ·ÎÁ÷
+    // NPC ï¿½Ìºï¿½Æ® Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 }
 
 void K_Npc::Update(float deltaTime) {
-    // NPC ¾÷µ¥ÀÌÆ® ·ÎÁ÷
+    // NPC ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
 }
 
 void K_Npc::Render() {
-    // NPC ·»´õ¸µ ·ÎÁ÷
+    // NPC ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 }

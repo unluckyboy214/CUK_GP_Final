@@ -14,7 +14,8 @@ public:
     virtual void Update(float deltaTime);
     virtual void Render();
     virtual void HandleEvents();
-    virtual void SpawnMonsters() = 0; // ¼ø¼ö °¡»ó ÇÔ¼ö
+    virtual void SpawnMonsters() = 0; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+    const std::vector<Monster*>& GetMonsters() const;
 
 protected:
     SDL_Texture* texture_;

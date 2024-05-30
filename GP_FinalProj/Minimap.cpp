@@ -3,33 +3,33 @@
 #include <iostream>
 
 Minimap::Minimap(SDL_Renderer* renderer) : renderer(renderer), currentMapIndex(0) {
-    // ¸Ê ÅØ½ºÃ³ ·Îµå
+    // ï¿½ï¿½ ï¿½Ø½ï¿½Ã³ ï¿½Îµï¿½
     SDL_Surface* mapSurface = IMG_Load("../../Resource/Map/minimap.png");
     mapTexture = SDL_CreateTextureFromSurface(renderer, mapSurface);
     SDL_FreeSurface(mapSurface);
 
-    // ÇÃ·¹ÀÌ¾î ÅØ½ºÃ³ ·Îµå
+    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ø½ï¿½Ã³ ï¿½Îµï¿½
     SDL_Surface* playerSurface = IMG_Load("../../Resource/Character/player_icon.png");
     playerTexture = SDL_CreateTextureFromSurface(renderer, playerSurface);
     SDL_FreeSurface(playerSurface);
 
-    // ÇÃ·¹ÀÌ¾î Rect ÃÊ±âÈ­
-    playerRect = { 0, 0, 16, 16 }; // ÇÃ·¹ÀÌ¾î ¾ÆÀÌÄÜ Å©±â ¼³Á¤
+    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Rect ï¿½Ê±ï¿½È­
+    playerRect = { 0, 0, 16, 16 }; // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-    // ¹Ì´Ï¸ÊÀÇ °¢ À§Ä¡¸¦ ÀúÀåÇÏ´Â Rect ÃÊ±âÈ­
-    mapRects.push_back({ 10, 140, 32, 32 }); // Á¤¹® À§Ä¡
-    mapRects.push_back({ 10, 115, 32, 32 }); // ±è¼öÈ¯ À§Ä¡
-    mapRects.push_back({ 10, 95, 32, 32 }); // ±¤Àå À§Ä¡
-    mapRects.push_back({ 50, 95, 32, 32 }); // ´ÏÄÝ½º1 À§Ä¡
-    mapRects.push_back({ 90, 95, 32, 32 }); // ´ÏÄÝ½º2 À§Ä¡
-    mapRects.push_back({ 130, 95, 32, 32 }); // ´ÏÄÝ½º3 À§Ä¡
-    mapRects.push_back({ 130, 115, 32, 32 }); // ¸¶¸®¾Æ À§Ä¡
-    mapRects.push_back({ 50, 70, 32, 32 }); // ºñ¸£Åõ½º À§Ä¡
-    mapRects.push_back({ 90, 70, 32, 32 }); // ¹ãºñ³ë À§Ä¡
-    mapRects.push_back({ 90, 50, 32, 32 }); // ´Ù¼Ö À§Ä¡
-    mapRects.push_back({ 126, 50, 32, 32 }); // ÇÐ»ýÈ¸°ü À§Ä¡
-    mapRects.push_back({ 126, 28, 32, 32 }); // ¹ÌÄ«¿¤ À§Ä¡
-    mapRects.push_back({ 126, 5, 32, 32 }); // ÃÖÁ¾Àå À§Ä¡
+    // ï¿½Ì´Ï¸ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ Rect ï¿½Ê±ï¿½È­
+    mapRects.push_back({ 10, 140, 32, 32 }); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
+    mapRects.push_back({ 10, 115, 32, 32 }); // ï¿½ï¿½ï¿½È¯ ï¿½ï¿½Ä¡
+    mapRects.push_back({ 10, 95, 32, 32 }); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
+    mapRects.push_back({ 50, 95, 32, 32 }); // ï¿½ï¿½ï¿½Ý½ï¿½1 ï¿½ï¿½Ä¡
+    mapRects.push_back({ 90, 95, 32, 32 }); // ï¿½ï¿½ï¿½Ý½ï¿½2 ï¿½ï¿½Ä¡
+    mapRects.push_back({ 130, 95, 32, 32 }); // ï¿½ï¿½ï¿½Ý½ï¿½3 ï¿½ï¿½Ä¡
+    mapRects.push_back({ 130, 115, 32, 32 }); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
+    mapRects.push_back({ 50, 70, 32, 32 }); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
+    mapRects.push_back({ 90, 70, 32, 32 }); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
+    mapRects.push_back({ 90, 50, 32, 32 }); // ï¿½Ù¼ï¿½ ï¿½ï¿½Ä¡
+    mapRects.push_back({ 126, 50, 32, 32 }); // ï¿½Ð»ï¿½È¸ï¿½ï¿½ ï¿½ï¿½Ä¡
+    mapRects.push_back({ 126, 28, 32, 32 }); // ï¿½ï¿½Ä«ï¿½ï¿½ ï¿½ï¿½Ä¡
+    mapRects.push_back({ 126, 5, 32, 32 }); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
 
     playerRect.x = mapRects[currentMapIndex].x;
     playerRect.y = mapRects[currentMapIndex].y;
@@ -41,11 +41,11 @@ Minimap::~Minimap() {
 }
 
 void Minimap::Render(int playerX, int playerY) {
-    // ¹Ì´Ï¸Ê ·»´õ¸µ
-    SDL_Rect mapRect = { 0, 0, 160, 160 }; // ¹Ì´Ï¸Ê Å©±â ¼³Á¤
+    // ï¿½Ì´Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    SDL_Rect mapRect = { 0, 0, 160, 160 }; // ï¿½Ì´Ï¸ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     SDL_RenderCopy(renderer, mapTexture, NULL, &mapRect);
 
-    // ÇÃ·¹ÀÌ¾î ¾ÆÀÌÄÜ ·»´õ¸µ
+    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     SDL_RenderCopy(renderer, playerTexture, NULL, &playerRect);
 }
 

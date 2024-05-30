@@ -13,7 +13,7 @@ extern bool g_flag_running;
 extern Uint32 g_last_time_ms;
 extern Uint32 g_frame_per_sec;
 extern int g_current_game_phase;
-extern int g_player_health; // ÇÃ·¹ÀÌ¾î Ã¼·Â
-extern std::vector<SDL_Rect> g_obstacles; // º®ÀÌ³ª ±¸Á¶¹°ÀÇ ¹è¿­
+extern int g_player_health; // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Ã¼ï¿½ï¿½
+extern std::vector<SDL_Rect> g_obstacles; // ï¿½ï¿½ï¿½Ì³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­
 
 #endif // GLOBALS_H

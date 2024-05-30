@@ -44,6 +44,7 @@ void Player::Update(float deltaTime) {
     rect_.x = std::max(0, std::min(WINDOW_WIDTH - rect_.w, rect_.x));
     rect_.y = std::max(0, std::min(WINDOW_HEIGHT - rect_.h, rect_.y));
 }
+
 void Player::Render() {
     if (is_parrying_) {
         // 패링 상태일 때 다른 색상으로 렌더링
@@ -54,9 +55,10 @@ void Player::Render() {
     else {
         SDL_RenderCopy(g_renderer, texture_, NULL, &rect_);
     }
+
 }
 
-void Player::HandleEvents(const SDL_Event& event) {
+void Player::HandleEvents(const SDL_Event& event, const std::vector<Monster*>& monsters) {
     switch (event.type) {
     case SDL_KEYDOWN:
         switch (event.key.keysym.sym) {
@@ -73,7 +75,7 @@ void Player::HandleEvents(const SDL_Event& event) {
             g_move_down = true;
             break;
         case SDLK_SPACE:
-            PerformParry();
+            PerformParry(monsters); // PerformParry 호출 시 몬스터 목록 전달
             break;
         }
         break;
@@ -97,18 +99,32 @@ void Player::HandleEvents(const SDL_Event& event) {
     }
 }
 
-
-void Player::PerformParry() {
+void Player::PerformParry(const std::vector<Monster*>& monsters) {
     if (parry_timer_ <= 0) {
-        is_parrying_ = true;
-        parry_timer_ = parry_cooldown_ + parry_duration_;
-        float parry_distance = 10.0f; // 패링 시 이동 거리
+        bool monsterInRange = false;
+        float parryDistance = 1000.0f; // 패링 거리 기준
+        for (const auto& monster : monsters) {
+            int deltaX = monster->getX() - rect_.x;
+            int deltaY = monster->getY() - rect_.y;
+            float distance = sqrt(deltaX * deltaX + deltaY * deltaY);
+            if (distance <= parryDistance) {
+                monsterInRange = true;
+                break;
+            }
+        }
 
-        switch (direction_) {
-        case 0: rect_.y -= parry_distance; break; // 위
-        case 1: rect_.x += parry_distance; break; // 오른쪽
-        case 2: rect_.y += parry_distance; break; // 아래
-        case 3: rect_.x -= parry_distance; break; // 왼쪽
+        std :: cout << monsterInRange;
+        if (monsterInRange) {
+            is_parrying_ = true;
+            parry_timer_ = parry_cooldown_ + parry_duration_;
+            float parry_distance = 100.0f; // 패링 시 이동 거리
+
+            switch (direction_) {
+            case 0: rect_.y -= parry_distance; break; // 위
+            case 1: rect_.x += parry_distance; break; // 오른쪽
+            case 2: rect_.y += parry_distance; break; // 아래
+            case 3: rect_.x -= parry_distance; break; // 왼쪽
+            }
         }
     }
 }

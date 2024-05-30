@@ -3,29 +3,31 @@
 #define PLAYER_H
 
 #include <SDL.h>
+#include <vector>
+#include "Monster.h"
+
+class Monster;
 
 class Player {
 public:
     Player();
     void Update(float deltaTime);
     void Render();
-    void HandleEvents(const SDL_Event& event);
+    void HandleEvents(const SDL_Event& event, const std::vector<Monster*>& monsters); // 몬스터 목록을 인자로 받도록 수정
+    void PerformParry(const std::vector<Monster*>& monsters); // 몬스터 목록을 인자로 받도록 수정
     void SetParrying(bool parrying);
     bool IsParrying() const;
     const SDL_Rect& GetRect() const;
 
 private:
-    bool is_parrying_;
-    float move_speed_;
     SDL_Texture* texture_;
     SDL_Rect rect_;
-    float parry_cooldown_;    // 패링 쿨다운 시간
-    float parry_duration_;    // 패링 지속 시간
-    float parry_timer_;       // 패링 타이머
-    int direction_;           // 플레이어가 바라보는 방향 (0: 상, 1: 우, 2: 하, 3: 좌)
-
-    void UpdateDirection(const SDL_Event& event);
-    void PerformParry();
+    bool is_parrying_;
+    float move_speed_;
+    float parry_cooldown_;
+    float parry_duration_;
+    float parry_timer_;
+    int direction_;
 };
 
 #endif // PLAYER_H

@@ -14,7 +14,7 @@ public:
     void Render();
 
 private:
-    // ÀÌ¹ÌÁö °ü·Ã
+    // ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     SDL_Texture* texture_; // the SDL_Texture 
     SDL_Rect source_rectangle_; // the rectangle for source image
     SDL_Rect destination_rectangle_; // for destination
@@ -23,7 +23,7 @@ private:
     SDL_Texture* g_flight_sheet_texture_left;
     SDL_Texture* g_flight_sheet_texture_right;
 
-    // Æ÷Å» °ü·Ã
+    // ï¿½ï¿½Å» ï¿½ï¿½ï¿½ï¿½
     SDL_Texture* portal_texture;
     SDL_Rect portal_rect_N3toN2;
     SDL_Rect portal_rect_N3toMa;

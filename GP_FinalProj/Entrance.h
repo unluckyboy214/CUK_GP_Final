@@ -1,30 +1,20 @@
 #pragma once
+#ifndef ENTRANCE_H
+#define ENTRANCE_H
 
-#include "SDL.h"
-#include "Monster.h"
+#include "Map.h"
+#include "K_Npc.h"
 
-class Entrance
-{
+
+
+class Entrance : public Map {
 public:
     Entrance();
-    ~Entrance();
-
-    void HandleEvents();
-    void Update(float deltaTime);
-    void Render();
+    void SpawnMonsters() override;
 
 private:
-    // ÀÌ¹ÌÁö °ü·Ã
-    SDL_Texture* texture_;
-    SDL_Rect source_rectangle_;
-    SDL_Rect destination_rectangle_;
-    SDL_Texture* g_flight_sheet_texture;
-
-    // Æ÷Å» °ü·Ã
-    SDL_Texture* portal_texture;
-    SDL_Rect portal_rect_EtoK;
-
-    // ¸ó½ºÅÍ °ü·Ã
-    Monster* monster;
-    void SpawnMonster();
+    K_Npc* npc;  // NPC ï¿½ï¿½Ã¼
 };
+
+
+#endif

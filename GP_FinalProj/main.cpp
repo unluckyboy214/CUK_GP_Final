@@ -64,7 +64,49 @@ int main(int argc, char* argv[]) {
                 g_flag_running = false;
             }
             chisam.HandleEvents(e);
-            player.HandleEvents(e);
+
+            // 현재 맵의 몬스터 목록을 player.HandleEvents에 전달
+            switch (g_current_game_phase) {
+            case PHASE_Entrance:
+                player.HandleEvents(e, entrance.GetMonsters());
+                break;
+            case PHASE_KimSuHwan:
+                player.HandleEvents(e, kimsuhwan.GetMonsters());
+                break;
+            case PHASE_Hall:
+                player.HandleEvents(e, hall.GetMonsters());
+                break;
+            /*case PHASE_Nicols1:
+                player.HandleEvents(e, nicols1.GetMonsters());
+                break;
+            case PHASE_Nicols2:
+                player.HandleEvents(e, nicols2.GetMonsters());
+                break;
+            case PHASE_Nicols3:
+                player.HandleEvents(e, nicols3.GetMonsters());
+                break;
+            case PHASE_Maria:
+                player.HandleEvents(e, maria.GetMonsters());
+                break;
+            case PHASE_Virtus:
+                player.HandleEvents(e, virtus.GetMonsters());
+                break;
+            case PHASE_Bambino:
+                player.HandleEvents(e, bambino.GetMonsters());
+                break;
+            case PHASE_Dasol:
+                player.HandleEvents(e, dasol.GetMonsters());
+                break;
+            case PHASE_Sophiebara:
+                player.HandleEvents(e, sophiebara.GetMonsters());
+                break;
+            case PHASE_Michael:
+                player.HandleEvents(e, michael.GetMonsters());
+                break;
+            case PHASE_LastBoss:
+                player.HandleEvents(e, lastboss.GetMonsters());
+                break; */
+            }
         }
 
         player.Update(deltaTime);
