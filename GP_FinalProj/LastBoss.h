@@ -1,30 +1,31 @@
-// LastBoss.h
-#pragma once
+#ifndef LASTBOSS_H
+#define LASTBOSS_H
 
-#include "SDL.h"
+#include "Map.h"
+#include "BossMonster.h"
+#include <vector>
 
-class LastBoss
-{
+class LastBoss : public Map {
 public:
     LastBoss();
     ~LastBoss();
+    void SpawnMonsters() override;
+    void Update(float deltaTime) override;
+    void Render() override;
+    void HandleEvents() override;
 
-    void HandleEvents();
-    void Update(float deltaTime);
-    void Render();
+    bool showBossIntro; // public으로 변경하여 외부에서 접근 가능하게 함
 
 private:
-    // 이미지 관련
-    SDL_Texture* texture_; // the SDL_Texture 
-    SDL_Rect source_rectangle_; // the rectangle for source image
-    SDL_Rect destination_rectangle_; // for destination
-    SDL_Texture* g_flight_sheet_texture_up;
-    SDL_Texture* g_flight_sheet_texture_down;
-    SDL_Texture* g_flight_sheet_texture_left;
-    SDL_Texture* g_flight_sheet_texture_right;
+    float bossIntroTotalTimer;
+    std::vector<SDL_Texture*> bossIntroFrames; // 보스 인트로 프레임
+    int currentFrame;
+    float frameDuration;
+    float frameTimer;
+    BossMonster* bossMonster;
+    SDL_Texture* bossHPBarTexture; // 보스 HP 바 텍스처
 
-    // 포탈 관련
-    SDL_Texture* portal_texture;
-    SDL_Rect portal_rect_LtoMi;
-
+    void RenderBossHP(); // 보스 HP 바 렌더링 함수
 };
+
+#endif
