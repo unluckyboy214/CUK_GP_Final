@@ -144,6 +144,7 @@
     <ClCompile Include="Hall.cpp" />
     <ClCompile Include="Health.cpp" />
     <ClCompile Include="KimSuHwan.cpp" />
+    <ClCompile Include="K_Npc.cpp" />
     <ClCompile Include="LastBoss.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Entrance.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="Nicols1.cpp" />
     <ClCompile Include="Nicols2.cpp" />
     <ClCompile Include="Nicols3.cpp" />
+    <ClCompile Include="NPC.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RangedMonster.cpp" />
     <ClCompile Include="Sophiebara.cpp" />
@@ -173,6 +175,7 @@
     <ClInclude Include="Hall.h" />
     <ClInclude Include="Health.h" />
     <ClInclude Include="KimSuHwan.h" />
+    <ClInclude Include="K_Npc.h" />
     <ClInclude Include="LastBoss.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Maria.h" />
@@ -183,9 +186,11 @@
     <ClInclude Include="Nicols1.h" />
     <ClInclude Include="Nicols2.h" />
     <ClInclude Include="Nicols3.h" />
+    <ClInclude Include="NPC.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RangedMonster.h" />
     <ClInclude Include="Sophiebara.h" />
+    <ClInclude Include="Statue.h" />
     <ClInclude Include="Virtus.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
