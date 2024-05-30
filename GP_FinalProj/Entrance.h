@@ -1,5 +1,4 @@
 // Entrance.h
-#pragma once
 #ifndef ENTRANCE_H
 #define ENTRANCE_H
 
@@ -10,10 +9,11 @@
 class Entrance : public Map {
 public:
     Entrance();
+    ~Entrance(); // 소멸자 선언 추가
     void SpawnNPC();
     void Update(float deltaTime) override;
-    void Render() override;
-    void HandleEvents() override;
+    void Render();
+    void HandleEvents();
     void SpawnMonsters() override;
     void TransitionToNextMap() override;
 

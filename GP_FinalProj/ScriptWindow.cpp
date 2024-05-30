@@ -1,22 +1,26 @@
 // ScriptWindow.cpp
 #include "ScriptWindow.h"
 #include "GameClass.h"
-#include <SDL_ttf.h>
+#include <SDL_image.h>
+
 ScriptWindow::ScriptWindow()
     : isVisible_(false), currentScriptIndex_(0), isScriptFinished_(false) {
-    scripts_.push_back("hello");
-    scripts_.push_back("who are you");
-    scripts_.push_back("start");
-    scripts_.push_back("go");
+    scriptTextures_.push_back(IMG_LoadTexture(g_renderer, "../../Resource/Script/script1.png"));
+    scriptTextures_.push_back(IMG_LoadTexture(g_renderer, "../../Resource/Script/script2.png"));
+    scriptTextures_.push_back(IMG_LoadTexture(g_renderer, "../../Resource/Script/script3.png"));
 
-    font_ = TTF_OpenFont("../../Resource/YEONGJUSeonbi.ttf", 24);
-    if (font_ == nullptr) {
-        // 폰트 로드 실패 처리
+    for (const auto& texture : scriptTextures_) {
+        if (texture == nullptr) {
+            // 텍스처 로딩 실패 처리
+            std::cout << "Failed to load script texture!" << std::endl;
+        }
     }
 }
 
 ScriptWindow::~ScriptWindow() {
-    TTF_CloseFont(font_);
+    for (auto texture : scriptTextures_) {
+        SDL_DestroyTexture(texture);
+    }
 }
 
 void ScriptWindow::Show() {
@@ -25,33 +29,33 @@ void ScriptWindow::Show() {
     isScriptFinished_ = false;
 }
 
+void ScriptWindow::Hide() {
+    isVisible_ = false;
+}
+
 void ScriptWindow::HandleInput(const SDL_Event& event) {
     if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RETURN) {
-        if (currentScriptIndex_ < scripts_.size() - 1) {
+        if (currentScriptIndex_ < scriptTextures_.size() - 1) {
             currentScriptIndex_++;
         }
         else {
-            isVisible_ = false;
+            Hide();
             isScriptFinished_ = true;
         }
     }
 }
 
 void ScriptWindow::Render() {
-    if (isVisible_) {
-        SDL_Rect dialogueRect = { 0, WINDOW_HEIGHT - 150, WINDOW_WIDTH, 150 };
-        SDL_SetRenderDrawColor(g_renderer, 0, 0, 0, 128);
-        SDL_RenderFillRect(g_renderer, &dialogueRect);
-        SDL_Color color = { 255, 255, 255 };
-        SDL_Surface* surfaceMessage = TTF_RenderText_Blended(font_, scripts_[currentScriptIndex_].c_str(), color);
-        SDL_Texture* message = SDL_CreateTextureFromSurface(g_renderer, surfaceMessage);
-        SDL_Rect messageRect = { 10, WINDOW_HEIGHT - 140, surfaceMessage->w, surfaceMessage->h };
-        SDL_RenderCopy(g_renderer, message, NULL, &messageRect);
-        SDL_FreeSurface(surfaceMessage);
-        SDL_DestroyTexture(message);
+    if (isVisible_ && currentScriptIndex_ >= 0 && currentScriptIndex_ < scriptTextures_.size()) {
+        SDL_Rect scriptRect = { 0, WINDOW_HEIGHT - 200, WINDOW_WIDTH, 200 };
+        SDL_RenderCopy(g_renderer, scriptTextures_[currentScriptIndex_], NULL, &scriptRect);
     }
 }
 
 bool ScriptWindow::IsScriptFinished() const {
     return isScriptFinished_;
+}
+
+bool ScriptWindow::IsVisible() const {
+    return isVisible_;
 }

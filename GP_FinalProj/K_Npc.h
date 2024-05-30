@@ -3,17 +3,23 @@
 #define K_NPC_H
 
 #include <SDL.h>
+#include "ScriptWindow.h"
 
 class K_Npc {
 public:
     K_Npc(const char* texturePath, int x, int y, int width, int height, SDL_Renderer* renderer);
+    ~K_Npc();
     void Render(SDL_Renderer* renderer);
     bool CheckCollision(const SDL_Rect& playerRect);
-    // Other NPC related methods and properties
+    void StartInteraction();
+    bool IsInteracting();
+
+    ScriptWindow* scriptWindow_;
+
 private:
     SDL_Rect m_rect;
     SDL_Texture* m_texture;
-    // Other NPC related properties
+    bool isInteracting_;
 };
 
 #endif

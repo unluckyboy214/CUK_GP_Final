@@ -7,9 +7,15 @@ extern SDL_Renderer* g_renderer;
 extern TTF_Font* g_font;
 
 Entrance::Entrance()
-    : Map("../../Resource/Map/Entrance.png", { (WINDOW_WIDTH - 100) / 2, 50, 100, 100 }) {
+    : Map("../../Resource/Map/Entrance.png", { (WINDOW_WIDTH - 100) / 2, 50, 100, 100 }),
+    npc(nullptr), scriptWindow(nullptr) {
     SpawnNPC();
     scriptWindow = new ScriptWindow();
+}
+
+Entrance::~Entrance() {
+    delete npc;
+    delete scriptWindow;
 }
 
 void Entrance::SpawnMonsters() {
@@ -22,12 +28,10 @@ void Entrance::SpawnNPC() {
 
 void Entrance::Update(float deltaTime) {
     Map::Update(deltaTime);
+
     if (npc->CheckCollision(g_player_destination_rect)) {
-        if (!scriptWindow->IsScriptFinished()) {
-            scriptWindow->Show();
-        }
-        else {
-            scriptWindow->Show();
+        if (!npc->IsInteracting()) {
+            npc->StartInteraction();
         }
     }
 }
@@ -36,8 +40,8 @@ void Entrance::HandleEvents() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RETURN) {
-            if (!scriptWindow->IsScriptFinished()) {
-                scriptWindow->HandleInput(event);
+            if (npc->IsInteracting()) {
+                npc->scriptWindow_->HandleInput(event);
             }
         }
     }
@@ -45,8 +49,12 @@ void Entrance::HandleEvents() {
 
 void Entrance::Render() {
     Map::Render();
-    npc->Render(g_renderer);
-    scriptWindow->Render();
+    if (npc != nullptr) {
+        npc->Render(g_renderer);
+    }
+    if (scriptWindow != nullptr) {
+        scriptWindow->Render();
+    }
 }
 
 void Entrance::TransitionToNextMap() {

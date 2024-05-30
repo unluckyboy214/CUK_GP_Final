@@ -122,5 +122,5 @@ bool Player::IsParrying() const {
 }
 
 const SDL_Rect& Player::GetRect() const {
-    return rect_;
+    return rect_; // 플레이어의 위치를 나타내는 SDL_Rect 객체의 참조 반환
 }
