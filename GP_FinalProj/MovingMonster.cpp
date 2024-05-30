@@ -33,15 +33,4 @@ void MovingMonster::MoveTowardsPlayer(float deltaTime, const SDL_Rect& playerRec
     }
 }
 
-void MovingMonster::ParryEffect(const SDL_Rect& playerRect) {
-    float knockbackSpeed = 50.0f; // Adjust the knockback speed as needed
 
-    float deltaX = x - playerRect.x;
-    float deltaY = y - playerRect.y;
-    float distance = std::sqrt(deltaX * deltaX + deltaY * deltaY);
-
-    if (distance > 0) {
-        x += static_cast<int>(knockbackSpeed * deltaX / distance);
-        y += static_cast<int>(knockbackSpeed * deltaY / distance);
-    }
-}
