@@ -159,6 +159,8 @@ int main(int argc, char* argv[]) {
             break;
         }
 
+        player.Render();
+
         if (showMinimapAndHealth) {
             minimap.Render(g_player_destination_rect.x, g_player_destination_rect.y);
             health.Render();
