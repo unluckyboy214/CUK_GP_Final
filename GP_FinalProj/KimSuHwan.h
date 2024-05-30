@@ -12,7 +12,7 @@ public:
     void SpawnMonsters() override;
 
 private:
-    K_Npc* npc;  // NPC °´Ã¼
+    K_Npc* npc;  // NPC ï¿½ï¿½Ã¼
 };
 
 

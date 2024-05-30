@@ -9,7 +9,7 @@ Map::Map(const char* backgroundPath, const SDL_Rect& portalRect)
 {
     LoadBackground(backgroundPath);
     LoadPortal();
-    // SpawnMonsters()¸¦ ¿©±â¼­ È£ÃâÇÏÁö ¾Ê½À´Ï´Ù.
+    // SpawnMonsters()ï¿½ï¿½ ï¿½ï¿½ï¿½â¼­ È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.
 }
 
 Map::~Map() {
@@ -44,7 +44,7 @@ void Map::Update(float deltaTime) {
     player_.Update(deltaTime);
 
     if (SDL_HasIntersection(&player_.GetRect(), &portal_rect_)) {
-        // ÆäÀÌÁî ÀüÈ¯ ·ÎÁ÷ ±¸Çö
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     }
 
     for (auto it = monsters.begin(); it != monsters.end();) {
@@ -56,7 +56,7 @@ void Map::Update(float deltaTime) {
             it = monsters.erase(it);
 
             if (g_player_health <= 0) {
-                // °ÔÀÓ ¿À¹ö ·ÎÁ÷ Ã³¸®
+                // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
                 ResetMonsters();
                 break;
             }

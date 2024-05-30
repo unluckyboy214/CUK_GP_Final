@@ -31,12 +31,12 @@ void NPC::Render(SDL_Renderer* renderer) {
 }
 
 void NPC::ShowDialogue(SDL_Renderer* renderer) {
-    // ¹ÝÅõ¸í °ËÀº»ö ¹Ú½º
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½
     SDL_Rect dialogueRect = { 0, WINDOW_HEIGHT - 150, WINDOW_WIDTH, 150 };
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 128);
     SDL_RenderFillRect(renderer, &dialogueRect);
 
-    // ÅØ½ºÆ® ·»´õ¸µ (´ëÈ­)
+    // ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½È­)
     SDL_Color color = { 255, 255, 255 };
     SDL_Surface* surfaceMessage = TTF_RenderText_Blended(font_, dialogue_.c_str(), color);
     SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
@@ -47,7 +47,7 @@ void NPC::ShowDialogue(SDL_Renderer* renderer) {
     SDL_FreeSurface(surfaceMessage);
     SDL_DestroyTexture(message);
 
-    // NPC È®´ë ÀÌ¹ÌÁö
+    // NPC È®ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½
     SDL_Rect npcZoomRect = { WINDOW_WIDTH - 110, WINDOW_HEIGHT - 140, 100, 100 };
     SDL_RenderCopy(renderer, texture_, NULL, &npcZoomRect);
 }

@@ -3,8 +3,9 @@
 #include "Player.h"
 #include "globals.h"
 #include <SDL_image.h>
+#include <iostream>
 
-Player::Player() : is_parrying_(false), move_speed_(500.0f) {
+Player::Player() : is_parrying_(false), move_speed_(500.0f), parry_cooldown_(0.5f), parry_duration_(0.1f), parry_timer_(0.0f), direction_(0) {
     // 플레이어 텍스처 로드
     SDL_Surface* surface = IMG_Load("../../Resource/Character/Isacc.png");
     texture_ = SDL_CreateTextureFromSurface(g_renderer, surface);
@@ -16,22 +17,33 @@ Player::Player() : is_parrying_(false), move_speed_(500.0f) {
 void Player::Update(float deltaTime) {
     if (g_move_left) {
         rect_.x -= move_speed_ * deltaTime;
+        direction_ = 3; // 왼쪽
     }
     if (g_move_right) {
         rect_.x += move_speed_ * deltaTime;
+        direction_ = 1; // 오른쪽
     }
     if (g_move_up) {
         rect_.y -= move_speed_ * deltaTime;
+        direction_ = 0; // 위
     }
     if (g_move_down) {
         rect_.y += move_speed_ * deltaTime;
+        direction_ = 2; // 아래
+    }
+
+    // 패링 타이머 업데이트
+    if (parry_timer_ > 0) {
+        parry_timer_ -= deltaTime;
+    }
+    else {
+        is_parrying_ = false;
     }
 
     // 화면을 벗어나지 않도록 제한
     rect_.x = std::max(0, std::min(WINDOW_WIDTH - rect_.w, rect_.x));
     rect_.y = std::max(0, std::min(WINDOW_HEIGHT - rect_.h, rect_.y));
 }
-
 void Player::Render() {
     SDL_RenderCopy(g_renderer, texture_, NULL, &rect_);
 }
@@ -53,7 +65,7 @@ void Player::HandleEvents(const SDL_Event& event) {
             g_move_down = true;
             break;
         case SDLK_SPACE:
-            SetParrying(true);
+            PerformParry();
             break;
         }
         break;
@@ -72,11 +84,24 @@ void Player::HandleEvents(const SDL_Event& event) {
         case SDLK_DOWN:
             g_move_down = false;
             break;
-        case SDLK_SPACE:
-            SetParrying(false);
-            break;
         }
         break;
+    }
+}
+
+
+void Player::PerformParry() {
+    if (parry_timer_ <= 0) {
+        is_parrying_ = true;
+        parry_timer_ = parry_cooldown_ + parry_duration_;
+        float parry_distance = 10.0f; // 패링 시 이동 거리
+
+        switch (direction_) {
+        case 0: rect_.y -= parry_distance; break; // 위
+        case 1: rect_.x += parry_distance; break; // 오른쪽
+        case 2: rect_.y += parry_distance; break; // 아래
+        case 3: rect_.x -= parry_distance; break; // 왼쪽
+        }
     }
 }
 
