@@ -45,7 +45,15 @@ void Player::Update(float deltaTime) {
     rect_.y = std::max(0, std::min(WINDOW_HEIGHT - rect_.h, rect_.y));
 }
 void Player::Render() {
-    SDL_RenderCopy(g_renderer, texture_, NULL, &rect_);
+    if (is_parrying_) {
+        // 패링 상태일 때 다른 색상으로 렌더링
+        SDL_SetTextureColorMod(texture_, 255, 0, 0); // 빨간색으로 변경
+        SDL_RenderCopy(g_renderer, texture_, NULL, &rect_);
+        SDL_SetTextureColorMod(texture_, 255, 255, 255); // 원래 색상으로 복원
+    }
+    else {
+        SDL_RenderCopy(g_renderer, texture_, NULL, &rect_);
+    }
 }
 
 void Player::HandleEvents(const SDL_Event& event) {
