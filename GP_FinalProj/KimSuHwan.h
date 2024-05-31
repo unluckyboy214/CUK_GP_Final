@@ -1,20 +1,17 @@
-// KimSuHwan.h
 #ifndef KIMSUHWAN_H
 #define KIMSUHWAN_H
-
 #include "Map.h"
-#include "K_Npc.h"
-
+#include "K_NPC.h"
 
 class KimSuHwan : public Map {
 public:
     KimSuHwan();
     void SpawnMonsters() override;
+    void SpawnNPC();
+    void Update(float deltaTime) override;
+    void Render();
     void TransitionToNextMap() override;
-
 private:
-    K_Npc* npc;  // NPC ��ü
+    K_NPC* npc;
 };
-
-
 #endif

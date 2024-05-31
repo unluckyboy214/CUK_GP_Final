@@ -17,6 +17,8 @@
 #include "Minimap.h"
 #include "Health.h"
 #include "Chisam.h"
+#include "E_NPC.h"
+#include "K_NPC.h"
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
@@ -51,6 +53,9 @@ int main(int argc, char* argv[]) {
     LastBoss lastboss; // LastBoss 객체 생성
     Player player;
     Chisam chisam(WINDOW_WIDTH / 20, WINDOW_HEIGHT / 20, g_renderer, font);
+    E_NPC e_npc(g_renderer, 100, 100);
+    K_NPC k_npc(g_renderer, 200, 200);
+
 
     while (g_flag_running) {
         Uint32 cur_time_ms = SDL_GetTicks();
@@ -84,12 +89,14 @@ int main(int argc, char* argv[]) {
             entrance.Update(deltaTime);
             entrance.Render();
             chisam.Render();
+            e_npc.render(g_renderer);
             break;
         case PHASE_KimSuHwan:
             minimap.UpdatePlayerPosition(1);
             kimsuhwan.HandleEvents();
             kimsuhwan.Update(deltaTime);
             kimsuhwan.Render();
+            k_npc.render(g_renderer);
             break;
         case PHASE_Hall:
             minimap.UpdatePlayerPosition(2);

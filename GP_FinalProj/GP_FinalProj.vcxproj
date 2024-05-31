@@ -138,6 +138,7 @@
     <ClCompile Include="ChargingMonster.cpp" />
     <ClCompile Include="Chisam.cpp" />
     <ClCompile Include="Dasol.cpp" />
+    <ClCompile Include="E_NPC.cpp" />
     <ClCompile Include="GameClass.cpp" />
     <ClCompile Include="GameClassPhase.h" />
     <ClCompile Include="GamePhases.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="ChargingMonster.h" />
     <ClInclude Include="Chisam.h" />
     <ClInclude Include="Dasol.h" />
+    <ClInclude Include="E_NPC.h" />
     <ClInclude Include="GameClass.h" />
     <ClInclude Include="Entrance.h" />
     <ClInclude Include="GamePhases.h" />
