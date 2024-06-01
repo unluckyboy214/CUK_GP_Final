@@ -14,12 +14,12 @@ public:
     void SpawnMonsters() override;
 
 private:
-    std::vector<SDL_Texture*> bossIntroFrames; // º¸½ºÀü ÀÎÆ®·Î ÇÁ·¹ÀÓ
+    std::vector<SDL_Texture*> bossIntroFrames; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     BossMonster* bossMonster;
     bool showBossIntro;
     float bossIntroTotalTimer;
     float frameTimer;
     float frameDuration;
     int currentFrame;
-    void RenderBossHP(); // º¸½º HP ·»´õ¸µ ÇÔ¼ö
+    void RenderBossHP(); // ï¿½ï¿½ï¿½ï¿½ HP ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 };

@@ -38,7 +38,7 @@ void Chisam::LoadTexture(const char* filePath) {
 }
 
 void Chisam::GenerateRandomPosition() {
-    // Áß¾Ó¿¡ À§Ä¡ÇÏµµ·Ï ¼³Á¤
+    // ï¿½ß¾Ó¿ï¿½ ï¿½ï¿½Ä¡ï¿½Ïµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     position.x = mapWidth / 5;
     position.y = mapHeight / 2;
 }
@@ -46,7 +46,7 @@ void Chisam::GenerateRandomPosition() {
 void Chisam::Render() {
     if (visible) {
         if (texture) {
-            SDL_Rect dstRect = { (position.x * 20) - 10, (position.y * 20) - 10, 20, 20 }; // ÀÌ¹ÌÁö Å©±â Á¶Á¤ ÇÊ¿ä
+            SDL_Rect dstRect = { (position.x * 20) - 10, (position.y * 20) - 10, 20, 20 }; // ï¿½Ì¹ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
             SDL_RenderCopy(renderer, texture, NULL, &dstRect);
         }
         else {

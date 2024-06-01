@@ -3,25 +3,41 @@
 
 #include <SDL.h>
 #include <vector>
+#include <unordered_map>
 #include "Monster.h"
+#include "GameClass.h"
 
 class Monster;
+
+enum class PlayerState {
+    Idle,
+    Move,
+    Parry,
+    Damage,
+    Death
+};
+
+struct Animation {
+    std::vector<SDL_Texture*> frames;
+    float frame_duration;  // 각 프레임의 지속 시간
+};
 
 class Player {
 public:
     Player();
     void Update(float deltaTime);
     void Render();
-    void HandleEvents(const SDL_Event& event, const std::vector<Monster*>& monsters); // 몬스터 목록을 인자로 받도록 수정
-    void PerformParry(const std::vector<Monster*>& monsters); // 몬스터 목록을 인자로 받도록 수정
+    void HandleEvents(const SDL_Event& event, const std::vector<Monster*>& monsters);
+    void PerformParry(const std::vector<Monster*>& monsters);
     void SetParrying(bool parrying);
     bool IsParrying() const;
     const SDL_Rect& GetRect() const;
-
-    void SetPosition(int x, int y); // 플레이어 위치 설정
+    void SetPosition(int x, int y);
 
 private:
-    SDL_Texture* texture_;
+    void LoadTextures();
+    void LoadAnimation(PlayerState state, const std::string& base_path, int frame_count, float frame_duration);
+
     SDL_Rect rect_;
     bool is_parrying_;
     float move_speed_;
@@ -29,6 +45,14 @@ private:
     float parry_duration_;
     float parry_timer_;
     int direction_;
+    PlayerState state_;
+    PlayerState prev_state_;  // 이전 상태를 저장
+    int current_frame_;
+    float frame_time_;
+
+    std::unordered_map<PlayerState, Animation> animations_;
+    static bool textures_loaded_;  // 플래그 추가
+    static std::unordered_map<PlayerState, Animation> shared_animations_;  // 공유 애니메이션 추가
 };
 
 #endif // PLAYER_H
