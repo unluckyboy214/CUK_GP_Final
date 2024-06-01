@@ -31,7 +31,7 @@ public:
     void PerformParry(const std::vector<Monster*>& monsters);
     void SetParrying(bool parrying);
     bool IsParrying() const;
-    const SDL_Rect& GetRect() const;
+    SDL_Rect GetRect() const;
     void SetPosition(int x, int y);
 
 private:

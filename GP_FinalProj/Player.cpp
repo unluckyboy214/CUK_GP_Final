@@ -25,7 +25,7 @@ Player::Player()
         textures_loaded_ = true;
     }
     animations_ = shared_animations_;
-    rect_ = { WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 100, 100 };
+    rect_ = { WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 150, 150 }; // 캐릭터 크기 조정
 }
 
 void Player::LoadTextures() {
@@ -71,13 +71,13 @@ void Player::Update(float deltaTime) {
         rect_.x -= move_speed_ * deltaTime;
         direction_ = 3; // left
         isMoving = true;
-        flip_ = false;  // 왼쪽 이동 시 반전
+        flip_ = false;  // 왼쪽 이동 시 반전 해제
     }
     if (g_move_right) {
         rect_.x += move_speed_ * deltaTime;
         direction_ = 1; // right
         isMoving = true;
-        flip_ = true;  // 오른쪽 이동 시 반전 해제
+        flip_ = true;  // 오른쪽 이동 시 반전 
     }
     if (g_move_up) {
         rect_.y -= move_speed_ * deltaTime;
@@ -230,8 +230,12 @@ bool Player::IsParrying() const {
     return is_parrying_;
 }
 
-const SDL_Rect& Player::GetRect() const {
-    return rect_;
+SDL_Rect Player::GetRect() const {
+    // 충돌 범위를 줄이기 위해 크기를 줄여서 반환
+    SDL_Rect smaller_rect = rect_;
+    smaller_rect.w *= 0.5;  // 너비를 50%로 줄임
+    smaller_rect.h *= 0.6;  // 높이를 60%로 줄임
+    return smaller_rect;
 }
 
 void Player::SetPosition(int x, int y) {
