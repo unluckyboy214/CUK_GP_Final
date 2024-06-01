@@ -14,6 +14,7 @@ public:
     SDL_Rect source_rectangle_;
     SDL_Rect destination_rectangle_;
     std::vector<Monster*> monsters;
+    void SpawnMonster();
     Player player_;
 
     float spawnTimer;  // 몬스터 생성 타이머
