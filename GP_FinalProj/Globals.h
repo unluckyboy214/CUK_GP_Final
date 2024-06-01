@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include <vector>
+#include <SDL_ttf.h>
 
 extern SDL_Window* g_window;
 extern SDL_Renderer* g_renderer;
@@ -16,5 +17,7 @@ extern int g_player_health;
 extern float g_phase_transition_timer;
 extern const int NUMBER_OF_PHASES;
 extern std::vector<SDL_Rect> g_obstacles;  // 추가: 장애물 벡터 선언
+extern int g_kill_count;
+extern TTF_Font* g_font;
 
 #endif // GLOBALS_H

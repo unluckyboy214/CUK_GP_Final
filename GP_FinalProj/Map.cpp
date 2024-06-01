@@ -1,4 +1,6 @@
 #include "Map.h"
+#include "globals.h" // globals.h 포함
+#include "Entrance.h"  // Entrance 클래스 포함
 
 Map::Map(const char* backgroundPath) : destination_rectangle_{ 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT }, spawnTimer(0.0f), spawnDelay(5.0f), monstersSpawned(false) {
     LoadBackground(backgroundPath);
@@ -32,6 +34,11 @@ void Map::Update(float deltaTime) {
         if ((*it)->CheckCollisionWithPlayer(player_.GetRect())) {
             delete* it;
             it = monsters.erase(it);
+            g_kill_count++; // 몬스터 삭제 시 킬 수 증가
+            // 몬스터 제거 시 새로운 몬스터 생성
+            if (monsters.size() < 7) {
+                dynamic_cast<Entrance*>(this)->SpawnMonster();  // 한 마리의 새로운 몬스터 생성
+            }
         }
         else {
             ++it;
@@ -43,6 +50,7 @@ void Map::Update(float deltaTime) {
         g_phase_transition_timer = 2.0f;
     }
 }
+
 
 void Map::Render() {
     SDL_SetRenderDrawColor(g_renderer, 255, 255, 255, 255);

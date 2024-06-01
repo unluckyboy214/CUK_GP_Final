@@ -16,12 +16,29 @@ void SetPlayerToCenter(Player& player) {
     player.SetPosition(WINDOW_WIDTH / 2 - player.GetRect().w / 2, WINDOW_HEIGHT / 2 - player.GetRect().h / 2);
 }
 
+// 킬 수를 렌더링하는 함수 추가
+void RenderKillCount() {
+    SDL_Color color = { 255, 0, 0, 255 }; // 빨간색
+    std::string killCountText = "Kills: " + std::to_string(g_kill_count);
+    SDL_Surface* surface = TTF_RenderText_Solid(g_font, killCountText.c_str(), color);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(g_renderer, surface);
+
+    int text_width = surface->w;
+    int text_height = surface->h;
+    SDL_FreeSurface(surface);
+
+    SDL_Rect renderQuad = { WINDOW_WIDTH / 2 - text_width / 2, 0, text_width, text_height };
+    SDL_RenderCopy(g_renderer, texture, NULL, &renderQuad);
+    SDL_DestroyTexture(texture);
+}
+
 int main(int argc, char* argv[]) {
     SDL_Init(SDL_INIT_EVERYTHING);
     TTF_Init();
     IMG_Init(IMG_INIT_PNG); // Initialize SDL_image
 
     TTF_Font* font = TTF_OpenFont("../../Resource/YEONGJUSeonbi.ttf", 24); // 적절한 경로로 변경
+    g_font = font; // 전역 폰트 설정
     g_window = SDL_CreateWindow("Dungeon of Catholic (Beta)", 500, 100, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
     g_renderer = SDL_CreateRenderer(g_window, -1, SDL_RENDERER_ACCELERATED);
 
@@ -74,60 +91,57 @@ int main(int argc, char* argv[]) {
             SetPlayerToCenter(player);
         }
 
-        // 단계 전환 타이머 업데이트
-        if (g_phase_transition_timer > 0) {
-            g_phase_transition_timer -= deltaTime;
-            if (g_phase_transition_timer <= 0) {
-                // 다음 단계로 전환
-                switch (g_current_game_phase) {
-                case PHASE_Entrance:
-                    g_current_game_phase = PHASE_KimSuHwan;
-                    kimsuhwan.ResetMonsters();  // 다음 맵 초기화
-                    break;
-                case PHASE_KimSuHwan:
-                    g_current_game_phase = PHASE_Hall;
-                    hall.ResetMonsters();  // 다음 맵 초기화
-                    break;
-                case PHASE_Hall:
-                    g_current_game_phase = PHASE_Entrance;
-                    entrance.ResetMonsters();  // 다시 처음으로 돌아옴
-                    break;
-                }
-                SetPlayerToCenter(player); // 맵 전환 후 플레이어 위치 중앙으로 설정
-            }
-        }
-        else {
-            bool showMinimapAndHealth = true;
-
+        // 킬 카운트 기반의 페이즈 전환 로직
+        if (g_kill_count >= 10) {  // 10마리를 처치했다면 페이즈 전환
+            g_kill_count = 0;  // 킬 카운트 초기화
             switch (g_current_game_phase) {
             case PHASE_Entrance:
-                minimap.UpdatePlayerPosition(0);
-                entrance.Update(deltaTime);
-                entrance.Render();
-                chisam.Render();
+                g_current_game_phase = PHASE_KimSuHwan;
+                kimsuhwan.ResetMonsters();  // 다음 맵 초기화
                 break;
             case PHASE_KimSuHwan:
-                minimap.UpdatePlayerPosition(1);
-                kimsuhwan.Update(deltaTime);
-                kimsuhwan.Render();
+                g_current_game_phase = PHASE_Hall;
+                hall.ResetMonsters();  // 다음 맵 초기화
                 break;
             case PHASE_Hall:
-                minimap.UpdatePlayerPosition(2);
-                hall.Update(deltaTime);
-                hall.Render();
+                g_current_game_phase = PHASE_Entrance;
+                entrance.ResetMonsters();  // 처음 맵으로 돌아옴
                 break;
             }
-
-            player.Render();
-
-            if (showMinimapAndHealth) {
-                minimap.Render(g_player_destination_rect.x, g_player_destination_rect.y);
-                health.Render();
-            }
-
-            SDL_RenderPresent(g_renderer);
-            g_last_time_ms = cur_time_ms;
+            SetPlayerToCenter(player);  // 맵 전환 후 플레이어 위치 중앙으로 설정
         }
+
+        bool showMinimapAndHealth = true;
+
+        switch (g_current_game_phase) {
+        case PHASE_Entrance:
+            minimap.UpdatePlayerPosition(0);
+            entrance.Update(deltaTime);
+            entrance.Render();
+            chisam.Render();
+            break;
+        case PHASE_KimSuHwan:
+            minimap.UpdatePlayerPosition(1);
+            kimsuhwan.Update(deltaTime);
+            kimsuhwan.Render();
+            break;
+        case PHASE_Hall:
+            minimap.UpdatePlayerPosition(2);
+            hall.Update(deltaTime);
+            hall.Render();
+            break;
+        }
+
+        player.Render();
+        RenderKillCount(); // 플레이어 렌더링 후 킬 수 렌더링
+
+        if (showMinimapAndHealth) {
+            minimap.Render(g_player_destination_rect.x, g_player_destination_rect.y);
+            health.Render();
+        }
+
+        SDL_RenderPresent(g_renderer);
+        g_last_time_ms = cur_time_ms;
     }
 
     SDL_DestroyRenderer(g_renderer);

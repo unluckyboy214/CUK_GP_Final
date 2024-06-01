@@ -20,6 +20,8 @@ public:
     float spawnDelay;  // 몬스터 생성 지연 시간
     bool monstersSpawned; // 몬스터가 생성되었는지 여부
 
+    static const int MaxMonsters = 10; // 최대 몬스터 수
+
     Map(const char* backgroundPath);
     virtual ~Map();
 

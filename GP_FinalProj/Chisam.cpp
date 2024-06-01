@@ -38,31 +38,55 @@ void Chisam::LoadTexture(const char* filePath) {
 }
 
 void Chisam::GenerateRandomPosition() {
-    // �߾ӿ� ��ġ�ϵ��� ����
+    // 중앙에 위치하도록 설정
     position.x = mapWidth / 5;
     position.y = mapHeight / 2;
 }
 
 void Chisam::Render() {
     if (visible) {
+        int characterWidth = 40; // 캐릭터의 너비 (픽셀 단위)
+        int characterHeight = 40; // 캐릭터의 높이 (픽셀 단위)
+
         if (texture) {
-            SDL_Rect dstRect = { (position.x * 20) - 10, (position.y * 20) - 10, 20, 20 }; // �̹��� ũ�� ���� �ʿ�
+            SDL_Rect dstRect = { (position.x * 20) - (characterWidth / 2), (position.y * 20) - (characterHeight / 2), characterWidth, characterHeight }; // 캐릭터 크기 조정
             SDL_RenderCopy(renderer, texture, NULL, &dstRect);
         }
         else {
             SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255); // Yellow for Chisam
-            SDL_Rect chisamRect = { position.x * 20, position.y * 20, 20, 20 };
+            SDL_Rect chisamRect = { position.x * 20, position.y * 20, characterWidth, characterHeight };
             SDL_RenderFillRect(renderer, &chisamRect);
         }
 
         if (currentDialogueIndex < dialogues.size()) {
-            SDL_Color color = { 0, 0, 0, 255 };
-            SDL_Surface* surface = TTF_RenderText_Solid(font, dialogues[currentDialogueIndex].c_str(), color);
-            SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-            SDL_Rect dstRect = { (position.x * 20) - (surface->w / 2), (position.y * 20) - 30, surface->w, surface->h };
-            SDL_RenderCopy(renderer, texture, NULL, &dstRect);
-            SDL_FreeSurface(surface);
-            SDL_DestroyTexture(texture);
+            SDL_Color textColor = { 0, 0, 0, 255 };
+            SDL_Surface* textSurface = TTF_RenderUTF8_Solid(font, dialogues[currentDialogueIndex].c_str(), textColor);
+            if (textSurface) {
+                SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+
+                // 말풍선 배경을 그리기 위한 사각형
+                int padding = 10;
+                int bubbleOffsetY = 60; // 말풍선을 위로 올리기 위한 오프셋
+                SDL_Rect bgRect = { (position.x * 20) - (textSurface->w / 2) - padding, (position.y * 20) - bubbleOffsetY - padding, textSurface->w + padding * 2, textSurface->h + padding * 2 };
+
+                // 말풍선 배경 색상 설정
+                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // White background
+                SDL_RenderFillRect(renderer, &bgRect);
+
+                // 말풍선 테두리 그리기
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black border
+                SDL_RenderDrawRect(renderer, &bgRect);
+
+                // 텍스트 렌더링
+                SDL_Rect textRect = { (position.x * 20) - (textSurface->w / 2), (position.y * 20) - bubbleOffsetY, textSurface->w, textSurface->h };
+                SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+
+                SDL_FreeSurface(textSurface);
+                SDL_DestroyTexture(textTexture);
+            }
+            else {
+                printf("TTF_RenderUTF8_Solid Error: %s\n", TTF_GetError());
+            }
         }
     }
 }

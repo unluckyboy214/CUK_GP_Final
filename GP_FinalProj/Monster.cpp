@@ -14,6 +14,8 @@ Monster::~Monster() {
         }
     }
     textures.clear();
+
+
 }
 
 void Monster::LoadTextures(const std::vector<std::string>& frameFiles) {
