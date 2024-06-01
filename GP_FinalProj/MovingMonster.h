@@ -8,9 +8,14 @@ public:
     MovingMonster(int x, int y);
     void Update(float deltaTime, const SDL_Rect& playerRect) override;
     void ParryEffect(const SDL_Rect& playerRect);
+    void TakeDamage(int damage);
 
 private:
     void MoveTowardsPlayer(float deltaTime, const SDL_Rect& playerRect);
+    int health;
+    std::vector<std::string> normalFrameFiles;
+    std::vector<std::string> stunFrameFiles;
+    bool isStunned;
 };
 
 #endif // MOVINGMONSTER_H
