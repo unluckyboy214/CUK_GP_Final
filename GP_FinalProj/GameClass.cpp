@@ -1,5 +1,6 @@
 // GameClass.cpp
 #include "GameClass.h"
+#include "Intro.h"
 #include "Entrance.h"
 #include "KimSuHwan.h"
 #include "Hall.h"
@@ -28,6 +29,7 @@ bool g_move_down = false;
 
 void InitGame() {
     g_flag_running = true;
+    g_current_game_phase = PHASE_Intro; // 추가: 시작 단계를 PHASE_Intro로 설정
     g_player_destination_rect = { WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 100, 100 };
     g_player_direction = PlayerDirection::UP;
 }

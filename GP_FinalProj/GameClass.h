@@ -15,6 +15,7 @@ void InitGame();
 void ClearGame();
 
 // Game Phases
+const int PHASE_Intro = -1;
 const int PHASE_Entrance = 0;
 const int PHASE_KimSuHwan = 1;
 const int PHASE_Hall = 2;

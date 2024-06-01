@@ -1,4 +1,5 @@
 ﻿#include "GameClass.h"
+#include "Intro.h"
 #include "Entrance.h"
 #include "KimSuHwan.h"
 #include "Hall.h"
@@ -47,6 +48,7 @@ int main(int argc, char* argv[]) {
     Minimap minimap(g_renderer);
     Health health(g_renderer);
 
+    Intro intro;
     Entrance entrance;
     KimSuHwan kimsuhwan;
     Hall hall;
@@ -70,6 +72,9 @@ int main(int argc, char* argv[]) {
 
             // 현재 맵의 몬스터 목록을 player.HandleEvents에 전달
             switch (g_current_game_phase) {
+            case PHASE_Intro:
+                intro.HandleEvents(e);
+                break;
             case PHASE_Entrance:
                 player.HandleEvents(e, entrance.GetMonsters());
                 break;
@@ -114,6 +119,10 @@ int main(int argc, char* argv[]) {
         bool showMinimapAndHealth = true;
 
         switch (g_current_game_phase) {
+        case PHASE_Intro:
+            intro.Update(deltaTime);
+            intro.Render();
+            break;
         case PHASE_Entrance:
             minimap.UpdatePlayerPosition(0);
             entrance.Update(deltaTime);
@@ -132,12 +141,14 @@ int main(int argc, char* argv[]) {
             break;
         }
 
-        player.Render();
-        RenderKillCount(); // 플레이어 렌더링 후 킬 수 렌더링
+        if (g_current_game_phase != PHASE_Intro) {
+            player.Render();
+            RenderKillCount();
 
-        if (showMinimapAndHealth) {
-            minimap.Render(g_player_destination_rect.x, g_player_destination_rect.y);
-            health.Render();
+            if (showMinimapAndHealth) {
+                minimap.Render(g_player_destination_rect.x, g_player_destination_rect.y);
+                health.Render();
+            }
         }
 
         SDL_RenderPresent(g_renderer);

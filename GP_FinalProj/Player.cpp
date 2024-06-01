@@ -22,7 +22,8 @@ Player::Player()
     prev_state_(PlayerState::Idle),  // 초기 이전 상태
     current_frame_(0),
     frame_time_(0.0f),
-    flip_(false) {  // 초기 반전 상태
+    flip_(false),
+    velocity_({ 0.0f, 0.0f }) {  // 속도 초기화
     if (!textures_loaded_) {
         LoadTextures();
         textures_loaded_ = true;
@@ -67,31 +68,65 @@ void Player::LoadAnimation(PlayerState state, const std::string& base_path, int 
 }
 
 void Player::Update(float deltaTime) {
+    float acceleration = 3000.0f;  // 가속도
+    float deceleration = 3000.0f;  // 감속도
+    float maxSpeed = 500.0f;  // 최대 속도
     bool isMoving = false;
 
-    // Handle movement input
+    // Handle movement input with acceleration
     if (g_move_left) {
-        rect_.x -= move_speed_ * deltaTime;
+        velocity_.x -= acceleration * deltaTime;
+        if (velocity_.x < -maxSpeed) velocity_.x = -maxSpeed;
         direction_ = 3; // left
         isMoving = true;
-        flip_ = false;  // 왼쪽 이동 시 반전 해제
+        flip_ = false;
     }
     if (g_move_right) {
-        rect_.x += move_speed_ * deltaTime;
+        velocity_.x += acceleration * deltaTime;
+        if (velocity_.x > maxSpeed) velocity_.x = maxSpeed;
         direction_ = 1; // right
         isMoving = true;
-        flip_ = true;  // 오른쪽 이동 시 반전 
+        flip_ = true;
     }
     if (g_move_up) {
-        rect_.y -= move_speed_ * deltaTime;
+        velocity_.y -= acceleration * deltaTime;
+        if (velocity_.y < -maxSpeed) velocity_.y = -maxSpeed;
         direction_ = 0; // up
         isMoving = true;
     }
     if (g_move_down) {
-        rect_.y += move_speed_ * deltaTime;
+        velocity_.y += acceleration * deltaTime;
+        if (velocity_.y > maxSpeed) velocity_.y = maxSpeed;
         direction_ = 2; // down
         isMoving = true;
     }
+
+    // Decelerate when no input is given
+    if (!g_move_left && !g_move_right) {
+        if (velocity_.x > 0) {
+            velocity_.x -= deceleration * deltaTime;
+            if (velocity_.x < 0) velocity_.x = 0;
+        }
+        else if (velocity_.x < 0) {
+            velocity_.x += deceleration * deltaTime;
+            if (velocity_.x > 0) velocity_.x = 0;
+        }
+    }
+
+    if (!g_move_up && !g_move_down) {
+        if (velocity_.y > 0) {
+            velocity_.y -= deceleration * deltaTime;
+            if (velocity_.y < 0) velocity_.y = 0;
+        }
+        else if (velocity_.y < 0) {
+            velocity_.y += deceleration * deltaTime;
+            if (velocity_.y > 0) velocity_.y = 0;
+        }
+    }
+
+    // Update player position
+    rect_.x += velocity_.x * deltaTime;
+    rect_.y += velocity_.y * deltaTime;
 
     // Update state based on movement and parrying
     if (is_parrying_) {
@@ -155,7 +190,7 @@ void Player::Render() {
     SDL_RenderCopyEx(g_renderer, current_texture, NULL, &rect_, 0, NULL, flip);
 }
 
-void Player::HandleEvents(const SDL_Event& event,  std::vector<Monster*>& monsters) {
+void Player::HandleEvents(const SDL_Event& event, std::vector<Monster*>& monsters) {
     switch (event.type) {
     case SDL_KEYDOWN:
         switch (event.key.keysym.sym) {
@@ -243,8 +278,6 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
                         }
                     }
                 }
-
-
             }
 
             // 플레이어 이동 처리

@@ -2,6 +2,7 @@
 #ifndef GAME_PHASES_H
 #define GAME_PHASES_H
 
+extern const int PHASE_Intro;
 extern const int PHASE_Entrance;
 extern const int PHASE_KimSuHwan;
 extern const int PHASE_Hall;
