@@ -1,4 +1,3 @@
-#pragma once
 #ifndef MAP_H
 #define MAP_H
 
@@ -6,29 +5,35 @@
 #include <vector>
 #include "Monster.h"
 #include "Player.h"
+#include <SDL_image.h>
+#include "globals.h"
 
 class Map {
 public:
-    Map(const char* backgroundPath, const SDL_Rect& portalRect);
-    virtual ~Map();
-    virtual void Update(float deltaTime);
-    virtual void Render();
-    virtual void HandleEvents();
-    virtual void SpawnMonsters() = 0; // ���� ���� �Լ�
-    const std::vector<Monster*>& GetMonsters() const;
-
-protected:
     SDL_Texture* texture_;
-    SDL_Texture* portal_texture;
     SDL_Rect source_rectangle_;
     SDL_Rect destination_rectangle_;
-    SDL_Rect portal_rect_;
     std::vector<Monster*> monsters;
     Player player_;
 
-    void LoadBackground(const char* path);
-    void LoadPortal();
+    float spawnTimer;  // 몬스터 생성 타이머
+    float spawnDelay;  // 몬스터 생성 지연 시간
+    bool monstersSpawned; // 몬스터가 생성되었는지 여부
+
+    Map(const char* backgroundPath);
+    virtual ~Map();
+
+    virtual void Update(float deltaTime);
+    virtual void Render();
+    virtual void HandleEvents();
+    virtual void SpawnMonsters() = 0; // 순수 가상 함수
+
     void ResetMonsters();
+    void LoadBackground(const char* path);
+
+    const std::vector<Monster*>& GetMonsters() const {
+        return monsters;
+    }
 };
 
 #endif // MAP_H

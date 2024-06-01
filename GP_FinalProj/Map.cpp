@@ -1,23 +1,78 @@
-// Map.cpp
 #include "Map.h"
-#include "GameClass.h"
-#include <SDL_image.h>
-#include <random>
 
-Map::Map(const char* backgroundPath, const SDL_Rect& portalRect)
-    : portal_rect_(portalRect)
-{
+Map::Map(const char* backgroundPath) : destination_rectangle_{ 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT }, spawnTimer(0.0f), spawnDelay(5.0f), monstersSpawned(false) {
     LoadBackground(backgroundPath);
-    LoadPortal();
-    // SpawnMonsters()�� ���⼭ ȣ������ �ʽ��ϴ�.
 }
 
 Map::~Map() {
-    SDL_DestroyTexture(texture_);
-    SDL_DestroyTexture(portal_texture);
-    for (auto monster : monsters) {
-        delete monster;
+    if (texture_) {
+        SDL_DestroyTexture(texture_);
+        texture_ = nullptr;
     }
+    for (auto& monster : monsters) {
+        delete monster;
+        monster = nullptr;
+    }
+    monsters.clear();
+}
+
+void Map::Update(float deltaTime) {
+    player_.Update(deltaTime);
+
+    // 몬스터 생성 타이머 업데이트
+    spawnTimer += deltaTime;
+    if (spawnTimer >= spawnDelay && !monstersSpawned) {
+        SpawnMonsters();  // 몬스터 생성
+        monstersSpawned = true;  // 몬스터 생성 플래그 설정
+    }
+
+    bool allMonstersDefeated = true;
+    for (auto it = monsters.begin(); it != monsters.end();) {
+        (*it)->Update(deltaTime, player_.GetRect());
+        if ((*it)->CheckCollisionWithPlayer(player_.GetRect())) {
+            delete* it;
+            it = monsters.erase(it);
+        }
+        else {
+            ++it;
+            allMonstersDefeated = false;
+        }
+    }
+
+    if (allMonstersDefeated && monsters.empty() && monstersSpawned) {
+        g_phase_transition_timer = 2.0f;
+    }
+}
+
+void Map::Render() {
+    SDL_SetRenderDrawColor(g_renderer, 255, 255, 255, 255);
+    SDL_RenderClear(g_renderer);
+    SDL_RenderCopy(g_renderer, texture_, NULL, &destination_rectangle_);
+    for (auto monster : monsters) {
+        monster->Render();
+    }
+}
+
+void Map::HandleEvents() {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
+            g_flag_running = false;
+        }
+    }
+}
+
+void Map::ResetMonsters() {
+    for (auto& monster : monsters) {
+        delete monster;
+        monster = nullptr;
+    }
+    monsters.clear();
+    monstersSpawned = false;  // 리셋 시 몬스터 생성 플래그 초기화
+    spawnTimer = 0.0f;  // 타이머 리셋
+
+    // 플레이어 위치 중앙으로 설정
+    player_.SetPosition(WINDOW_WIDTH / 2 - player_.GetRect().w / 2, WINDOW_HEIGHT / 2 - player_.GetRect().h / 2);
 }
 
 void Map::LoadBackground(const char* path) {
@@ -27,83 +82,4 @@ void Map::LoadBackground(const char* path) {
 
     SDL_QueryTexture(texture_, NULL, NULL, &source_rectangle_.w, &source_rectangle_.h);
     destination_rectangle_ = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
-}
-
-void Map::LoadPortal() {
-    SDL_Surface* portal_surface = IMG_Load("../../Resource/Map/portal.png");
-    SDL_Surface* resized_portal_surface = SDL_CreateRGBSurface(0, 100, 100, 32, 0, 0, 0, 0);
-    SDL_Rect resized_portal_rect = { 0, 0, 100, 100 };
-    SDL_BlitScaled(portal_surface, NULL, resized_portal_surface, &resized_portal_rect);
-    SDL_FreeSurface(portal_surface);
-
-    portal_texture = SDL_CreateTextureFromSurface(g_renderer, resized_portal_surface);
-    SDL_FreeSurface(resized_portal_surface);
-}
-
-void Map::Update(float deltaTime) {
-    player_.Update(deltaTime);
-
-    if (SDL_HasIntersection(&player_.GetRect(), &portal_rect_)) {
-        // ������ ��ȯ ���� ����
-    }
-
-    for (auto it = monsters.begin(); it != monsters.end();) {
-        (*it)->Update(deltaTime, player_.GetRect());
-
-        if ((*it)->CheckCollisionWithPlayer(player_.GetRect())) {
-            g_player_health--;
-            delete* it;
-            it = monsters.erase(it);
-
-            if (g_player_health <= 0) {
-                // ���� ���� ���� ó��
-                ResetMonsters();
-                break;
-            }
-        }
-        else {
-            ++it;
-        }
-    }
-}
-
-void Map::Render() {
-    SDL_SetRenderDrawColor(g_renderer, 0, 255, 255, 0);
-    SDL_RenderClear(g_renderer);
-
-    SDL_RenderCopy(g_renderer, texture_, &source_rectangle_, &destination_rectangle_);
-    SDL_RenderCopy(g_renderer, portal_texture, NULL, &portal_rect_);
-
-    for (auto monster : monsters) {
-        monster->Render();
-    }
-
-    SDL_RenderPresent(g_renderer);
-    //player_.Render();
-}
-
-void Map::HandleEvents() {
-    SDL_Event event;
-    if (SDL_PollEvent(&event)) {
-        switch (event.type) {
-        case SDL_QUIT:
-            g_flag_running = false;
-            break;
-        default:
-            player_.HandleEvents(event, monsters); // 몬스터 목록 전달
-            break;
-        }
-    }
-}
-
-void Map::ResetMonsters() {
-    for (auto monster : monsters) {
-        delete monster;
-    }
-    monsters.clear();
-    SpawnMonsters();
-}
-
-const std::vector<Monster*>& Map::GetMonsters() const {
-    return monsters;
 }

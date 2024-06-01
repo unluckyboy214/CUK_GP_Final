@@ -1,12 +1,9 @@
-#include "GameClass.h"
 #include "Hall.h"
-#include "ChargingMonster.h"
-#include <SDL_image.h>
 #include <random>
+#include <SDL_image.h>
 
-Hall::Hall()
-    : Map("../../Resource/Map/Hall.png", { (WINDOW_WIDTH - 100) / 2, 0, 100, 100 }) {
-    SpawnMonsters(); // 여기서 SpawnMonsters를 호출합니다.
+Hall::Hall() : Map("../../Resource/Map/Hall.png") {
+    SpawnMonsters();
 }
 
 void Hall::SpawnMonsters() {

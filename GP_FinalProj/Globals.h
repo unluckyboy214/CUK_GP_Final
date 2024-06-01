@@ -1,4 +1,3 @@
-// globals.h
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
@@ -13,7 +12,9 @@ extern bool g_flag_running;
 extern Uint32 g_last_time_ms;
 extern Uint32 g_frame_per_sec;
 extern int g_current_game_phase;
-extern int g_player_health; // �÷��̾� ü��
-extern std::vector<SDL_Rect> g_obstacles; // ���̳� �������� �迭
+extern int g_player_health;
+extern float g_phase_transition_timer;
+extern const int NUMBER_OF_PHASES;
+extern std::vector<SDL_Rect> g_obstacles;  // 추가: 장애물 벡터 선언
 
 #endif // GLOBALS_H

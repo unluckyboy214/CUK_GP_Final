@@ -1,4 +1,3 @@
-#include "GameClass.h"
 #include "Entrance.h"
 #include "MovingMonster.h"
 #include "RangedMonster.h"
@@ -6,8 +5,9 @@
 #include <random>
 
 Entrance::Entrance()
-    : Map("../../Resource/Map/Entrance.png", { (WINDOW_WIDTH - 100) / 2, 0, 100, 100 }) {
-    SpawnMonsters(); // ì—¬ê¸°ì„œ SpawnMonstersë¥¼ í˜¸ì¶œí•©ë‹ˆë‹¤.
+    : Map("../../Resource/Map/Entrance.png") {
+    // ½ºÅ×ÀÌÁö ÃÊ±â ½ÃÀÛ ½Ã¿¡´Â ¸ó½ºÅÍ¸¦ »ı¼ºÇÏÁö ¾ÊÀ½
+    spawnDelay = 10.0f;  // Ã¹ ½ºÅ×ÀÌÁö¿¡¼­ÀÇ ÃÊ±â Áö¿¬ ½Ã°£ ¼³Á¤
 }
 
 void Entrance::SpawnMonsters() {

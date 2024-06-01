@@ -1,4 +1,3 @@
-// Player.cpp
 #include "GameClass.h"
 #include "Player.h"
 #include "globals.h"
@@ -113,7 +112,6 @@ void Player::PerformParry(const std::vector<Monster*>& monsters) {
             }
         }
 
-        std :: cout << monsterInRange;
         if (monsterInRange) {
             is_parrying_ = true;
             parry_timer_ = parry_cooldown_ + parry_duration_;
@@ -139,4 +137,9 @@ bool Player::IsParrying() const {
 
 const SDL_Rect& Player::GetRect() const {
     return rect_;
+}
+
+void Player::SetPosition(int x, int y) {
+    rect_.x = x;
+    rect_.y = y;
 }

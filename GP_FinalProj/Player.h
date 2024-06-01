@@ -1,4 +1,3 @@
-// Player.h
 #ifndef PLAYER_H
 #define PLAYER_H
 
@@ -18,6 +17,8 @@ public:
     void SetParrying(bool parrying);
     bool IsParrying() const;
     const SDL_Rect& GetRect() const;
+
+    void SetPosition(int x, int y); // 플레이어 위치 설정
 
 private:
     SDL_Texture* texture_;

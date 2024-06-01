@@ -1,13 +1,11 @@
-#include "GameClass.h"
 #include "KimSuHwan.h"
 #include "MovingMonster.h"
 #include "RangedMonster.h"
 #include <SDL_image.h>
 #include <random>
 
-KimSuHwan::KimSuHwan()
-    : Map("../../Resource/Map/KimSuHwan.png", { (WINDOW_WIDTH - 100) / 2, 0, 100, 100 }) {
-    SpawnMonsters(); // 여기서 SpawnMonsters를 호출합니다.
+KimSuHwan::KimSuHwan() : Map("../../Resource/Map/KimSuHwan.png") {
+    SpawnMonsters(); // SpawnMonsters 호출
 }
 
 void KimSuHwan::SpawnMonsters() {

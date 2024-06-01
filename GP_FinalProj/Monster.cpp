@@ -8,8 +8,12 @@ Monster::Monster(int x, int y) : x(x), y(y), health(1), currentFrame(0), animati
 
 Monster::~Monster() {
     for (auto texture : textures) {
-        SDL_DestroyTexture(texture);
+        if (texture) {
+            SDL_DestroyTexture(texture);
+            texture = nullptr;
+        }
     }
+    textures.clear();
 }
 
 void Monster::LoadTextures(const std::vector<std::string>& frameFiles) {
