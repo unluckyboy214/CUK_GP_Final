@@ -51,7 +51,7 @@ void Monster::Render() {
 }
 
 bool Monster::CheckCollisionWithPlayer(const SDL_Rect& playerRect) {
-    SDL_Rect monsterRect = { x, y, 128, 128 }; // Adjust collision size to match render size
+    SDL_Rect monsterRect = { x, y, 5, 5 }; // Adjust collision size to match render size
     return SDL_HasIntersection(&monsterRect, &playerRect);
 }
 

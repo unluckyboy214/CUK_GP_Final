@@ -29,7 +29,7 @@ private:
     std::vector<SDL_Texture*> idleTextures;
     std::vector<SDL_Texture*> chargingTextures;
     std::vector<SDL_Texture*> runningTextures;
-    SDL_Texture* stunnedTexture;
+    std::vector<SDL_Texture*> stunnedTexture;
 
     void LoadTextures();
     void AdvanceFrame(float deltaTime);

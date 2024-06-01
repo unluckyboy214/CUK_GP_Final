@@ -22,7 +22,10 @@ void ChargingMonster::LoadTextures() {
         "../../Resource/Monster/charge_frame2.png",
         "../../Resource/Monster/charge_frame3.png",
         "../../Resource/Monster/charge_frame4.png",
-        "../../Resource/Monster/charge_frame5.png"
+        "../../Resource/Monster/charge_frame5.png",
+        "../../Resource/Monster/charge_frame6.png",
+        "../../Resource/Monster/charge_frame7.png",
+        "../../Resource/Monster/charge_frame8.png"
     };
     for (const auto& file : idleFrameFiles) {
         SDL_Surface* temp_surface = IMG_Load(file.c_str());
@@ -37,11 +40,14 @@ void ChargingMonster::LoadTextures() {
 
     // Charging textures
     std::vector<std::string> chargingFrameFiles = {
-        "../../Resource/Monster/charge_frame1.png",
-        "../../Resource/Monster/charge_frame2.png",
-        "../../Resource/Monster/charge_frame3.png",
-        "../../Resource/Monster/charge_frame4.png",
-        "../../Resource/Monster/charge_frame5.png"
+        "../../Resource/Monster/chaging_frame1.png",
+        "../../Resource/Monster/chaging_frame2.png",
+        "../../Resource/Monster/chaging_frame3.png",
+        "../../Resource/Monster/chaging_frame4.png",
+        "../../Resource/Monster/chaging_frame5.png",
+        "../../Resource/Monster/chaging_frame6.png",
+        "../../Resource/Monster/chaging_frame7.png",
+        "../../Resource/Monster/chaging_frame8.png",
     };
     for (const auto& file : chargingFrameFiles) {
         SDL_Surface* temp_surface = IMG_Load(file.c_str());
@@ -58,7 +64,9 @@ void ChargingMonster::LoadTextures() {
     std::vector<std::string> runningFrameFiles = {
         "../../Resource/Monster/charge_run_frame1.png",
         "../../Resource/Monster/charge_run_frame2.png",
-        "../../Resource/Monster/charge_run_frame3.png"
+        "../../Resource/Monster/charge_run_frame3.png",
+        "../../Resource/Monster/charge_run_frame4.png",
+        "../../Resource/Monster/charge_run_frame5.png"
     };
     for (const auto& file : runningFrameFiles) {
         SDL_Surface* temp_surface = IMG_Load(file.c_str());
@@ -71,11 +79,26 @@ void ChargingMonster::LoadTextures() {
         }
     }
 
-    // Stunned texture
-    SDL_Surface* temp_surface = IMG_Load("../../Resource/Monster/charge_stun_frame.png");
-    if (temp_surface) {
-        stunnedTexture = SDL_CreateTextureFromSurface(g_renderer, temp_surface);
-        SDL_FreeSurface(temp_surface);
+
+    std::vector<std::string> stunningFrameFiles = {
+        "../../Resource/Monster/charge_stun_frame1.png",
+        "../../Resource/Monster/charge_stun_frame2.png",
+        "../../Resource/Monster/charge_stun_frame3.png",
+        "../../Resource/Monster/charge_stun_frame4.png",
+        "../../Resource/Monster/charge_stun_frame5.png",
+        "../../Resource/Monster/charge_stun_frame6.png",
+        "../../Resource/Monster/charge_stun_frame7.png",
+        "../../Resource/Monster/charge_stun_frame8.png",
+    };
+    for (const auto& file : stunningFrameFiles) {
+        SDL_Surface* temp_surface = IMG_Load(file.c_str());
+        if (temp_surface) {
+            SDL_Texture* texture = SDL_CreateTextureFromSurface(g_renderer, temp_surface);
+            if (texture) {
+                stunnedTexture.push_back(texture);
+            }
+            SDL_FreeSurface(temp_surface);
+        }
     }
 }
 
@@ -156,6 +179,9 @@ void ChargingMonster::AdvanceFrame(float deltaTime) {
         else if (state == Running) {
             currentFrame %= runningTextures.size();
         }
+        else if (state == Stunned) {
+			currentFrame %= stunnedTexture.size();
+		}
     }
 }
 
@@ -180,7 +206,7 @@ void ChargingMonster::Render() {
         }
         break;
     case Stunned:
-        currentTexture = stunnedTexture;
+        currentTexture = stunnedTexture[currentFrame % runningTextures.size()];
         break;
     }
 
