@@ -2,16 +2,13 @@
 #include "globals.h"
 #include <cmath>
 
-MovingMonster::MovingMonster(int x, int y) : Monster(x, y), health(3), isStunned(false) { // Initial health set to 3
+MovingMonster::MovingMonster(int x, int y) : Monster(x, y), health(10), isStunned(false) { // Initial health set to 3
     normalFrameFiles = {
         "../../Resource/Monster/slime_frame1.png",
         "../../Resource/Monster/slime_frame2.png",
         "../../Resource/Monster/slime_frame3.png",
         "../../Resource/Monster/slime_frame4.png",
-        "../../Resource/Monster/slime_frame5.png",
-        "../../Resource/Monster/slime_frame6.png",
-        "../../Resource/Monster/slime_frame7.png",
-        "../../Resource/Monster/slime_frame8.png"
+        "../../Resource/Monster/slime_frame5.png"
     };
 
     stunFrameFiles = {
@@ -57,3 +54,4 @@ void MovingMonster::MoveTowardsPlayer(float deltaTime, const SDL_Rect& playerRec
         y += static_cast<int>(moveSpeed * deltaY / distance * deltaTime);
     }
 }
+
