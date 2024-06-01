@@ -13,6 +13,12 @@ RangedMonster::RangedMonster(int x, int y) : Monster(x, y), shootCooldown(1.0f),
         "../../Resource/Monster/shooter_frame5.png",
         "../../Resource/Monster/shooter_frame6.png",
         "../../Resource/Monster/shooter_frame7.png",
+        "../../Resource/Monster/shooter_frame8.png",
+        "../../Resource/Monster/shooter_frame9.png",
+        "../../Resource/Monster/shooter_frame10.png",
+        "../../Resource/Monster/shooter_frame11.png",
+        "../../Resource/Monster/shooter_frame12.png",
+        "../../Resource/Monster/shooter_frame13.png",
     };
     LoadTextures(frameFiles);
 }

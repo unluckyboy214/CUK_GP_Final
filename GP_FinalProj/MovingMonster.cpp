@@ -2,8 +2,8 @@
 #include "globals.h"
 #include <cmath>
 
-MovingMonster::MovingMonster(int x, int y) : Monster(x, y) {
-    std::vector<std::string> frameFiles = {
+MovingMonster::MovingMonster(int x, int y) : Monster(x, y), health(3), isStunned(false) { // Initial health set to 3
+    normalFrameFiles = {
         "../../Resource/Monster/slime_frame1.png",
         "../../Resource/Monster/slime_frame2.png",
         "../../Resource/Monster/slime_frame3.png",
@@ -11,13 +11,38 @@ MovingMonster::MovingMonster(int x, int y) : Monster(x, y) {
         "../../Resource/Monster/slime_frame5.png",
         "../../Resource/Monster/slime_frame6.png",
         "../../Resource/Monster/slime_frame7.png",
+        "../../Resource/Monster/slime_frame8.png"
     };
-    LoadTextures(frameFiles);
+
+    stunFrameFiles = {
+        "../../Resource/Monster/slime_stun_frame1.png",
+        "../../Resource/Monster/slime_stun_frame2.png",
+        "../../Resource/Monster/slime_stun_frame3.png",
+        "../../Resource/Monster/slime_stun_frame4.png",
+        "../../Resource/Monster/slime_stun_frame5.png",
+        "../../Resource/Monster/slime_stun_frame6.png",
+        "../../Resource/Monster/slime_stun_frame7.png",
+        "../../Resource/Monster/slime_stun_frame8.png"
+    };
+
+    LoadTextures(normalFrameFiles);
 }
 
 void MovingMonster::Update(float deltaTime, const SDL_Rect& playerRect) {
     AdvanceFrame(deltaTime);
     MoveTowardsPlayer(deltaTime, playerRect);
+
+    if (!isStunned) {
+        MoveTowardsPlayer(deltaTime, playerRect);
+    }
+}
+
+void MovingMonster::TakeDamage(int damage) {
+    health -= damage;
+    if (health == 1 && !isStunned) {
+        isStunned = true;
+        LoadTextures(stunFrameFiles);
+    }
 }
 
 void MovingMonster::MoveTowardsPlayer(float deltaTime, const SDL_Rect& playerRect) {
@@ -32,5 +57,3 @@ void MovingMonster::MoveTowardsPlayer(float deltaTime, const SDL_Rect& playerRec
         y += static_cast<int>(moveSpeed * deltaY / distance * deltaTime);
     }
 }
-
-
