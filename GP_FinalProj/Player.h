@@ -28,7 +28,7 @@ public:
     void Update(float deltaTime);
     void Render();
     void HandleEvents(const SDL_Event& event, std::vector<Monster*>& monsters);
-    void PerformParry( std::vector<Monster*>& monsters);
+    void PerformParry(std::vector<Monster*>& monsters);
     void SetParrying(bool parrying);
     bool IsParrying() const;
     SDL_Rect GetRect() const;
@@ -50,6 +50,7 @@ private:
     int current_frame_;
     float frame_time_;
     bool flip_;  // 캐릭터 이미지 반전 여부
+    SDL_FPoint velocity_;  // 플레이어의 속도
 
     std::unordered_map<PlayerState, Animation> animations_;
     static bool textures_loaded_;  // 플래그 추가
