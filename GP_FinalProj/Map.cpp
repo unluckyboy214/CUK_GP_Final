@@ -1,6 +1,9 @@
 #include "Map.h"
 #include "globals.h" // globals.h 포함
 #include "Entrance.h"  // Entrance 클래스 포함
+#include "MovingMonster.h"
+#include "RangedMonster.h"
+#include <random>
 
 Map::Map(const char* backgroundPath) : destination_rectangle_{ 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT }, spawnTimer(0.0f), spawnDelay(5.0f), monstersSpawned(false) {
     LoadBackground(backgroundPath);
@@ -35,9 +38,9 @@ void Map::Update(float deltaTime) {
             delete* it;
             it = monsters.erase(it);
            
-            // 몬스터 제거 시 새로운 몬스터 생성
+            // 새로운 몬스터 생성 및 추가
             if (monsters.size() < 7) {
-                dynamic_cast<Entrance*>(this)->SpawnMonster();  // 한 마리의 새로운 몬스터 생성
+                dynamic_cast<Map*>(this)->SpawnMonster();  // 새로운 몬스터 생성
             }
         }
         else {
@@ -90,4 +93,22 @@ void Map::LoadBackground(const char* path) {
 
     SDL_QueryTexture(texture_, NULL, NULL, &source_rectangle_.w, &source_rectangle_.h);
     destination_rectangle_ = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
+}
+
+void Map::SpawnMonster() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> disX(0, WINDOW_WIDTH - 128);
+    std::uniform_int_distribution<> disY(0, WINDOW_HEIGHT - 128);
+
+    if (monsters.size() < 7) {
+        int x = disX(gen);
+        int y = disY(gen);
+        if (monsters.size() % 2 == 0) {
+            monsters.push_back(new MovingMonster(x, y));
+        }
+        else {
+            monsters.push_back(new RangedMonster(x, y));
+        }
+    }
 }
