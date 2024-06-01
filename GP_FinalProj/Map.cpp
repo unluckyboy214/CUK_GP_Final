@@ -3,6 +3,7 @@
 #include "Entrance.h"  // Entrance 클래스 포함
 #include "MovingMonster.h"
 #include "RangedMonster.h"
+#include "ChargingMonster.h"
 #include <random>
 
 Map::Map(const char* backgroundPath) : destination_rectangle_{ 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT }, spawnTimer(0.0f), spawnDelay(5.0f), monstersSpawned(false) {
@@ -101,14 +102,26 @@ void Map::SpawnMonster() {
     std::uniform_int_distribution<> disX(0, WINDOW_WIDTH - 128);
     std::uniform_int_distribution<> disY(0, WINDOW_HEIGHT - 128);
 
-    if (monsters.size() < 7) {
-        int x = disX(gen);
-        int y = disY(gen);
-        if (monsters.size() % 2 == 0) {
-            monsters.push_back(new MovingMonster(x, y));
-        }
-        else {
-            monsters.push_back(new RangedMonster(x, y));
+
+    if (g_current_game_phase == PHASE_Hall) {
+        if (monsters.size() < 7) {
+            int x = disX(gen);
+            int y = disY(gen);
+            monsters.push_back(new ChargingMonster(x, y));
         }
     }
+    else {
+        if (monsters.size() < 7) {
+            int x = disX(gen);
+            int y = disY(gen);
+            if (g_kill_count % 3 == 0) {
+                monsters.push_back(new RangedMonster(x, y));
+            }
+            else {
+                monsters.push_back(new MovingMonster(x, y));
+            }
+        }
+    }
+
+
 }
