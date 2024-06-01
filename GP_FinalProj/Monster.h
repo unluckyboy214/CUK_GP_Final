@@ -14,6 +14,9 @@ public:
     virtual bool CheckCollisionWithPlayer(const SDL_Rect& playerRect);
     int getX() const;
     int getY() const;
+    void SetHealth(int newHealth);
+    int GetHealth() const;
+    bool IsDead() const;
 
 protected:
     int x;
