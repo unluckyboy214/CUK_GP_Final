@@ -31,7 +31,7 @@ public:
     void ResetMonsters();
     void LoadBackground(const char* path);
 
-    const std::vector<Monster*>& GetMonsters() const {
+    std::vector<Monster*>& GetMonsters() {
         return monsters;
     }
 };
