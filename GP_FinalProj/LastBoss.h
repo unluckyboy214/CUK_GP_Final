@@ -1,25 +1,22 @@
-#pragma once
+#ifndef LASTBOSS_H
+#define LASTBOSS_H
+
 #include "Map.h"
-#include "BossMonster.h"
-#include <vector>
-#include <SDL.h>
 
 class LastBoss : public Map {
 public:
     LastBoss();
-    ~LastBoss();
-    void Update(float deltaTime) override;
-    void Render() override;
-    void HandleEvents() override;
     void SpawnMonsters() override;
+    void SpawnMonster();
+
+    // 추가: 인트로 이미지 로드를 위한 함수
+    void LoadIntroImage(const char* path);
+
+    void Render() override;  // 추가: 인트로 이미지를 렌더링하기 위해 Render 함수 오버라이드
 
 private:
-    std::vector<SDL_Texture*> bossIntroFrames; // ������ ��Ʈ�� ������
-    BossMonster* bossMonster;
-    bool showBossIntro;
-    float bossIntroTotalTimer;
-    float frameTimer;
-    float frameDuration;
-    int currentFrame;
-    void RenderBossHP(); // ���� HP ������ �Լ�
+    SDL_Texture* introTexture_;
+    bool introDisplayed_;
 };
+
+#endif // LASTBOSS_H

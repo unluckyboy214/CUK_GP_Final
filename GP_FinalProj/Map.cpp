@@ -1,6 +1,6 @@
 #include "Map.h"
-#include "globals.h" // globals.h í¬í•¨
-#include "Entrance.h"  // Entrance í´ë˜ìŠ¤ í¬í•¨
+#include "globals.h" // globals.h Æ÷ÇÔ
+#include "Entrance.h"  // Entrance Å¬·¡½º Æ÷ÇÔ
 #include "MovingMonster.h"
 #include "RangedMonster.h"
 #include <random>
@@ -24,11 +24,10 @@ Map::~Map() {
 void Map::Update(float deltaTime) {
     player_.Update(deltaTime);
 
-    // ëª¬ìŠ¤í„° ìƒì„± íƒ€ì´ë¨¸ ì—…ë°ì´íŠ¸
     spawnTimer += deltaTime;
     if (spawnTimer >= spawnDelay && !monstersSpawned) {
-        SpawnMonsters();  // ëª¬ìŠ¤í„° ìƒì„±
-        monstersSpawned = true;  // ëª¬ìŠ¤í„° ìƒì„± í”Œë˜ê·¸ ì„¤ì •
+        SpawnMonsters();
+        monstersSpawned = true;
     }
 
     bool allMonstersDefeated = true;
@@ -38,9 +37,9 @@ void Map::Update(float deltaTime) {
             delete* it;
             it = monsters.erase(it);
            
-            // ìƒˆë¡œìš´ ëª¬ìŠ¤í„° ìƒì„± ë° ì¶”ê°€
+            // ¸ó½ºÅÍ Á¦°Å ½Ã »õ·Î¿î ¸ó½ºÅÍ »ı¼º
             if (monsters.size() < 7) {
-                dynamic_cast<Map*>(this)->SpawnMonster();  // ìƒˆë¡œìš´ ëª¬ìŠ¤í„° ìƒì„±
+                dynamic_cast<Entrance*>(this)->SpawnMonster();  // ÇÑ ¸¶¸®ÀÇ »õ·Î¿î ¸ó½ºÅÍ »ı¼º
             }
         }
         else {
@@ -53,7 +52,6 @@ void Map::Update(float deltaTime) {
         g_phase_transition_timer = 2.0f;
     }
 }
-
 
 void Map::Render() {
     SDL_SetRenderDrawColor(g_renderer, 255, 255, 255, 255);
@@ -79,10 +77,9 @@ void Map::ResetMonsters() {
         monster = nullptr;
     }
     monsters.clear();
-    monstersSpawned = false;  // ë¦¬ì…‹ ì‹œ ëª¬ìŠ¤í„° ìƒì„± í”Œë˜ê·¸ ì´ˆê¸°í™”
-    spawnTimer = 0.0f;  // íƒ€ì´ë¨¸ ë¦¬ì…‹
+    monstersSpawned = false;
+    spawnTimer = 0.0f;
 
-    // í”Œë ˆì´ì–´ ìœ„ì¹˜ ì¤‘ì•™ìœ¼ë¡œ ì„¤ì •
     player_.SetPosition(WINDOW_WIDTH / 2 - player_.GetRect().w / 2, WINDOW_HEIGHT / 2 - player_.GetRect().h / 2);
 }
 

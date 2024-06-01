@@ -17,11 +17,11 @@ public:
     void SpawnMonster();
     Player player_;
 
-    float spawnTimer;  // 몬스터 생성 타이머
-    float spawnDelay;  // 몬스터 생성 지연 시간
-    bool monstersSpawned; // 몬스터가 생성되었는지 여부
+    float spawnTimer;
+    float spawnDelay;
+    bool monstersSpawned;
 
-    static const int MaxMonsters = 10; // 최대 몬스터 수
+    static const int MaxMonsters = 10;
 
     Map(const char* backgroundPath);
     virtual ~Map();
@@ -29,7 +29,7 @@ public:
     virtual void Update(float deltaTime);
     virtual void Render();
     virtual void HandleEvents();
-    virtual void SpawnMonsters() = 0; // 순수 가상 함수
+    virtual void SpawnMonsters() = 0;
 
     void ResetMonsters();
     void LoadBackground(const char* path);

@@ -4,10 +4,8 @@
 #include <SDL_image.h>
 #include <random>
 
-Entrance::Entrance()
-    : Map("../../Resource/Map/Entrance.png") {
-    // �������� �ʱ� ���� �ÿ��� ���͸� �������� ����
-    spawnDelay = 10.0f;  // ù �������������� �ʱ� ���� �ð� ����
+Entrance::Entrance() : Map("../../Resource/Map/Entrance.png") {
+    spawnDelay = 5.0f;
 }
 
 void Entrance::SpawnMonsters() {
