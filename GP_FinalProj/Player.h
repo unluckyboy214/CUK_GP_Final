@@ -27,8 +27,8 @@ public:
     Player();
     void Update(float deltaTime);
     void Render();
-    void HandleEvents(const SDL_Event& event, const std::vector<Monster*>& monsters);
-    void PerformParry(const std::vector<Monster*>& monsters);
+    void HandleEvents(const SDL_Event& event, std::vector<Monster*>& monsters);
+    void PerformParry( std::vector<Monster*>& monsters);
     void SetParrying(bool parrying);
     bool IsParrying() const;
     SDL_Rect GetRect() const;

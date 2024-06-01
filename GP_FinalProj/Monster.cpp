@@ -60,3 +60,15 @@ int Monster::getX() const {
 int Monster::getY() const {
     return y;
 }
+
+void Monster::SetHealth(int newHealth) {
+    health = newHealth;
+}
+
+bool Monster::IsDead() const {
+    return health <= 0;
+}
+
+int Monster::GetHealth() const {
+    return health;
+}
