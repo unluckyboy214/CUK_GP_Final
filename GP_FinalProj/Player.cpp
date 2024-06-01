@@ -23,6 +23,9 @@ Player::Player()
     current_frame_(0),
     frame_time_(0.0f),
     flip_(false),
+    dashEffectFrame(0),
+    dashEffectTimer(0.0f),
+    isDashEffectActive(false),
     velocity_({ 0.0f, 0.0f }) {  // 속도 초기화
     if (!textures_loaded_) {
         LoadTextures();
@@ -30,6 +33,29 @@ Player::Player()
     }
     animations_ = shared_animations_;
     rect_ = { WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 150, 150 }; // 캐릭터 크기 조정
+	LoadDashEffectTextures();
+}
+
+void Player::LoadDashEffectTextures() {
+    std::vector<std::string> frameFiles = {
+        "../../Resource/Character/effect/effect1.png",
+        "../../Resource/Character/effect/effect2.png",
+        "../../Resource/Character/effect/effect3.png",
+        "../../Resource/Character/effect/effect4.png",
+        "../../Resource/Character/effect/effect3.png",
+        "../../Resource/Character/effect/effect4.png"
+    };
+
+    for (const auto& file : frameFiles) {
+        SDL_Surface* temp_surface = IMG_Load(file.c_str());
+        if (temp_surface) {
+            dashEffectTextures.push_back(SDL_CreateTextureFromSurface(g_renderer, temp_surface));
+            SDL_FreeSurface(temp_surface);
+        }
+        else {
+            std::cerr << "Failed to load dash effect texture: " << IMG_GetError() << std::endl;
+        }
+    }
 }
 
 void Player::LoadTextures() {
@@ -163,6 +189,22 @@ void Player::Update(float deltaTime) {
     // Keep player within window bounds
     rect_.x = std::max(0, std::min(WINDOW_WIDTH - rect_.w, rect_.x));
     rect_.y = std::max(0, std::min(WINDOW_HEIGHT - rect_.h, rect_.y));
+
+    UpdateDashEffect(deltaTime);
+}
+
+void Player::UpdateDashEffect(float deltaTime) {
+    if (isDashEffectActive) {
+        dashEffectTimer += deltaTime;
+        if (dashEffectTimer >= 0.05f) { // 이펙트 프레임 전환 속도 조절
+            dashEffectTimer = 0.0f;
+            dashEffectFrame++;
+            if (dashEffectFrame >= dashEffectTextures.size()) {
+                dashEffectFrame = 0;
+                isDashEffectActive = false;
+            }
+        }
+    }
 }
 
 void Player::Render() {
@@ -188,6 +230,36 @@ void Player::Render() {
 
     SDL_RendererFlip flip = flip_ ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     SDL_RenderCopyEx(g_renderer, current_texture, NULL, &rect_, 0, NULL, flip);
+
+    RenderDashEffect(); // 대시 이펙트 렌더링 호출 추가
+}
+
+void Player::RenderDashEffect() {
+    if (isDashEffectActive && !dashEffectTextures.empty()) {
+        SDL_Rect effectRect = { 0, 0, rect_.w, rect_.h };
+
+        // 대시 방향에 따라 이펙트 위치 조정
+        switch (direction_) {
+        case 0: // 위쪽
+            effectRect.x = rect_.x;
+            effectRect.y = rect_.y + rect_.h;
+            break;
+        case 1: // 오른쪽
+            effectRect.x = rect_.x - rect_.w;
+            effectRect.y = rect_.y;
+            break;
+        case 2: // 아래쪽
+            effectRect.x = rect_.x;
+            effectRect.y = rect_.y - rect_.h;
+            break;
+        case 3: // 왼쪽
+            effectRect.x = rect_.x + rect_.w;
+            effectRect.y = rect_.y;
+            break;
+        }
+
+        SDL_RenderCopy(g_renderer, dashEffectTextures[dashEffectFrame], NULL, &effectRect);
+    }
 }
 
 void Player::HandleEvents(const SDL_Event& event, std::vector<Monster*>& monsters) {
@@ -257,6 +329,10 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
             is_parrying_ = true;
             parry_timer_ = parry_cooldown_ + parry_duration_;
             float parry_distance = 100.0f; // 패링 시 이동 거리
+
+            isDashEffectActive = true; // 패링 시 이펙트 활성화
+            dashEffectFrame = 0;
+            dashEffectTimer = 0.0f;
 
             int currentHealth = closestMonster->GetHealth();
             closestMonster->SetHealth(currentHealth - 1); // 몬스터의 체력을 1 감소시킴

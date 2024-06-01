@@ -51,6 +51,14 @@ private:
     float frame_time_;
     bool flip_;  // 캐릭터 이미지 반전 여부
     SDL_FPoint velocity_;  // 플레이어의 속도
+    std::vector<SDL_Texture*> dashEffectTextures;
+    int dashEffectFrame;
+    float dashEffectTimer;
+    bool isDashEffectActive;
+
+    void LoadDashEffectTextures();
+    void UpdateDashEffect(float deltaTime);
+    void RenderDashEffect();
 
     std::unordered_map<PlayerState, Animation> animations_;
     static bool textures_loaded_;  // 플래그 추가
