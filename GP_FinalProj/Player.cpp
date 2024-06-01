@@ -4,6 +4,9 @@
 #include <iostream>
 #include <cmath>
 #include <algorithm>
+#include <random>
+#include "MovingMonster.h"
+#include "RangedMonster.h"
 
 bool Player::textures_loaded_ = false;  // 플래그 초기화
 std::unordered_map<PlayerState, Animation> Player::shared_animations_;  // 공유 애니메이션 초기화
@@ -152,7 +155,7 @@ void Player::Render() {
     SDL_RenderCopyEx(g_renderer, current_texture, NULL, &rect_, 0, NULL, flip);
 }
 
-void Player::HandleEvents(const SDL_Event& event, const std::vector<Monster*>& monsters) {
+void Player::HandleEvents(const SDL_Event& event,  std::vector<Monster*>& monsters) {
     switch (event.type) {
     case SDL_KEYDOWN:
         switch (event.key.keysym.sym) {
@@ -193,30 +196,63 @@ void Player::HandleEvents(const SDL_Event& event, const std::vector<Monster*>& m
     }
 }
 
-void Player::PerformParry(const std::vector<Monster*>& monsters) {
+void Player::PerformParry(std::vector<Monster*>& monsters) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> disX(0, WINDOW_WIDTH - 128);
+    std::uniform_int_distribution<> disY(0, WINDOW_HEIGHT - 128);
     if (parry_timer_ <= 0) {
-        bool monsterInRange = false;
-        float parryDistance = 1000.0f; // Parry range
-        for (const auto& monster : monsters) {
+        Monster* closestMonster = nullptr;
+        float closestDistance = std::numeric_limits<float>::max(); // 매우 큰 값으로 초기화
+        float parryDistance = 1000.0f; // 패링 범위
+
+        // 가장 가까운 몬스터를 찾음
+        for (auto& monster : monsters) {
             int deltaX = monster->getX() - rect_.x;
             int deltaY = monster->getY() - rect_.y;
             float distance = sqrt(deltaX * deltaX + deltaY * deltaY);
-            if (distance <= parryDistance) {
-                monsterInRange = true;
-                break;
+            if (distance <= parryDistance && distance < closestDistance) {
+                closestDistance = distance;
+                closestMonster = monster;
             }
         }
 
-        if (monsterInRange) {
+        // 가장 가까운 몬스터가 있는 경우 패링을 적용
+        if (closestMonster != nullptr) {
             is_parrying_ = true;
             parry_timer_ = parry_cooldown_ + parry_duration_;
-            float parry_distance = 100.0f; // Distance to move when parrying
+            float parry_distance = 100.0f; // 패링 시 이동 거리
 
+            int currentHealth = closestMonster->GetHealth();
+            closestMonster->SetHealth(currentHealth - 1); // 몬스터의 체력을 1 감소시킴
+            if (closestMonster->IsDead()) {
+                // 체력이 0이 되면 몬스터를 제거
+                auto it = std::find(monsters.begin(), monsters.end(), closestMonster);
+                if (it != monsters.end()) {
+                    monsters.erase(it);
+                    g_kill_count++; // 몬스터 삭제 시 킬 수 증가
+                    delete closestMonster; // 몬스터가 동적으로 할당된 경우 메모리 해제
+                    if (monsters.size() < 7) {
+                        int x = disX(gen);
+                        int y = disY(gen);
+                        if (monsters.size() % 2 == 0) {
+                            monsters.push_back(new MovingMonster(x, y));
+                        }
+                        else {
+                            monsters.push_back(new RangedMonster(x, y));
+                        }
+                    }
+                }
+
+
+            }
+
+            // 플레이어 이동 처리
             switch (direction_) {
-            case 0: rect_.y -= parry_distance; break; // up
-            case 1: rect_.x += parry_distance; break; // right
-            case 2: rect_.y += parry_distance; break; // down
-            case 3: rect_.x -= parry_distance; break; // left
+            case 0: rect_.y -= parry_distance; break; // 위
+            case 1: rect_.x += parry_distance; break; // 오른쪽
+            case 2: rect_.y += parry_distance; break; // 아래
+            case 3: rect_.x -= parry_distance; break; // 왼쪽
             }
         }
     }

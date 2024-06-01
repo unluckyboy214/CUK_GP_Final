@@ -34,7 +34,7 @@ void Map::Update(float deltaTime) {
         if ((*it)->CheckCollisionWithPlayer(player_.GetRect())) {
             delete* it;
             it = monsters.erase(it);
-            g_kill_count++; // 몬스터 삭제 시 킬 수 증가
+           
             // 몬스터 제거 시 새로운 몬스터 생성
             if (monsters.size() < 7) {
                 dynamic_cast<Entrance*>(this)->SpawnMonster();  // 한 마리의 새로운 몬스터 생성
