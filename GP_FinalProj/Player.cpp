@@ -18,7 +18,8 @@ Player::Player()
     state_(PlayerState::Idle),
     prev_state_(PlayerState::Idle),  // 초기 이전 상태
     current_frame_(0),
-    frame_time_(0.0f) {
+    frame_time_(0.0f),
+    flip_(false) {  // 초기 반전 상태
     if (!textures_loaded_) {
         LoadTextures();
         textures_loaded_ = true;
@@ -70,11 +71,13 @@ void Player::Update(float deltaTime) {
         rect_.x -= move_speed_ * deltaTime;
         direction_ = 3; // left
         isMoving = true;
+        flip_ = false;  // 왼쪽 이동 시 반전
     }
     if (g_move_right) {
         rect_.x += move_speed_ * deltaTime;
         direction_ = 1; // right
         isMoving = true;
+        flip_ = true;  // 오른쪽 이동 시 반전 해제
     }
     if (g_move_up) {
         rect_.y -= move_speed_ * deltaTime;
@@ -145,7 +148,8 @@ void Player::Render() {
         return;
     }
 
-    SDL_RenderCopy(g_renderer, current_texture, NULL, &rect_);
+    SDL_RendererFlip flip = flip_ ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    SDL_RenderCopyEx(g_renderer, current_texture, NULL, &rect_, 0, NULL, flip);
 }
 
 void Player::HandleEvents(const SDL_Event& event, const std::vector<Monster*>& monsters) {

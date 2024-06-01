@@ -49,6 +49,7 @@ private:
     PlayerState prev_state_;  // 이전 상태를 저장
     int current_frame_;
     float frame_time_;
+    bool flip_;  // 캐릭터 이미지 반전 여부
 
     std::unordered_map<PlayerState, Animation> animations_;
     static bool textures_loaded_;  // 플래그 추가
