@@ -169,7 +169,7 @@ int main(int argc, char* argv[]) {
         else {
             player.Update(deltaTime);
 
-            if (g_player_health <= 1) {
+            if (g_player_health < 1) {
                 g_current_game_phase = PHASE_GameOver;
             }
 

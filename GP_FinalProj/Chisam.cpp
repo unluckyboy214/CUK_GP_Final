@@ -1,7 +1,7 @@
 #include "Chisam.h"
 #include <cstdlib>
 #include <ctime>
-#include <SDL_image.h> // Include SDL_image for loading images
+#include <SDL_image.h>
 
 // External global variables
 extern int g_current_game_phase;
@@ -9,9 +9,10 @@ extern const int PHASE_LastBoss;
 
 Chisam::Chisam(int mapWidth, int mapHeight, SDL_Renderer* renderer, TTF_Font* font)
     : mapWidth(mapWidth), mapHeight(mapHeight), renderer(renderer), font(font), currentDialogueIndex(0), visible(true), texture(nullptr) {
+    
     dialogues = {
-        "Hello!", "How are you?", "Nice to meet you!", "Have a good day!",
-        "Good luck!", "Keep going!", "Almost there!", "Transitioning to the final map..."
+        "HI", "I am Chisam!", "Help!!", "Please...",
+        "HI", "I am Chisam", "Help!!", "?? Something weird.."
     };
     std::srand(std::time(nullptr));
     GenerateRandomPosition();
@@ -69,8 +70,9 @@ void Chisam::Render() {
                 int bubbleOffsetY = 60; // 말풍선을 위로 올리기 위한 오프셋
                 SDL_Rect bgRect = { (position.x * 20) - (textSurface->w / 2) - padding, (position.y * 20) - bubbleOffsetY - padding, textSurface->w + padding * 2, textSurface->h + padding * 2 };
 
-                // 말풍선 배경 색상 설정
-                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // White background
+                // 말풍선 배경 색상 설정 (투명도 적용)
+                SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 128); // White background with 50% transparency
                 SDL_RenderFillRect(renderer, &bgRect);
 
                 // 말풍선 테두리 그리기
