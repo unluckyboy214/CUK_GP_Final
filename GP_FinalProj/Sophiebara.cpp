@@ -5,8 +5,8 @@
 #include <random>
 
 Sophiebara::Sophiebara()
-    : Map("../../Resource/Map/Sophiebara.png", 7) {  // maxMonsters ¼³Á¤
-    spawnDelay = 10.0f;  // ÃÊ±â ¸ó½ºÅÍ »ý¼º Áö¿¬ ½Ã°£ ¼³Á¤
+    : Map("../../Resource/Map/Sophiebara.png", 7) {  // maxMonsters ï¿½ï¿½ï¿½ï¿½
+    spawnDelay = 10.0f;  // ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
 }
 
 void Sophiebara::SpawnMonsters() {

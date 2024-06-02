@@ -290,64 +290,78 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> disX(0, WINDOW_WIDTH - 128);
     std::uniform_int_distribution<> disY(0, WINDOW_HEIGHT - 128);
-    if (parry_timer_ <= 0) {
-        Monster* closestMonster = nullptr;
-        float closestDistance = std::numeric_limits<float>::max(); // 매우 큰 값으로 초기화
-        float parryDistance = 1000.0f; // 패링 범위
 
-        // 가장 가까운 몬스터를 찾음
-        for (auto& monster : monsters) {
-            int deltaX = monster->getX() - rect_.x;
-            int deltaY = monster->getY() - rect_.y;
-            float distance = sqrt(deltaX * deltaX + deltaY * deltaY);
-            if (distance <= parryDistance && distance < closestDistance) {
-                closestDistance = distance;
-                closestMonster = monster;
+    if (parry_timer_ <= 0) {
+        is_parrying_ = true;
+        parry_timer_ = parry_cooldown_ + parry_duration_;
+        float parry_distance = 100.0f; // 패링 시 이동 거리
+
+        isDashEffectActive = true; // 패링 시 이펙트 활성화
+        dashEffectFrame = 0;
+        dashEffectTimer = 0.0f;
+
+        // 대시 이펙트 위치 및 회전 각도 설정
+        dashEffectPosition_ = {
+            static_cast<int>(rect_.x + rect_.w / 2 - (127 * 1.5) / 2),
+            static_cast<int>(rect_.y + rect_.h / 2 - (20 * 1.5) / 2),
+            static_cast<int>(127 * 1.5),
+            static_cast<int>(20 * 1.5)
+        };
+        dashEffectAngle_ = (direction_ == 0 || direction_ == 2) ? 90.0 : 0.0;
+
+        SDL_Rect dashArea = rect_;
+
+        // 대쉬 거리 설정 및 대쉬 영역 계산
+        switch (direction_) {
+        case 0: // 위
+            dashArea.y -= parry_distance;
+            dashArea.h = parry_distance;
+            break;
+        case 1: // 오른쪽
+            dashArea.x += rect_.w;
+            dashArea.w = parry_distance;
+            break;
+        case 2: // 아래
+            dashArea.y += rect_.h;
+            dashArea.h = parry_distance;
+            break;
+        case 3: // 왼쪽
+            dashArea.x -= parry_distance;
+            dashArea.w = parry_distance;
+            break;
+        }
+
+        // 대쉬 범위 내의 모든 몬스터를 찾음
+        for (auto it = monsters.begin(); it != monsters.end();) {
+            SDL_Rect monsterRect = (*it)->GetRect();
+            if (SDL_HasIntersection(&dashArea, &monsterRect)) {
+                int currentHealth = (*it)->GetHealth();
+                (*it)->SetHealth(currentHealth - 1); // 몬스터의 체력을 1 감소시킴
+                std::cout << "Monster's current health: " << (*it)->GetHealth() << std::endl;
+                if ((*it)->IsDead()) {
+                    delete* it;
+                    it = monsters.erase(it);
+                    g_kill_count++; // 몬스터 삭제 시 킬 수 증가
+                }
+                else {
+                    ++it;
+                }
+            }
+            else {
+                ++it;
             }
         }
 
-        // 가장 가까운 몬스터가 있는 경우 패링을 적용
-        if (closestMonster != nullptr) {
-            is_parrying_ = true;
-            parry_timer_ = parry_cooldown_ + parry_duration_;
-            float parry_distance = 100.0f; // 패링 시 이동 거리
-
-            isDashEffectActive = true; // 패링 시 이펙트 활성화
-            dashEffectFrame = 0;
-            dashEffectTimer = 0.0f;
-
-            // 대시 이펙트 위치 및 회전 각도 설정
-            dashEffectPosition_ = {
-                static_cast<int>(rect_.x + rect_.w / 2 - (127 * 1.5) / 2),
-                static_cast<int>(rect_.y + rect_.h / 2 - (20 * 1.5) / 2),
-                static_cast<int>(127 * 1.5),
-                static_cast<int>(20 * 1.5)
-            };
-            dashEffectAngle_ = (direction_ == 0 || direction_ == 2) ? 90.0 : 0.0;
-
-            int currentHealth = closestMonster->GetHealth();
-            closestMonster->SetHealth(currentHealth - 1); // 몬스터의 체력을 1 감소시킴
-            std::cout << "Monster's current health: " << closestMonster->GetHealth() << std::endl;
-            if (closestMonster->IsDead()) {
-                // 체력이 0이 되면 몬스터를 제거
-                auto it = std::find(monsters.begin(), monsters.end(), closestMonster);
-                if (it != monsters.end()) {
-                    monsters.erase(it);
-                    g_kill_count++; // 몬스터 삭제 시 킬 수 증가
-                    delete closestMonster; // 몬스터가 동적으로 할당된 경우 메모리 해제
-                }
-            }
-
-            // 플레이어 이동 처리
-            switch (direction_) {
-            case 0: rect_.y -= parry_distance; break; // 위
-            case 1: rect_.x += parry_distance; break; // 오른쪽
-            case 2: rect_.y += parry_distance; break; // 아래
-            case 3: rect_.x -= parry_distance; break; // 왼쪽
-            }
+        // 플레이어 이동 처리
+        switch (direction_) {
+        case 0: rect_.y -= parry_distance; break; // 위
+        case 1: rect_.x += parry_distance; break; // 오른쪽
+        case 2: rect_.y += parry_distance; break; // 아래
+        case 3: rect_.x -= parry_distance; break; // 왼쪽
         }
     }
 }
+
 
 void Player::OnMonsterCollision(const SDL_Rect& monsterRect) {
     g_player_health -= 1;

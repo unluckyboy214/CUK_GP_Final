@@ -4,12 +4,12 @@
 #include <SDL_image.h>
 
 Intro::Intro() {
-    // ¹è°æ ÀÌ¹ÌÁö ·Îµå
+    // ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½Îµï¿½
     SDL_Surface* backgroundSurface = IMG_Load("../../Resource/Map/Intro.png");
     backgroundTexture = SDL_CreateTextureFromSurface(g_renderer, backgroundSurface);
     SDL_FreeSurface(backgroundSurface);
 
-    // ¹è°æ ÀÌ¹ÌÁö Å©±â ¼³Á¤
+    // ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     backgroundRect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
 
     startButtonRect = { 520, 320, 200, 50 };
@@ -21,12 +21,12 @@ Intro::~Intro() {
 }
 
 void Intro::Update(float deltaTime) {
-    // Intro È­¸é¿¡¼­´Â Æ¯º°ÇÑ ¾÷µ¥ÀÌÆ® ·ÎÁ÷ÀÌ ¾ø½À´Ï´Ù.
+    // Intro È­ï¿½é¿¡ï¿½ï¿½ï¿½ï¿½ Æ¯ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.
 }
 
 void Intro::Render() {
     SDL_RenderCopy(g_renderer, backgroundTexture, nullptr, &backgroundRect);
-    // ¹öÆ° ·»´õ¸µ Ãß°¡ °¡´É
+    // ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½
 }
 
 void Intro::HandleEvents(SDL_Event& event) {

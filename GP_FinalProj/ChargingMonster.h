@@ -22,7 +22,7 @@ private:
     int health;
     float stateTimer;
     int targetX, targetY;
-    float directionX, directionY; // ¹æÇâ º¤ÅÍ Ãß°¡
+    float directionX, directionY; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
     int currentFrame;
     float animationTime;
     float animationSpeed;

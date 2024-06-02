@@ -10,7 +10,7 @@ Uint32 g_frame_per_sec = 30;
 int g_current_game_phase = 0;
 int g_player_health = 5;
 float g_phase_transition_timer = 0.0f;
-const int NUMBER_OF_PHASES = 8;  // ÆäÀÌÁî ¼ö º¯°æ
+const int NUMBER_OF_PHASES = 8;  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 std::vector<SDL_Rect> g_obstacles;
 int g_kill_count = 0;
 TTF_Font* g_font = nullptr;

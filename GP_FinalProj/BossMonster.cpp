@@ -12,8 +12,8 @@ BossMonster::BossMonster(int x, int y) : Monster(x, y), hp(20) {
 }
 
 void BossMonster::Update(float deltaTime, const SDL_Rect& playerRect) {
-    // º¸½º ¸ó½ºÅÍ ¾÷µ¥ÀÌÆ® ·ÎÁ÷
-    // ÇÃ·¹ÀÌ¾î¸¦ ÃßÀûÇÏ´Â µîÀÇ ·ÎÁ÷ Ãß°¡ °¡´É
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+    // ï¿½Ã·ï¿½ï¿½Ì¾î¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½
     float moveSpeed = 50.0f;
     float deltaX = playerRect.x - x;
     float deltaY = playerRect.y - y;
