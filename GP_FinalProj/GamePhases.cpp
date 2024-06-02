@@ -9,3 +9,4 @@ const int PHASE_Dasol = 4;
 const int PHASE_Sophiebara = 5;
 const int PHASE_Michael = 6;
 const int PHASE_LastBoss = 7;
+const int PHASE_GameOver = 8; // Ãß°¡
