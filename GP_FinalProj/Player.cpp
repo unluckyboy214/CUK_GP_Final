@@ -338,8 +338,9 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
             if (SDL_HasIntersection(&dashArea, &monsterRect)) {
                 parrySuccess = true; // 패링 성공
                 int currentHealth = (*it)->GetHealth();
-                (*it)->SetHealth(currentHealth - 1); // 몬스터의 체력을 1 감소시킴
-                std::cout << "Monster's current health: " << (*it)->GetHealth() << std::endl;
+                (*it)->SetHealth(currentHealth - 1);
+                (*it)->SetHitTimer(1.5f); // hitTimer 설정 함수 호출
+                std::cout << "Monster at (" << (*it)->getX() << ", " << (*it)->getY() << ") hit, health: " << (*it)->GetHealth() << std::endl; // 디버깅 메시지
                 if ((*it)->IsDead()) {
                     delete* it;
                     it = monsters.erase(it);

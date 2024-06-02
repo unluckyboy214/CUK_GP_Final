@@ -103,6 +103,8 @@ int main(int argc, char* argv[]) {
         if (cur_time_ms - g_last_time_ms < (1000 / g_frame_per_sec))
             continue;
 
+        g_last_time_ms = cur_time_ms;
+
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) {

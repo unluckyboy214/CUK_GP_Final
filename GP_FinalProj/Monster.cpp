@@ -5,7 +5,7 @@
 #include <cmath>
 #include <iostream>
 
-Monster::Monster(int x, int y) : x(x), y(y), health(2), maxHealth(2), currentFrame(0), animationTime(0.0f), animationSpeed(0.1f) {}
+Monster::Monster(int x, int y) : x(x), y(y), health(2), maxHealth(2), currentFrame(0), animationTime(0.0f), animationSpeed(0.1f), hitTimer(0.0f), hitDuration(0.3f) {}
 
 Monster::~Monster() {
     for (auto texture : textures) {
@@ -65,8 +65,24 @@ void Monster::RenderHealthBar() {
 void Monster::Render() {
     if (!textures.empty()) {
         SDL_Rect rect = { x, y, 128, 128 };
+
+        // 피격 효과 적용
+        Uint32 currentTime = SDL_GetTicks();
+        if (currentTime - hitStartTime < hitTimer * 1000) {
+            // 깜빡이는 효과를 위해 색상을 교대로 적용
+            if (static_cast<int>((currentTime - hitStartTime) / 100) % 2 == 0) {
+                SDL_SetTextureColorMod(textures[currentFrame], 255, 0, 0); // 빨간색 적용
+            }
+            else {
+                SDL_SetTextureColorMod(textures[currentFrame], 255, 255, 255); // 원래 색상으로 복원
+            }
+        }
+        else {
+            SDL_SetTextureColorMod(textures[currentFrame], 255, 255, 255); // 원래 색상으로 복원
+        }
+
         SDL_RenderCopy(g_renderer, textures[currentFrame], NULL, &rect);
-        RenderHealthBar();  // 체력 바 렌더링 추가
+        RenderHealthBar();
     }
 }
 
@@ -98,4 +114,9 @@ int Monster::GetHealth() const {
 
 SDL_Rect Monster::GetRect() const {
     return { x, y, 64, 64 }; // 충돌 범위의 크기를 렌더링 크기와 일치시킴
+}
+
+void Monster::SetHitTimer(float duration) {
+    hitStartTime = SDL_GetTicks();
+    hitTimer = duration;
 }

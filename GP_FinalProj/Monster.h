@@ -16,9 +16,14 @@ public:
     int getY() const;
     void SetHealth(int newHealth);
     int GetHealth() const;
+    float hitTimer;
+    const float hitDuration = 1.5f;
     void RenderHealthBar();  // 체력 바 렌더링 함수 추가
     bool IsDead() const;
     SDL_Rect GetRect() const;  // 추가된 메서드
+    Uint32 hitStartTime;
+
+    void SetHitTimer(float duration); // 피격 타이머 설정 함수 추가
 
 protected:
     int x;
