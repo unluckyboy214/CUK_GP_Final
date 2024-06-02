@@ -11,7 +11,7 @@ constexpr float CHARGE_DURATION = 1.0f; // Time to charge before running
 constexpr float STUN_DURATION = 3.0f; // Time to stay stunned
 
 ChargingMonster::ChargingMonster(int x, int y)
-    : Monster(x, y), state(Idle), stateTimer(IDLE_DELAY), targetX(0), targetY(0), directionX(0), directionY(0), currentFrame(0), animationTime(0.0f), animationSpeed(0.1f) {
+    : Monster(x, y), health(3), state(Idle), stateTimer(IDLE_DELAY), targetX(0), targetY(0), directionX(0), directionY(0), currentFrame(0), animationTime(0.0f), animationSpeed(0.1f) {
     LoadTextures();
 }
 
@@ -180,11 +180,12 @@ void ChargingMonster::AdvanceFrame(float deltaTime) {
             currentFrame %= runningTextures.size();
         }
         else if (state == Stunned) {
-			currentFrame %= stunnedTexture.size();
-		}
+            currentFrame %= stunnedTexture.size();
+        }
     }
 }
 
+// ChargingMonster.cpp
 void ChargingMonster::Render() {
     SDL_Rect dstRect = { x, y, 128, 128 }; // Example size, adjust as needed
     SDL_Texture* currentTexture = nullptr;
@@ -206,13 +207,17 @@ void ChargingMonster::Render() {
         }
         break;
     case Stunned:
-        currentTexture = stunnedTexture[currentFrame % runningTextures.size()];
+        if (!stunnedTexture.empty()) {
+            currentTexture = stunnedTexture[currentFrame % stunnedTexture.size()];
+        }
         break;
     }
 
     if (currentTexture) {
         SDL_RenderCopy(g_renderer, currentTexture, NULL, &dstRect);
     }
+
+    Monster::RenderHealthBar(); // 체력바 렌더링 호출 추가
 }
 
 void ChargingMonster::ResetStateTimer(float time) {

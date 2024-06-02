@@ -2,7 +2,7 @@
 #include "globals.h"
 #include <cmath>
 
-MovingMonster::MovingMonster(int x, int y) : Monster(x, y), health(10), isStunned(false) { // Initial health set to 3
+MovingMonster::MovingMonster(int x, int y) : Monster(x, y), health(3), isStunned(false) { // Initial health set to 3
     normalFrameFiles = {
         "../../Resource/Monster/slime_frame1.png",
         "../../Resource/Monster/slime_frame2.png",
@@ -43,7 +43,7 @@ void MovingMonster::TakeDamage(int damage) {
 }
 
 void MovingMonster::MoveTowardsPlayer(float deltaTime, const SDL_Rect& playerRect) {
-    float moveSpeed = 100.0f; // Adjust the speed as needed
+    float moveSpeed = 50.0f; // Adjust the speed as needed
 
     float deltaX = playerRect.x - x;
     float deltaY = playerRect.y - y;

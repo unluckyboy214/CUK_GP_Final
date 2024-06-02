@@ -1,10 +1,11 @@
+//Monster.cpp
 #include "Monster.h"
 #include "globals.h"  // Include the globals header
 #include <SDL_image.h>
 #include <cmath>
 #include <iostream>
 
-Monster::Monster(int x, int y) : x(x), y(y), health(1), currentFrame(0), animationTime(0.0f), animationSpeed(0.1f) {}
+Monster::Monster(int x, int y) : x(x), y(y), health(2), maxHealth(2), currentFrame(0), animationTime(0.0f), animationSpeed(0.1f) {}
 
 Monster::~Monster() {
     for (auto texture : textures) {
@@ -41,10 +42,31 @@ void Monster::AdvanceFrame(float deltaTime) {
     }
 }
 
+void Monster::RenderHealthBar() {
+    if (health < maxHealth) {
+        int barWidth = 50;
+        int barHeight = 5;
+        int barX = x + (128 - barWidth) / 2;  // 체력 바 x 좌표 계산
+        int barY = y - 10;  // 체력 바 y 좌표 계산
+
+        // 체력 바 배경 렌더링
+        SDL_Rect backgroundRect = { barX, barY, barWidth, barHeight };
+        SDL_SetRenderDrawColor(g_renderer, 255, 0, 0, 255);  // 빨간색
+        SDL_RenderFillRect(g_renderer, &backgroundRect);
+
+        // 현재 체력 바 렌더링
+        int healthWidth = (health * barWidth) / maxHealth;
+        SDL_Rect healthRect = { barX, barY, healthWidth, barHeight };
+        SDL_SetRenderDrawColor(g_renderer, 0, 255, 0, 255);  // 초록색
+        SDL_RenderFillRect(g_renderer, &healthRect);
+    }
+}
+
 void Monster::Render() {
     if (!textures.empty()) {
-        SDL_Rect rect = { x, y, 128, 128 }; // Render size of 128x128
+        SDL_Rect rect = { x, y, 128, 128 };
         SDL_RenderCopy(g_renderer, textures[currentFrame], NULL, &rect);
+        RenderHealthBar();  // 체력 바 렌더링 추가
     }
 }
 

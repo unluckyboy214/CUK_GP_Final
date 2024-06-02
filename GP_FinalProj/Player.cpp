@@ -1,3 +1,4 @@
+//Player.cpp
 #include "Player.h"
 #include "globals.h"
 #include <SDL_image.h>
@@ -326,6 +327,7 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
 
             int currentHealth = closestMonster->GetHealth();
             closestMonster->SetHealth(currentHealth - 1); // 몬스터의 체력을 1 감소시킴
+            std::cout << "Monster's current health: " << closestMonster->GetHealth() << std::endl;
             if (closestMonster->IsDead()) {
                 // 체력이 0이 되면 몬스터를 제거
                 auto it = std::find(monsters.begin(), monsters.end(), closestMonster);

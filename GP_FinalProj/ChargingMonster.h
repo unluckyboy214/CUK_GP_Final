@@ -19,6 +19,7 @@ private:
         Stunned
     } state;
 
+    int health;
     float stateTimer;
     int targetX, targetY;
     float directionX, directionY; // 방향 벡터 추가
