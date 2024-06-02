@@ -32,7 +32,7 @@ void Map::Update(float deltaTime) {
 
     // 몬스터 생성 타이머 업데이트
     spawnTimer += deltaTime;
-    if (spawnTimer >= spawnDelay) {
+    if (spawnTimer >= spawnDelay && monsters.empty()) {
         SpawnMonsters();  // 몬스터 생성
         spawnTimer = 0.0f;  // 타이머 리셋
     }
@@ -55,7 +55,7 @@ void Map::Update(float deltaTime) {
     }
 
     // 남아있는 몬스터의 수가 maxMonsters 이하로 떨어지면 새로운 몬스터 생성
-    if (monsters.size() < maxMonsters) {
+    if (monsters.size() < maxMonsters && !monsters.empty()) {
         int spawnCount = maxMonsters - monsters.size();
         for (int i = 0; i < spawnCount; ++i) {
             SpawnMonster();

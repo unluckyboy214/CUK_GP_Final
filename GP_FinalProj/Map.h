@@ -26,8 +26,8 @@ public:
     virtual void Update(float deltaTime);
     virtual void Render();
     virtual void HandleEvents();
-    virtual void SpawnMonsters();
-    virtual void SpawnMonster() = 0;
+    virtual void SpawnMonsters();  // 순수 가상 함수가 아님
+    virtual void SpawnMonster() = 0; // 순수 가상 함수
 
     void ResetMonsters();
     void LoadBackground(const char* path);
