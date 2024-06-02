@@ -11,7 +11,8 @@
 #include "Sophiebara.h"
 #include "Michael.h"
 #include "LastBoss.h"
-#include "Intro.h" // 추가
+#include "Intro.h"
+#include "GameOver.h" // 추가
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
@@ -36,6 +37,21 @@ void RenderKillCount() {
     SDL_DestroyTexture(texture);
 }
 
+void ResetGame(Entrance& entrance, KimSuHwan& kimsuhwan, Hall& hall, Nicols1& nicols1, Dasol& dasol, Sophiebara& sophiebara, Michael& michael, LastBoss& lastboss, Player& player) {
+    g_current_game_phase = PHASE_Intro;
+    g_player_health = 5;
+    g_kill_count = 0;
+    entrance.ResetMonsters();
+    kimsuhwan.ResetMonsters();
+    hall.ResetMonsters();
+    nicols1.ResetMonsters();
+    dasol.ResetMonsters();
+    sophiebara.ResetMonsters();
+    michael.ResetMonsters();
+    lastboss.ResetMonsters();
+    SetPlayerToCenter(player);
+}
+
 int main(int argc, char* argv[]) {
     SDL_Init(SDL_INIT_EVERYTHING);
     TTF_Init();
@@ -50,7 +66,8 @@ int main(int argc, char* argv[]) {
 
     Health health(g_renderer);
 
-    Intro intro; // 추가
+    Intro intro;
+    Gameover gameover; // 추가
     Entrance entrance;
     KimSuHwan kimsuhwan;
     Hall hall;
@@ -78,6 +95,12 @@ int main(int argc, char* argv[]) {
 
             if (g_current_game_phase == PHASE_Intro) {
                 intro.HandleEvents(e); // 인트로 페이즈 이벤트 처리
+            }
+            else if (g_current_game_phase == PHASE_GameOver) {
+                gameover.HandleEvents(e); // 게임 오버 페이즈 이벤트 처리
+                if (g_current_game_phase == PHASE_Intro) { // 게임 오버 화면에서 Intro로 돌아가면 게임 초기화
+                    ResetGame(entrance, kimsuhwan, hall, nicols1, dasol, sophiebara, michael, lastboss, player);
+                }
             }
             else {
                 chisam.HandleEvents(e);
@@ -115,14 +138,16 @@ int main(int argc, char* argv[]) {
             intro.Update(deltaTime);
             intro.Render();
         }
+        else if (g_current_game_phase == PHASE_GameOver) {
+            gameover.Update(deltaTime);
+            gameover.Render();
+        }
         else {
             player.Update(deltaTime);
 
-            if (g_player_health <= 0) {
-                g_current_game_phase = PHASE_Entrance;
-                g_player_health = 5;
-                entrance.ResetMonsters();
-                SetPlayerToCenter(player);
+            /***현재 GameOver 보기 위해 1로 설정함***/
+            if (g_player_health <= 1) {
+                g_current_game_phase = PHASE_GameOver;
             }
 
             // 킬 카운트 기반의 페이즈 전환 로직
