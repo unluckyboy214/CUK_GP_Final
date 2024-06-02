@@ -24,6 +24,8 @@ const int PHASE_Dasol = 4;
 const int PHASE_Sophiebara = 5;
 const int PHASE_Michael = 6;
 const int PHASE_LastBoss = 7;
+const int PHASE_Gameover = 8;
+const int PHASE_Pause = 9;
 
 
 extern int g_current_game_phase;

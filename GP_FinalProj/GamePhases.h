@@ -11,5 +11,6 @@ extern const int PHASE_Sophiebara;
 extern const int PHASE_Michael;
 extern const int PHASE_LastBoss;
 extern const int PHASE_GameOver; // Ãß°¡
+extern const int PHASE_Pause;
 
 #endif // GAME_PHASES_H

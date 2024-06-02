@@ -13,6 +13,7 @@
 #include "LastBoss.h"
 #include "Intro.h"
 #include "GameOver.h" // 추가
+#include "Pause.h"
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
@@ -84,6 +85,7 @@ int main(int argc, char* argv[]) {
 
     Intro intro;
     Gameover gameover; // 추가
+    Pause pause;
     Entrance entrance;
     KimSuHwan kimsuhwan;
     Hall hall;
@@ -119,6 +121,10 @@ int main(int argc, char* argv[]) {
                 if (g_current_game_phase == PHASE_Intro) { // 게임 오버 화면에서 Intro로 돌아가면 게임 초기화
                     ResetGame(entrance, kimsuhwan, hall, nicols1, dasol, sophiebara, michael, lastboss, player);
                 }
+            }
+            else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
+                // ESC 키를 누르면 일시정지 화면으로 전환합니다.
+                g_current_game_phase = PHASE_Pause;
             }
             else {
                 chisam.HandleEvents(e);
@@ -199,6 +205,9 @@ int main(int argc, char* argv[]) {
                     g_current_game_phase = PHASE_LastBoss;
                     lastboss.ResetMonsters();
                     break;
+                case PHASE_Pause:
+                    pause.HandleEvents(e);
+                    break;
                 }
                 SetPlayerToCenter(player);
             }
@@ -249,6 +258,10 @@ int main(int argc, char* argv[]) {
             case PHASE_LastBoss:
                 lastboss.Update(deltaTime);
                 lastboss.Render();
+                break;
+            case PHASE_Pause:
+                pause.Update(deltaTime);
+                pause.Render();
                 break;
             }
 

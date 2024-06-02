@@ -8,6 +8,8 @@
 #include "Dasol.h"
 #include "Michael.h"
 #include "LastBoss.h"
+#include "GameOver.h"
+#include "Pause.h"
 
 // Game variables
 SDL_Rect g_player_destination_rect;
