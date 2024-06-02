@@ -33,23 +33,8 @@
     <ClCompile Include="Nicols1.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Nicols2.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Nicols3.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="GameClassPhase.h">
       <Filter>헤더 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Maria.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Virtus.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Bambino.cpp">
-      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Dasol.cpp">
       <Filter>소스 파일</Filter>
@@ -81,9 +66,6 @@
     <ClCompile Include="ChargingMonster.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Minimap.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Health.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -105,15 +87,12 @@
     <ClCompile Include="BossMonster.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Intro.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Nicols1.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Nicols2.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Nicols3.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="KimSuHwan.h">
@@ -126,15 +105,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Entrance.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Maria.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Virtus.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Bambino.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Dasol.h">
@@ -167,9 +137,6 @@
     <ClInclude Include="ChargingMonster.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Minimap.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Health.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -192,6 +159,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="BossMonster.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Intro.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
