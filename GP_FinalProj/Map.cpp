@@ -38,18 +38,16 @@ void Map::Update(float deltaTime) {
     }
 
     bool allMonstersDefeated = true;
-    for (auto it = monsters.begin(); it != monsters.end();) {
+    for (auto it = monsters.begin(); it != monsters.end(); ++it) {
         (*it)->Update(deltaTime, player_.GetRect());
         if ((*it)->CheckCollisionWithPlayer(player_.GetRect())) {
-            delete* it;
-            it = monsters.erase(it);
+            player_.OnMonsterCollision((*it)->GetRect());
+            allMonstersDefeated = false; // 몬스터가 여전히 존재함을 나타냄
         }
         else {
-            ++it;
             allMonstersDefeated = false;
         }
     }
-
     if (allMonstersDefeated && monsters.empty()) {
         g_phase_transition_timer = 2.0f;
     }

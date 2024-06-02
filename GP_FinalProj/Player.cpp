@@ -376,7 +376,7 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
 
 void Player::OnMonsterCollision(const SDL_Rect& monsterRect) {
     g_player_health -= 1;
-
+    std::cout << "Player hit by a monster! Current health: " << g_player_health << std::endl;
 }
 
 void Player::SetParrying(bool parrying) {
