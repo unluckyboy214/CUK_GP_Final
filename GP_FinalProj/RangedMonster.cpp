@@ -4,7 +4,7 @@
 #include <cmath>
 #include <vector>
 
-RangedMonster::RangedMonster(int x, int y) : Monster(x, y), shootCooldown(1.0f), shootTimer(0.0f) {
+RangedMonster::RangedMonster(int x, int y) : Monster(x, y), health(3), shootCooldown(4.0f), shootTimer(0.0f) {
     std::vector<std::string> frameFiles = {
         "../../Resource/Monster/shooter_frame1.png",
         "../../Resource/Monster/shooter_frame2.png",

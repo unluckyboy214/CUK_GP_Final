@@ -16,6 +16,7 @@ public:
     int getY() const;
     void SetHealth(int newHealth);
     int GetHealth() const;
+    void RenderHealthBar();  // 체력 바 렌더링 함수 추가
     bool IsDead() const;
     SDL_Rect GetRect() const;  // 추가된 메서드
 
@@ -23,6 +24,7 @@ protected:
     int x;
     int y;
     int health;
+    int maxHealth;  // 최대 체력 변수 추가
     std::vector<SDL_Texture*> textures; // Vector to store animation frames
     int currentFrame;
     float animationTime;

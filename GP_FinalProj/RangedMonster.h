@@ -21,6 +21,7 @@ public:
     std::vector<Projectile>& GetProjectiles(); // Add this line
 
 private:
+    int health;
     float shootCooldown;
     float shootTimer;
     std::vector<Projectile> projectiles;
