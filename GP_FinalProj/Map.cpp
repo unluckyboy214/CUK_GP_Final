@@ -41,6 +41,7 @@ void Map::Update(float deltaTime) {
     for (auto it = monsters.begin(); it != monsters.end();) {
         (*it)->Update(deltaTime, player_.GetRect());
         if ((*it)->CheckCollisionWithPlayer(player_.GetRect())) {
+            player_.OnMonsterCollision((*it)->GetRect());
             delete* it;
             it = monsters.erase(it);
         }
