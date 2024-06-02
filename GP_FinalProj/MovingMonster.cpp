@@ -34,14 +34,6 @@ void MovingMonster::Update(float deltaTime, const SDL_Rect& playerRect) {
     }
 }
 
-void MovingMonster::TakeDamage(int damage) {
-    health -= damage;
-    if (health == 1 && !isStunned) {
-        isStunned = true;
-        LoadTextures(stunFrameFiles);
-    }
-}
-
 void MovingMonster::MoveTowardsPlayer(float deltaTime, const SDL_Rect& playerRect) {
     float moveSpeed = 50.0f; // Adjust the speed as needed
 
@@ -53,5 +45,33 @@ void MovingMonster::MoveTowardsPlayer(float deltaTime, const SDL_Rect& playerRec
         x += static_cast<int>(moveSpeed * deltaX / distance * deltaTime);
         y += static_cast<int>(moveSpeed * deltaY / distance * deltaTime);
     }
+
+    // Update facing direction
+    facingRight = deltaX <= 0;
 }
 
+void MovingMonster::Render() {
+    if (!textures.empty()) {
+        SDL_Rect rect = { x, y, 128, 128 };
+
+        // Apply hit effect
+        Uint32 currentTime = SDL_GetTicks();
+        if (currentTime - hitStartTime < hitTimer * 1000) {
+            // Alternate color for flashing effect
+            if (static_cast<int>((currentTime - hitStartTime) / 100) % 2 == 0) {
+                SDL_SetTextureColorMod(textures[currentFrame], 255, 0, 0); // Red
+            }
+            else {
+                SDL_SetTextureColorMod(textures[currentFrame], 255, 255, 255); // Original color
+            }
+        }
+        else {
+            SDL_SetTextureColorMod(textures[currentFrame], 255, 255, 255); // Original color
+        }
+
+        SDL_RendererFlip flip = facingRight ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
+        SDL_RenderCopyEx(g_renderer, textures[currentFrame], NULL, &rect, 0, NULL, flip);
+
+        RenderHealthBar();
+    }
+}
