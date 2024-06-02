@@ -27,6 +27,9 @@ Player::Player()
     dashEffectFrame(0),
     dashEffectTimer(0.0f),
     isDashEffectActive(false),
+    invincible_start_time_(0),
+    invincible_duration_(0.0f),
+    hit_this_frame_(false),
     velocity_({ 0.0f, 0.0f }),
     dashEffectPosition_({ 0, 0, static_cast<int>(127 * 1.5), static_cast<int>(20 * 1.5) }),
     dashEffectAngle_(0.0) {  // 속도 초기화 및 대시 이펙트 위치 초기화
@@ -194,6 +197,15 @@ void Player::Update(float deltaTime) {
     rect_.y = std::max(0, std::min(WINDOW_HEIGHT - rect_.h, rect_.y));
 
     UpdateDashEffect(deltaTime);
+
+    if (IsInvincible()) {
+        Uint32 current_time = SDL_GetTicks();
+        if (current_time - invincible_start_time_ >= invincible_duration_ * 1000) {
+            invincible_duration_ = 0.0f;
+            std::cout << "Player invincibility ended." << std::endl;
+        }
+    }
+    hit_this_frame_ = false;
 }
 
 void Player::UpdateDashEffect(float deltaTime) {
@@ -373,10 +385,19 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
     }
 }
 
-
 void Player::OnMonsterCollision(const SDL_Rect& monsterRect) {
-    g_player_health -= 1;
-    std::cout << "Player hit by a monster! Current health: " << g_player_health << std::endl;
+    if (!IsInvincible() && !hit_this_frame_) {
+        int health_loss = 1;
+        if (g_player_health > health_loss) {
+            g_player_health -= health_loss;
+        }
+        else {
+            g_player_health = 0;
+        }
+        std::cout << "Player hit by a monster! Current health: " << g_player_health << std::endl;
+        SetInvincibleTimer(5.0f);
+        hit_this_frame_ = true;
+    }
 }
 
 void Player::SetParrying(bool parrying) {
@@ -398,4 +419,14 @@ SDL_Rect Player::GetRect() const {
 void Player::SetPosition(int x, int y) {
     rect_.x = x;
     rect_.y = y;
+}
+
+bool Player::IsInvincible() const {
+    return invincible_duration_ > 0.0f;
+}
+
+void Player::SetInvincibleTimer(float duration) {
+    invincible_start_time_ = SDL_GetTicks();
+    invincible_duration_ = duration;
+    std::cout << "Player is now invincible for " << duration << " seconds." << std::endl;
 }

@@ -1,3 +1,4 @@
+//Player.h
 #ifndef PLAYER_H
 #define PLAYER_H
 
@@ -34,6 +35,8 @@ public:
     SDL_Rect GetRect() const;
     void SetPosition(int x, int y);
     void OnMonsterCollision(const SDL_Rect& monsterRect);
+    void SetInvincibleTimer(float duration);
+    bool IsInvincible() const;
 
 private:
     void LoadTextures();
@@ -58,6 +61,9 @@ private:
     bool isDashEffectActive;
     SDL_Rect dashEffectPosition_;  // 대시 이펙트 위치를 저장할 변수
     double dashEffectAngle_;  // 대시 이펙트 회전 각도
+    Uint32 invincible_start_time_;
+    float invincible_duration_;
+    bool hit_this_frame_;
 
     void LoadDashEffectTextures();
     void UpdateDashEffect(float deltaTime);
