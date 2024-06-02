@@ -333,16 +333,6 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
                     monsters.erase(it);
                     g_kill_count++; // 몬스터 삭제 시 킬 수 증가
                     delete closestMonster; // 몬스터가 동적으로 할당된 경우 메모리 해제
-                    if (monsters.size() < 7) {
-                        int x = disX(gen);
-                        int y = disY(gen);
-                        if (monsters.size() % 2 == 0) {
-                            monsters.push_back(new MovingMonster(x, y));
-                        }
-                        else {
-                            monsters.push_back(new RangedMonster(x, y));
-                        }
-                    }
                 }
             }
 
