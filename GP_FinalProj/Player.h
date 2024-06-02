@@ -33,6 +33,7 @@ public:
     bool IsParrying() const;
     SDL_Rect GetRect() const;
     void SetPosition(int x, int y);
+    void OnMonsterCollision(const SDL_Rect& monsterRect);
 
 private:
     void LoadTextures();

@@ -7,7 +7,8 @@
 class Hall : public Map {
 public:
     Hall();
-    void SpawnMonsters() override;
+    virtual void SpawnMonsters() override;
+    virtual void SpawnMonster() override;
 };
 
 #endif // HALL_H

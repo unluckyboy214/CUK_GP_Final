@@ -14,8 +14,6 @@ Monster::~Monster() {
         }
     }
     textures.clear();
-
-
 }
 
 void Monster::LoadTextures(const std::vector<std::string>& frameFiles) {
@@ -51,7 +49,7 @@ void Monster::Render() {
 }
 
 bool Monster::CheckCollisionWithPlayer(const SDL_Rect& playerRect) {
-    SDL_Rect monsterRect = { x, y, 5, 5 }; // Adjust collision size to match render size
+    SDL_Rect monsterRect = GetRect(); // 몬스터의 충돌 범위를 가져옴
     return SDL_HasIntersection(&monsterRect, &playerRect);
 }
 
@@ -73,4 +71,8 @@ bool Monster::IsDead() const {
 
 int Monster::GetHealth() const {
     return health;
+}
+
+SDL_Rect Monster::GetRect() const {
+    return { x, y, 128, 128 }; // 충돌 범위의 크기를 렌더링 크기와 일치시킴
 }

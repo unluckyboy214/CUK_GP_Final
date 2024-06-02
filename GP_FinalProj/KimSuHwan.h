@@ -6,7 +6,8 @@
 class KimSuHwan : public Map {
 public:
     KimSuHwan();
-    void SpawnMonsters() override;
+    virtual void SpawnMonsters() override;
+    virtual void SpawnMonster() override;
 };
 
 #endif // KIMSUHWAN_H

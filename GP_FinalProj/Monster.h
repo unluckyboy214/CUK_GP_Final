@@ -17,6 +17,7 @@ public:
     void SetHealth(int newHealth);
     int GetHealth() const;
     bool IsDead() const;
+    SDL_Rect GetRect() const;  // 추가된 메서드
 
 protected:
     int x;

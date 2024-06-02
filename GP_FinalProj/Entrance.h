@@ -6,8 +6,8 @@
 class Entrance : public Map {
 public:
     Entrance();
-    void SpawnMonsters() override;
-    void SpawnMonster();  // 새로운 몬스터 생성 함수
+    virtual void SpawnMonsters() override;
+    virtual void SpawnMonster() override;
 };
 
 #endif // ENTRANCE_H

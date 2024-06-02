@@ -1,12 +1,18 @@
 #include "Map.h"
-#include "globals.h" // globals.h 포함
-#include "Entrance.h"  // Entrance 클래스 포함
+#include "globals.h"
+#include "Entrance.h"
 #include "MovingMonster.h"
 #include "RangedMonster.h"
 #include "ChargingMonster.h"
+#include "Player.h"
 #include <random>
 
-Map::Map(const char* backgroundPath) : destination_rectangle_{ 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT }, spawnTimer(0.0f), spawnDelay(5.0f), monstersSpawned(false) {
+Map::Map(const char* backgroundPath, int maxMonsters)
+    : destination_rectangle_{ 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT },
+    spawnTimer(0.0f),
+    spawnDelay(5.0f),
+    monstersSpawned(false),
+    maxMonsters(maxMonsters) {
     LoadBackground(backgroundPath);
 }
 
@@ -36,13 +42,10 @@ void Map::Update(float deltaTime) {
     for (auto it = monsters.begin(); it != monsters.end();) {
         (*it)->Update(deltaTime, player_.GetRect());
         if ((*it)->CheckCollisionWithPlayer(player_.GetRect())) {
+            // 플레이어를 접촉 방향으로 밀어내고 체력 감소
+            player_.OnMonsterCollision((*it)->GetRect());
             delete* it;
             it = monsters.erase(it);
-           
-            // 새로운 몬스터 생성 및 추가
-            if (monsters.size() < 7) {
-                dynamic_cast<Map*>(this)->SpawnMonster();  // 새로운 몬스터 생성
-            }
         }
         else {
             ++it;
@@ -53,8 +56,15 @@ void Map::Update(float deltaTime) {
     if (allMonstersDefeated && monsters.empty() && monstersSpawned) {
         g_phase_transition_timer = 2.0f;
     }
-}
 
+    // 남아있는 몬스터의 수가 maxMonsters 이하로 떨어지면 새로운 몬스터 생성
+    if (monsters.size() < maxMonsters) {
+        int spawnCount = maxMonsters - monsters.size();
+        for (int i = 0; i < spawnCount; ++i) {
+            SpawnMonster();
+        }
+    }
+}
 
 void Map::Render() {
     SDL_SetRenderDrawColor(g_renderer, 255, 255, 255, 255);
@@ -63,6 +73,7 @@ void Map::Render() {
     for (auto monster : monsters) {
         monster->Render();
     }
+    player_.Render();
 }
 
 void Map::HandleEvents() {
@@ -71,6 +82,7 @@ void Map::HandleEvents() {
         if (event.type == SDL_QUIT) {
             g_flag_running = false;
         }
+        player_.HandleEvents(event, monsters); // 플레이어 이벤트 처리 추가
     }
 }
 
@@ -96,32 +108,6 @@ void Map::LoadBackground(const char* path) {
     destination_rectangle_ = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
 }
 
-void Map::SpawnMonster() {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> disX(0, WINDOW_WIDTH - 128);
-    std::uniform_int_distribution<> disY(0, WINDOW_HEIGHT - 128);
-
-
-    if (g_current_game_phase == PHASE_Hall) {
-        if (monsters.size() < 7) {
-            int x = disX(gen);
-            int y = disY(gen);
-            monsters.push_back(new ChargingMonster(x, y));
-        }
-    }
-    else {
-        if (monsters.size() < 7) {
-            int x = disX(gen);
-            int y = disY(gen);
-            if (g_kill_count % 3 == 0) {
-                monsters.push_back(new RangedMonster(x, y));
-            }
-            else {
-                monsters.push_back(new MovingMonster(x, y));
-            }
-        }
-    }
-
-
+void Map::SpawnMonsters() {
+    // 기본적으로 아무것도 하지 않음. 각 파생 클래스에서 이 함수를 구현해야 함.
 }

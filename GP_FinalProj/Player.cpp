@@ -357,6 +357,30 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
     }
 }
 
+void Player::OnMonsterCollision(const SDL_Rect& monsterRect) {
+    g_player_health -= 1;
+    int pushDistance = 50;
+
+    // 충돌한 방향으로 플레이어를 밀어냄
+    if (rect_.x < monsterRect.x) {
+        rect_.x -= pushDistance;
+    }
+    else if (rect_.x > monsterRect.x) {
+        rect_.x += pushDistance;
+    }
+
+    if (rect_.y < monsterRect.y) {
+        rect_.y -= pushDistance;
+    }
+    else if (rect_.y > monsterRect.y) {
+        rect_.y += pushDistance;
+    }
+
+    // Keep player within window bounds
+    rect_.x = std::max(0, std::min(WINDOW_WIDTH - rect_.w, rect_.x));
+    rect_.y = std::max(0, std::min(WINDOW_HEIGHT - rect_.h, rect_.y));
+}
+
 void Player::SetParrying(bool parrying) {
     is_parrying_ = parrying;
 }
