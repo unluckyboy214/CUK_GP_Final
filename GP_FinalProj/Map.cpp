@@ -11,7 +11,6 @@ Map::Map(const char* backgroundPath, int maxMonsters)
     : destination_rectangle_{ 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT },
     spawnTimer(0.0f),
     spawnDelay(5.0f),
-    monstersSpawned(false),
     maxMonsters(maxMonsters) {
     LoadBackground(backgroundPath);
 }
@@ -33,17 +32,15 @@ void Map::Update(float deltaTime) {
 
     // 몬스터 생성 타이머 업데이트
     spawnTimer += deltaTime;
-    if (spawnTimer >= spawnDelay && !monstersSpawned) {
+    if (spawnTimer >= spawnDelay) {
         SpawnMonsters();  // 몬스터 생성
-        monstersSpawned = true;  // 몬스터 생성 플래그 설정
+        spawnTimer = 0.0f;  // 타이머 리셋
     }
 
     bool allMonstersDefeated = true;
     for (auto it = monsters.begin(); it != monsters.end();) {
         (*it)->Update(deltaTime, player_.GetRect());
         if ((*it)->CheckCollisionWithPlayer(player_.GetRect())) {
-            // 플레이어를 접촉 방향으로 밀어내고 체력 감소
-            //player_.OnMonsterCollision((*it)->GetRect());
             delete* it;
             it = monsters.erase(it);
         }
@@ -53,7 +50,7 @@ void Map::Update(float deltaTime) {
         }
     }
 
-    if (allMonstersDefeated && monsters.empty() && monstersSpawned) {
+    if (allMonstersDefeated && monsters.empty()) {
         g_phase_transition_timer = 2.0f;
     }
 
@@ -92,7 +89,6 @@ void Map::ResetMonsters() {
         monster = nullptr;
     }
     monsters.clear();
-    monstersSpawned = false;  // 리셋 시 몬스터 생성 플래그 초기화
     spawnTimer = 0.0f;  // 타이머 리셋
 
     // 플레이어 위치 중앙으로 설정

@@ -10,7 +10,7 @@ Uint32 g_frame_per_sec = 30;
 int g_current_game_phase = 0;
 int g_player_health = 5;
 float g_phase_transition_timer = 0.0f;
-const int NUMBER_OF_PHASES = 13;
-std::vector<SDL_Rect> g_obstacles;  // 추가: 장애물 벡터 정의
+const int NUMBER_OF_PHASES = 8;  // 페이즈 수 변경
+std::vector<SDL_Rect> g_obstacles;
 int g_kill_count = 0;
 TTF_Font* g_font = nullptr;

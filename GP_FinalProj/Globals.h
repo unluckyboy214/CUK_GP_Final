@@ -16,7 +16,7 @@ extern int g_current_game_phase;
 extern int g_player_health;
 extern float g_phase_transition_timer;
 extern const int NUMBER_OF_PHASES;
-extern std::vector<SDL_Rect> g_obstacles;  // 추가: 장애물 벡터 선언
+extern std::vector<SDL_Rect> g_obstacles;
 extern int g_kill_count;
 extern TTF_Font* g_font;
 

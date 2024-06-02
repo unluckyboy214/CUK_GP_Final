@@ -26,6 +26,7 @@ void Intro::Update(float deltaTime) {
 
 void Intro::Render() {
     SDL_RenderCopy(g_renderer, backgroundTexture, nullptr, &backgroundRect);
+    // 버튼 렌더링 추가 가능
 }
 
 void Intro::HandleEvents(SDL_Event& event) {
