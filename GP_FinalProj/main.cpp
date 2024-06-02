@@ -37,6 +37,20 @@ void RenderKillCount() {
     SDL_DestroyTexture(texture);
 }
 
+void ResetDirectionKeys() {
+    g_move_left = false;
+    g_move_right = false;
+    g_move_up = false;
+    g_move_down = false;
+}
+
+void ClearEventQueue() {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        // 모든 이벤트를 버립니다.
+    }
+}
+
 void ResetGame(Entrance& entrance, KimSuHwan& kimsuhwan, Hall& hall, Nicols1& nicols1, Dasol& dasol, Sophiebara& sophiebara, Michael& michael, LastBoss& lastboss, Player& player) {
     g_current_game_phase = PHASE_Intro;
     g_player_health = 5;
@@ -50,6 +64,8 @@ void ResetGame(Entrance& entrance, KimSuHwan& kimsuhwan, Hall& hall, Nicols1& ni
     michael.ResetMonsters();
     lastboss.ResetMonsters();
     SetPlayerToCenter(player);
+    ResetDirectionKeys(); // 방향 키 상태 초기화
+    ClearEventQueue(); // 이벤트 큐 초기화
 }
 
 int main(int argc, char* argv[]) {
@@ -145,7 +161,6 @@ int main(int argc, char* argv[]) {
         else {
             player.Update(deltaTime);
 
-            /***현재 GameOver 보기 위해 1로 설정함***/
             if (g_player_health <= 1) {
                 g_current_game_phase = PHASE_GameOver;
             }
