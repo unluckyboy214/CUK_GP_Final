@@ -4,7 +4,7 @@
 #include <cmath>
 #include <vector>
 
-RangedMonster::RangedMonster(int x, int y) : Monster(x, y), health(3), shootCooldown(4.0f), shootTimer(0.0f) {
+RangedMonster::RangedMonster(int x, int y) : Monster(x, y), health(3), shootCooldown(4.0f), shootTimer(0.0f), facingRight(true) { // Initialize facingRight
     std::vector<std::string> frameFiles = {
         "../../Resource/Monster/shooter_frame1.png",
         "../../Resource/Monster/shooter_frame2.png",
@@ -31,6 +31,10 @@ void RangedMonster::Update(float deltaTime, const SDL_Rect& playerRect) {
         shootTimer = 0.0f;
     }
 
+    // Update facing direction
+    float deltaX = playerRect.x - x;
+    facingRight = deltaX <= 0;
+
     // Update projectile positions and check collisions
     for (auto it = projectiles.begin(); it != projectiles.end();) {
         if (it->active) {
@@ -49,13 +53,6 @@ void RangedMonster::Update(float deltaTime, const SDL_Rect& playerRect) {
                     it->active = false;
                     it = projectiles.erase(it);
 
-                    // Check if player health is 0
-                    if (g_player_health <= 0) {
-                        // Reset the game state or set to game over phase
-                        g_current_game_phase = PHASE_Entrance; // Or any phase you define for game over
-                        g_player_health = 5; // Reset health for new game start
-                        break;
-                    }
                 }
                 else {
                     ++it;
@@ -87,7 +84,29 @@ std::vector<Projectile>& RangedMonster::GetProjectiles() {
 }
 
 void RangedMonster::Render() {
-    Monster::Render();
+    if (!textures.empty()) {
+        SDL_Rect rect = { x, y, 128, 128 };
+
+        // Apply hit effect
+        Uint32 currentTime = SDL_GetTicks();
+        if (currentTime - hitStartTime < hitTimer * 1000) {
+            // Alternate color for flashing effect
+            if (static_cast<int>((currentTime - hitStartTime) / 100) % 2 == 0) {
+                SDL_SetTextureColorMod(textures[currentFrame], 255, 0, 0); // Red
+            }
+            else {
+                SDL_SetTextureColorMod(textures[currentFrame], 255, 255, 255); // Original color
+            }
+        }
+        else {
+            SDL_SetTextureColorMod(textures[currentFrame], 255, 255, 255); // Original color
+        }
+
+        SDL_RendererFlip flip = facingRight ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
+        SDL_RenderCopyEx(g_renderer, textures[currentFrame], NULL, &rect, 0, NULL, flip);
+
+        RenderHealthBar();
+    }
 
     // Render projectiles
     SDL_SetRenderDrawColor(g_renderer, 255, 0, 0, 255); // Red color for projectiles

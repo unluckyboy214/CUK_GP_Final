@@ -25,6 +25,7 @@ private:
     float shootCooldown;
     float shootTimer;
     std::vector<Projectile> projectiles;
+    bool facingRight; // Add this variable to track the facing direction
 };
 
 #endif // RANGEDMONSTER_H
