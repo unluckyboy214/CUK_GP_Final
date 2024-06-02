@@ -1,3 +1,4 @@
+//Map.cpp
 #include "Map.h"
 #include "globals.h"
 #include "Entrance.h"
@@ -40,7 +41,7 @@ void Map::Update(float deltaTime) {
     bool allMonstersDefeated = true;
     for (auto it = monsters.begin(); it != monsters.end();) {
         (*it)->Update(deltaTime, player_.GetRect());
-        if ((*it)->CheckCollisionWithPlayer(player_.GetRect())) {
+        if (!player_.IsInvincible() && (*it)->CheckCollisionWithPlayer(player_.GetRect())) {
             player_.OnMonsterCollision((*it)->GetRect());
             delete* it;
             it = monsters.erase(it);
