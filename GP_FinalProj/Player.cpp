@@ -293,7 +293,6 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
 
     if (parry_timer_ <= 0) {
         is_parrying_ = true;
-        parry_timer_ = parry_cooldown_ + parry_duration_;
         float parry_distance = 100.0f; // 패링 시 이동 거리
 
         isDashEffectActive = true; // 패링 시 이펙트 활성화
@@ -331,10 +330,13 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
             break;
         }
 
+        bool parrySuccess = false; // 패링 성공 여부
+
         // 대쉬 범위 내의 모든 몬스터를 찾음
         for (auto it = monsters.begin(); it != monsters.end();) {
             SDL_Rect monsterRect = (*it)->GetRect();
             if (SDL_HasIntersection(&dashArea, &monsterRect)) {
+                parrySuccess = true; // 패링 성공
                 int currentHealth = (*it)->GetHealth();
                 (*it)->SetHealth(currentHealth - 1); // 몬스터의 체력을 1 감소시킴
                 std::cout << "Monster's current health: " << (*it)->GetHealth() << std::endl;
@@ -352,6 +354,14 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
             }
         }
 
+        // 패링 성공 여부에 따라 타이머 설정
+        if (parrySuccess) {
+            parry_timer_ = parry_duration_; // 패링 성공 시 지속 시간만 적용
+        }
+        else {
+            parry_timer_ = parry_cooldown_ + parry_duration_; // 패링 실패 시 쿨다운 적용
+        }
+
         // 플레이어 이동 처리
         switch (direction_) {
         case 0: rect_.y -= parry_distance; break; // 위
@@ -365,26 +375,7 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
 
 void Player::OnMonsterCollision(const SDL_Rect& monsterRect) {
     g_player_health -= 1;
-    int pushDistance = 50;
 
-    // 충돌한 방향으로 플레이어를 밀어냄
-    if (rect_.x < monsterRect.x) {
-        rect_.x -= pushDistance;
-    }
-    else if (rect_.x > monsterRect.x) {
-        rect_.x += pushDistance;
-    }
-
-    if (rect_.y < monsterRect.y) {
-        rect_.y -= pushDistance;
-    }
-    else if (rect_.y > monsterRect.y) {
-        rect_.y += pushDistance;
-    }
-
-    // Keep player within window bounds
-    rect_.x = std::max(0, std::min(WINDOW_WIDTH - rect_.w, rect_.x));
-    rect_.y = std::max(0, std::min(WINDOW_HEIGHT - rect_.h, rect_.y));
 }
 
 void Player::SetParrying(bool parrying) {

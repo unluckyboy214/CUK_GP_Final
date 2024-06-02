@@ -70,7 +70,6 @@ void Map::Render() {
     for (auto monster : monsters) {
         monster->Render();
     }
-    //player_.Render();
 }
 
 void Map::HandleEvents() {
@@ -79,7 +78,7 @@ void Map::HandleEvents() {
         if (event.type == SDL_QUIT) {
             g_flag_running = false;
         }
-        player_.HandleEvents(event, monsters); // 플레이어 이벤트 처리 추가
+        //player_.HandleEvents(event, monsters); // 플레이어 이벤트 처리 추가
     }
 }
 

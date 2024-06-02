@@ -73,6 +73,7 @@ void Monster::Render() {
 bool Monster::CheckCollisionWithPlayer(const SDL_Rect& playerRect) {
     SDL_Rect monsterRect = GetRect(); // 몬스터의 충돌 범위를 가져옴
     return SDL_HasIntersection(&monsterRect, &playerRect);
+
 }
 
 int Monster::getX() const {
@@ -96,5 +97,5 @@ int Monster::GetHealth() const {
 }
 
 SDL_Rect Monster::GetRect() const {
-    return { x, y, 128, 128 }; // 충돌 범위의 크기를 렌더링 크기와 일치시킴
+    return { x, y, 64, 64 }; // 충돌 범위의 크기를 렌더링 크기와 일치시킴
 }
