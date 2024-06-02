@@ -236,29 +236,33 @@ void Player::Render() {
 
 void Player::RenderDashEffect() {
     if (isDashEffectActive && !dashEffectTextures.empty()) {
-        SDL_Rect effectRect = { 0, 0, rect_.w, rect_.h };
+        SDL_Rect effectRect = { 0, 0, 127 * 1.5, 20 * 1.5 }; // 이펙트 크기를 1.5배로 설정
 
-        // 대시 방향에 따라 이펙트 위치 조정
+        // 대시 방향에 따라 이펙트 위치와 회전 조정
+        double angle = 0.0; // 회전 각도
         switch (direction_) {
         case 0: // 위쪽
-            effectRect.x = rect_.x;
+            effectRect.x = rect_.x + rect_.w / 2 - effectRect.w / 2;
             effectRect.y = rect_.y + rect_.h;
+            angle = 90.0;
             break;
         case 1: // 오른쪽
-            effectRect.x = rect_.x - rect_.w;
-            effectRect.y = rect_.y;
+            effectRect.x = rect_.x - effectRect.w;
+            effectRect.y = rect_.y + rect_.h / 2 - effectRect.h / 2;
+
             break;
         case 2: // 아래쪽
-            effectRect.x = rect_.x;
-            effectRect.y = rect_.y - rect_.h;
+            effectRect.x = rect_.x + rect_.w / 2 - effectRect.w / 2;
+            effectRect.y = rect_.y - effectRect.h;
+            angle = 90.0;
             break;
         case 3: // 왼쪽
             effectRect.x = rect_.x + rect_.w;
-            effectRect.y = rect_.y;
+            effectRect.y = rect_.y + rect_.h / 2 - effectRect.h / 2;
             break;
         }
 
-        SDL_RenderCopy(g_renderer, dashEffectTextures[dashEffectFrame], NULL, &effectRect);
+        SDL_RenderCopyEx(g_renderer, dashEffectTextures[dashEffectFrame], NULL, &effectRect, angle, NULL, SDL_FLIP_NONE);
     }
 }
 
