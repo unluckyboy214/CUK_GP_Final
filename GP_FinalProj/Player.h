@@ -55,6 +55,8 @@ private:
     int dashEffectFrame;
     float dashEffectTimer;
     bool isDashEffectActive;
+    SDL_Rect dashEffectPosition_;  // 대시 이펙트 위치를 저장할 변수
+    double dashEffectAngle_;  // 대시 이펙트 회전 각도
 
     void LoadDashEffectTextures();
     void UpdateDashEffect(float deltaTime);

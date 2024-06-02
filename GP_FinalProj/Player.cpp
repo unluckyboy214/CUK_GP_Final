@@ -26,14 +26,16 @@ Player::Player()
     dashEffectFrame(0),
     dashEffectTimer(0.0f),
     isDashEffectActive(false),
-    velocity_({ 0.0f, 0.0f }) {  // 속도 초기화
+    velocity_({ 0.0f, 0.0f }),
+    dashEffectPosition_({ 0, 0, static_cast<int>(127 * 1.5), static_cast<int>(20 * 1.5) }),
+    dashEffectAngle_(0.0) {  // 속도 초기화 및 대시 이펙트 위치 초기화
     if (!textures_loaded_) {
         LoadTextures();
         textures_loaded_ = true;
     }
     animations_ = shared_animations_;
     rect_ = { WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 150, 150 }; // 캐릭터 크기 조정
-	LoadDashEffectTextures();
+    LoadDashEffectTextures();
 }
 
 void Player::LoadDashEffectTextures() {
@@ -236,33 +238,8 @@ void Player::Render() {
 
 void Player::RenderDashEffect() {
     if (isDashEffectActive && !dashEffectTextures.empty()) {
-        SDL_Rect effectRect = { 0, 0, 127 * 1.5, 20 * 1.5 }; // 이펙트 크기를 1.5배로 설정
-
-        // 대시 방향에 따라 이펙트 위치와 회전 조정
-        double angle = 0.0; // 회전 각도
-        switch (direction_) {
-        case 0: // 위쪽
-            effectRect.x = rect_.x + rect_.w / 2 - effectRect.w / 2;
-            effectRect.y = rect_.y + rect_.h;
-            angle = 90.0;
-            break;
-        case 1: // 오른쪽
-            effectRect.x = rect_.x - effectRect.w;
-            effectRect.y = rect_.y + rect_.h / 2 - effectRect.h / 2;
-
-            break;
-        case 2: // 아래쪽
-            effectRect.x = rect_.x + rect_.w / 2 - effectRect.w / 2;
-            effectRect.y = rect_.y - effectRect.h;
-            angle = 90.0;
-            break;
-        case 3: // 왼쪽
-            effectRect.x = rect_.x + rect_.w;
-            effectRect.y = rect_.y + rect_.h / 2 - effectRect.h / 2;
-            break;
-        }
-
-        SDL_RenderCopyEx(g_renderer, dashEffectTextures[dashEffectFrame], NULL, &effectRect, angle, NULL, SDL_FLIP_NONE);
+        SDL_Rect effectRect = dashEffectPosition_; // 이펙트 위치를 고정된 위치로 설정
+        SDL_RenderCopyEx(g_renderer, dashEffectTextures[dashEffectFrame], NULL, &effectRect, dashEffectAngle_, NULL, SDL_FLIP_NONE);
     }
 }
 
@@ -337,6 +314,15 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
             isDashEffectActive = true; // 패링 시 이펙트 활성화
             dashEffectFrame = 0;
             dashEffectTimer = 0.0f;
+
+            // 대시 이펙트 위치 및 회전 각도 설정
+            dashEffectPosition_ = {
+                static_cast<int>(rect_.x + rect_.w / 2 - (127 * 1.5) / 2),
+                static_cast<int>(rect_.y + rect_.h / 2 - (20 * 1.5) / 2),
+                static_cast<int>(127 * 1.5),
+                static_cast<int>(20 * 1.5)
+            };
+            dashEffectAngle_ = (direction_ == 0 || direction_ == 2) ? 90.0 : 0.0;
 
             int currentHealth = closestMonster->GetHealth();
             closestMonster->SetHealth(currentHealth - 1); // 몬스터의 체력을 1 감소시킴
