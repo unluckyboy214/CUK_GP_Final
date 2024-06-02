@@ -92,30 +92,35 @@ int main(int argc, char* argv[]) {
         if (g_player_health <= 0) {
             g_current_game_phase = PHASE_Entrance;
             g_player_health = 5;
+            g_kill_count = 0; // 킬 카운트를 초기화합니다.
             entrance.ResetMonsters();
             SetPlayerToCenter(player);
         }
 
         // 킬 카운트 기반의 페이즈 전환 로직
-        if (g_kill_count >= 10) {  // 10마리를 처치했다면 페이즈 전환
-            g_kill_count = 0;  // 킬 카운트 초기화
-            switch (g_current_game_phase) {
-            case PHASE_Entrance:
-                g_current_game_phase = PHASE_KimSuHwan;
-                kimsuhwan.ResetMonsters();  // 다음 맵 초기화
-                break;
-            case PHASE_KimSuHwan:
-                g_current_game_phase = PHASE_Hall;
-                hall.ResetMonsters();  // 다음 맵 초기화
-                break;
-            case PHASE_Hall:
-                g_current_game_phase = PHASE_Entrance;
-                entrance.ResetMonsters();  // 처음 맵으로 돌아옴
-                break;
-            }
+        if (g_kill_count >= 10) {
+            g_current_game_phase = PHASE_Entrance; // 처음 맵으로 돌아옴
+            entrance.ResetMonsters();  // 처음 맵 초기화
+            g_kill_count = 0; // 킬 카운트 초기화
             SetPlayerToCenter(player);  // 맵 전환 후 플레이어 위치 중앙으로 설정
+
+        }
+        else if (g_kill_count >= 7 && g_current_game_phase == PHASE_KimSuHwan) {
+            g_current_game_phase = PHASE_Hall;
+            g_kill_count = 0; // 킬 카운트 초기화
+            hall.ResetMonsters();  // 다음 맵 초기화
+            SetPlayerToCenter(player);  // 맵 전환 후 플레이어 위치 중앙으로 설정
+
+        }
+        else if (g_kill_count >= 5 && g_current_game_phase == PHASE_Entrance) {
+            g_current_game_phase = PHASE_KimSuHwan;
+            g_kill_count = 0; // 킬 카운트 초기화
+            kimsuhwan.ResetMonsters();  // 다음 맵 초기화
+            SetPlayerToCenter(player);  // 맵 전환 후 플레이어 위치 중앙으로 설정
+
         }
 
+      
         bool showMinimapAndHealth = true;
 
         switch (g_current_game_phase) {

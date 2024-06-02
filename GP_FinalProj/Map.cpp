@@ -43,7 +43,7 @@ void Map::Update(float deltaTime) {
         (*it)->Update(deltaTime, player_.GetRect());
         if ((*it)->CheckCollisionWithPlayer(player_.GetRect())) {
             // 플레이어를 접촉 방향으로 밀어내고 체력 감소
-            player_.OnMonsterCollision((*it)->GetRect());
+            //player_.OnMonsterCollision((*it)->GetRect());
             delete* it;
             it = monsters.erase(it);
         }
@@ -73,7 +73,7 @@ void Map::Render() {
     for (auto monster : monsters) {
         monster->Render();
     }
-    player_.Render();
+    //player_.Render();
 }
 
 void Map::HandleEvents() {
