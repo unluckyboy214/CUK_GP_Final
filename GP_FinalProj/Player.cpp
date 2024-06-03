@@ -45,7 +45,7 @@ Player::Player()
     successParrySound = Mix_LoadWAV("../../Resource/Sound/Effect/Sucess_Parry.mp3");
     failParrySound = Mix_LoadWAV("../../Resource/Sound/Effect/Fail_Parry.mp3");
     playerHitSound = Mix_LoadWAV("../../Resource/Sound/Effect/Player_hit.mp3");
-    playerMoveSound = Mix_LoadWAV("../../Resource/Sound/Effect/Player_move.mp3");
+    //playerMoveSound = Mix_LoadWAV("../../Resource/Sound/Effect/Player_move.mp3");
 
     if (!successParrySound) {
         std::cerr << "Error loading success parry sound: " << Mix_GetError() << std::endl;
@@ -56,16 +56,16 @@ Player::Player()
     if (!playerHitSound) {
         std::cerr << "Error loading player hit sound: " << Mix_GetError() << std::endl;
     }
-    if (!playerMoveSound) {
+    /*if (!playerMoveSound) {
         std::cerr << "Error loading player move sound: " << Mix_GetError() << std::endl;
-    }
+    }*/
 }
 
 Player::~Player() {
     if (successParrySound) Mix_FreeChunk(successParrySound);
     if (failParrySound) Mix_FreeChunk(failParrySound);
     if (playerHitSound) Mix_FreeChunk(playerHitSound);
-    if (playerMoveSound) Mix_FreeChunk(playerMoveSound);
+    //if (playerMoveSound) Mix_FreeChunk(playerMoveSound);
 }
 
 
@@ -193,10 +193,10 @@ void Player::Update(float deltaTime) {
     }
     else if (isMoving) {
         state_ = PlayerState::Move;
-        if (!isMovingSoundPlaying && playerMoveSound) {
+        /*if (!isMovingSoundPlaying && playerMoveSound) {
             Mix_PlayChannel(-1, playerMoveSound, -1);
             isMovingSoundPlaying = true;
-        }
+        }*/
     }
     else {
         state_ = PlayerState::Idle;

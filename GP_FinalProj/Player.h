@@ -68,7 +68,7 @@ private:
     bool hit_this_frame_;
     bool isMovingSoundPlaying; // 이동 사운드가 재생 중인지 여부
 
-    Mix_Chunk* playerMoveSound; // 이동 사운드 효과
+    //Mix_Chunk* playerMoveSound; // 이동 사운드 효과
     Mix_Chunk* playerHitSound; // 플레이어 피격 사운드
     Mix_Chunk* successParrySound; // 패링 성공 사운드
     Mix_Chunk* failParrySound; // 패링 실패 사운드
