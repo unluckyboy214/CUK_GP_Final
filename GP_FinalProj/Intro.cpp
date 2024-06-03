@@ -48,7 +48,7 @@ void Intro::HandleEvents(SDL_Event& event) {
 
             if (x >= startButtonRect.x && x <= startButtonRect.x + startButtonRect.w &&
                 y >= startButtonRect.y && y <= startButtonRect.y + startButtonRect.h) {
-                g_current_game_phase = PHASE_Entrance;
+                g_current_game_phase = PHASE_Tutorial;
 
                 // 성공 사운드 재생
                 if (successSound) {
