@@ -4,7 +4,7 @@
 #include <cmath>
 #include <vector>
 
-RangedMonster::RangedMonster(int x, int y) : Monster(x, y), health(3), shootCooldown(4.0f), shootTimer(0.0f), facingRight(true) { // Initialize facingRight
+RangedMonster::RangedMonster(int x, int y) : Monster(x, y), health(3), shootCooldown(4.0f), shootTimer(0.0f), facingRight(true) {
     std::vector<std::string> frameFiles = {
         "../../Resource/Monster/shooter_frame1.png",
         "../../Resource/Monster/shooter_frame2.png",
@@ -14,6 +14,18 @@ RangedMonster::RangedMonster(int x, int y) : Monster(x, y), health(3), shootCool
         "../../Resource/Monster/shooter_frame6.png"
     };
     LoadTextures(frameFiles);
+    LoadProjectileTexture();
+}
+
+void RangedMonster::LoadProjectileTexture() {
+    SDL_Surface* temp_surface = IMG_Load("../../Resource/Character/fireball.png");
+    if (temp_surface) {
+        projectileTexture = SDL_CreateTextureFromSurface(g_renderer, temp_surface);
+        SDL_FreeSurface(temp_surface);
+    }
+    else {
+        
+    }
 }
 
 void RangedMonster::Update(float deltaTime, const SDL_Rect& playerRect) {
@@ -65,7 +77,6 @@ void RangedMonster::Update(float deltaTime, const SDL_Rect& playerRect) {
     }
 }
 
-
 void RangedMonster::ShootProjectile(const SDL_Rect& playerRect) {
     float deltaX = playerRect.x - (x + 64);
     float deltaY = playerRect.y - (y + 64);
@@ -76,7 +87,7 @@ void RangedMonster::ShootProjectile(const SDL_Rect& playerRect) {
         float velY = deltaY / distance * 200.0f; // Adjust speed as needed
 
         SDL_Rect projectileRect = { x + 12, y + 12, 16, 16 }; // Initial projectile position and size
-        projectiles.push_back({ projectileRect, velX, velY, true });
+        projectiles.push_back({ projectileRect, velX, velY, true, projectileTexture });
     }
 }
 
@@ -110,10 +121,9 @@ void RangedMonster::Render() {
     }
 
     // Render projectiles
-    SDL_SetRenderDrawColor(g_renderer, 255, 0, 0, 255); // Red color for projectiles
     for (const auto& projectile : projectiles) {
-        if (projectile.active) {
-            SDL_RenderFillRect(g_renderer, &projectile.rect);
+        if (projectile.active && projectile.texture) {
+            SDL_RenderCopy(g_renderer, projectile.texture, NULL, &projectile.rect);
         }
     }
 }
