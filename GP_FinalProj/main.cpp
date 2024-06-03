@@ -14,6 +14,7 @@
 #include "Intro.h"
 #include "GameOver.h" // 추가
 #include "Pause.h"
+#include "Tutorial.h"
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
@@ -110,6 +111,7 @@ int main(int argc, char* argv[]) {
     Intro intro;
     Gameover gameover; // 추가
     Pause pause;
+    Tutorial tutorial;
     Entrance entrance;
     KimSuHwan kimsuhwan;
     Hall hall;
@@ -167,6 +169,9 @@ int main(int argc, char* argv[]) {
                 chisam.HandleEvents(e);
 
                 switch (g_current_game_phase) {
+                case PHASE_Tutorial:
+                    player.HandleEvents(e, tutorial.GetMonsters());
+                    break;
                 case PHASE_Entrance:
                     player.HandleEvents(e, entrance.GetMonsters());
                     break;
@@ -213,6 +218,10 @@ int main(int argc, char* argv[]) {
             if (g_kill_count >= 10 && g_current_game_phase != PHASE_LastBoss) {
                 g_kill_count = 0;
                 switch (g_current_game_phase) {
+                case PHASE_Tutorial: // Tutorial 페이즈 추가
+                    ChangePhase(PHASE_Entrance);
+                    entrance.ResetMonsters();
+                    break;
                 case PHASE_Entrance:
                     ChangePhase(PHASE_KimSuHwan);
                     kimsuhwan.ResetMonsters();
@@ -261,6 +270,10 @@ int main(int argc, char* argv[]) {
             }
 
             switch (g_current_game_phase) {
+            case PHASE_Tutorial: // Tutorial 페이즈 추가
+                tutorial.Update(deltaTime);
+                tutorial.Render();
+                break;
             case PHASE_Entrance:
                 entrance.Update(deltaTime);
                 entrance.Render();

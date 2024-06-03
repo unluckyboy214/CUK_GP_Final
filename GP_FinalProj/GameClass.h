@@ -28,6 +28,7 @@ const int PHASE_LastBoss = 7;
 const int PHASE_GameOver = 8;
 const int PHASE_Gameover = 8;
 const int PHASE_Pause = 9;
+const int PHASE_Tutorial = 10;
 
 
 extern int g_current_game_phase;

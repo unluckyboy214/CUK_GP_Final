@@ -161,6 +161,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RangedMonster.cpp" />
     <ClCompile Include="Sophiebara.cpp" />
+    <ClCompile Include="Tutorial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BossMonster.h" />
@@ -189,6 +190,7 @@
     <ClInclude Include="RangedMonster.h" />
     <ClInclude Include="Sophiebara.h" />
     <ClInclude Include="Statue.h" />
+    <ClInclude Include="Tutorial.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
