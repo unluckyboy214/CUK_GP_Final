@@ -69,6 +69,30 @@ void ResetGame(Entrance& entrance, KimSuHwan& kimsuhwan, Hall& hall, Nicols1& ni
     ClearEventQueue(); // 이벤트 큐 초기화
 }
 
+void ChangePhase(int newPhase) {
+    g_current_game_phase = newPhase;
+    switch (newPhase) {
+    case PHASE_Intro:
+        PlayBackgroundMusic("../../Resource/Sound/Bgm/BG_Intro.mp3");
+        break;
+    case PHASE_Entrance:
+    case PHASE_KimSuHwan:
+    case PHASE_Hall:
+    case PHASE_Nicols1:
+    case PHASE_Dasol:
+    case PHASE_Sophiebara:
+    case PHASE_Michael:
+        PlayBackgroundMusic("../../Resource/Sound/Bgm/BG1.mp3");
+        break;
+    case PHASE_LastBoss:
+        PlayBackgroundMusic("../../Resource/Sound/Bgm/LastBoss.mp3");
+        break;
+    case PHASE_GameOver:
+        PlayBackgroundMusic("../../Resource/Sound/Bgm/GameOver.mp3");
+        break;
+    }
+}
+
 int main(int argc, char* argv[]) {
     SDL_Init(SDL_INIT_EVERYTHING);
     TTF_Init();
@@ -99,13 +123,13 @@ int main(int argc, char* argv[]) {
 
     SetPlayerToCenter(player);
 
+    PlayBackgroundMusic("../../Resource/Sound/Bgm/BG_Intro.mp3");
+
     while (g_flag_running) {
         Uint32 cur_time_ms = SDL_GetTicks();
         float deltaTime = (cur_time_ms - g_last_time_ms) / 1000.0f;
         if (cur_time_ms - g_last_time_ms < (1000 / g_frame_per_sec))
             continue;
-
-        g_last_time_ms = cur_time_ms;
 
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
@@ -124,6 +148,7 @@ int main(int argc, char* argv[]) {
                 gameover.HandleEvents(e);
                 if (g_current_game_phase == PHASE_Intro) {
                     ResetGame(entrance, kimsuhwan, hall, nicols1, dasol, sophiebara, michael, lastboss, player);
+                    ChangePhase(PHASE_Intro);
                 }
             }
             else if (g_current_game_phase == PHASE_Pause) {
@@ -185,36 +210,35 @@ int main(int argc, char* argv[]) {
                 g_current_game_phase = PHASE_GameOver;
             }
 
-            // 킬 카운트 기반의 페이즈 전환 로직
             if (g_kill_count >= 10 && g_current_game_phase != PHASE_LastBoss) {
                 g_kill_count = 0;
                 switch (g_current_game_phase) {
                 case PHASE_Entrance:
-                    g_current_game_phase = PHASE_KimSuHwan;
+                    ChangePhase(PHASE_KimSuHwan);
                     kimsuhwan.ResetMonsters();
                     break;
                 case PHASE_KimSuHwan:
-                    g_current_game_phase = PHASE_Hall;
+                    ChangePhase(PHASE_Hall);
                     hall.ResetMonsters();
                     break;
                 case PHASE_Hall:
-                    g_current_game_phase = PHASE_Nicols1;
+                    ChangePhase(PHASE_Nicols1);
                     nicols1.ResetMonsters();
                     break;
                 case PHASE_Nicols1:
-                    g_current_game_phase = PHASE_Dasol;
+                    ChangePhase(PHASE_Dasol);
                     dasol.ResetMonsters();
                     break;
                 case PHASE_Dasol:
-                    g_current_game_phase = PHASE_Sophiebara;
+                    ChangePhase(PHASE_Sophiebara);
                     sophiebara.ResetMonsters();
                     break;
                 case PHASE_Sophiebara:
-                    g_current_game_phase = PHASE_Michael;
+                    ChangePhase(PHASE_Michael);
                     michael.ResetMonsters();
                     break;
                 case PHASE_Michael:
-                    g_current_game_phase = PHASE_LastBoss;
+                    ChangePhase(PHASE_LastBoss);
                     lastboss.ResetMonsters();
                     break;
                 case PHASE_Pause:
@@ -224,17 +248,16 @@ int main(int argc, char* argv[]) {
                 SetPlayerToCenter(player);
             }
             else if (g_kill_count >= 7 && g_current_game_phase == PHASE_KimSuHwan) {
-                g_current_game_phase = PHASE_Hall;
-                g_kill_count = 0; // 킬 카운트 초기화
-                hall.ResetMonsters();  // 다음 맵 초기화
-                SetPlayerToCenter(player);  // 맵 전환 후 플레이어 위치 중앙으로 설정
-
+                ChangePhase(PHASE_Hall);
+                g_kill_count = 0;
+                hall.ResetMonsters();
+                SetPlayerToCenter(player);
             }
             else if (g_kill_count >= 5 && g_current_game_phase == PHASE_Entrance) {
-                g_current_game_phase = PHASE_KimSuHwan;
-                g_kill_count = 0; // 킬 카운트 초기화
-                kimsuhwan.ResetMonsters();  // 다음 맵 초기화
-                SetPlayerToCenter(player);  // 맵 전환 후 플레이어 위치 중앙으로 설정
+                ChangePhase(PHASE_KimSuHwan);
+                g_kill_count = 0;
+                kimsuhwan.ResetMonsters();
+                SetPlayerToCenter(player);
             }
 
             switch (g_current_game_phase) {

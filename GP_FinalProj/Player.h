@@ -1,4 +1,4 @@
-//Player.h
+// Player.h
 #ifndef PLAYER_H
 #define PLAYER_H
 
@@ -26,6 +26,7 @@ struct Animation {
 class Player {
 public:
     Player();
+    ~Player(); // Destructor to free loaded sounds
     void Update(float deltaTime);
     void Render();
     void HandleEvents(const SDL_Event& event, std::vector<Monster*>& monsters);
@@ -35,6 +36,7 @@ public:
     SDL_Rect GetRect() const;
     void SetPosition(int x, int y);
     void OnMonsterCollision(const SDL_Rect& monsterRect);
+    void OnRangedAttackHit(); // 원거리 공격 피격 함수
     void SetInvincibleTimer(float duration);
     bool IsInvincible() const;
 
@@ -64,6 +66,12 @@ private:
     Uint32 invincible_start_time_;
     float invincible_duration_;
     bool hit_this_frame_;
+    bool isMovingSoundPlaying; // 이동 사운드가 재생 중인지 여부
+
+    Mix_Chunk* playerMoveSound; // 이동 사운드 효과
+    Mix_Chunk* playerHitSound; // 플레이어 피격 사운드
+    Mix_Chunk* successParrySound; // 패링 성공 사운드
+    Mix_Chunk* failParrySound; // 패링 실패 사운드
 
     void LoadDashEffectTextures();
     void UpdateDashEffect(float deltaTime);

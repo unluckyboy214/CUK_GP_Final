@@ -1,4 +1,3 @@
-//Player.cpp
 #include "Player.h"
 #include "globals.h"
 #include <SDL_image.h>
@@ -31,6 +30,7 @@ Player::Player()
     invincible_duration_(0.0f),
     hit_this_frame_(false),
     velocity_({ 0.0f, 0.0f }),
+    isMovingSoundPlaying(false),  // Initialize to false
     dashEffectPosition_({ 0, 0, static_cast<int>(127 * 1.5), static_cast<int>(20 * 1.5) }),
     dashEffectAngle_(0.0) {  // 속도 초기화 및 대시 이펙트 위치 초기화
     if (!textures_loaded_) {
@@ -40,6 +40,32 @@ Player::Player()
     animations_ = shared_animations_;
     rect_ = { WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 150, 150 }; // 캐릭터 크기 조정
     LoadDashEffectTextures();
+
+    // Load sounds
+    successParrySound = Mix_LoadWAV("../../Resource/Sound/Effect/Sucess_Parry.mp3");
+    failParrySound = Mix_LoadWAV("../../Resource/Sound/Effect/Fail_Parry.mp3");
+    playerHitSound = Mix_LoadWAV("../../Resource/Sound/Effect/Player_hit.mp3");
+    playerMoveSound = Mix_LoadWAV("../../Resource/Sound/Effect/Player_move.mp3");
+
+    if (!successParrySound) {
+        std::cerr << "Error loading success parry sound: " << Mix_GetError() << std::endl;
+    }
+    if (!failParrySound) {
+        std::cerr << "Error loading fail parry sound: " << Mix_GetError() << std::endl;
+    }
+    if (!playerHitSound) {
+        std::cerr << "Error loading player hit sound: " << Mix_GetError() << std::endl;
+    }
+    if (!playerMoveSound) {
+        std::cerr << "Error loading player move sound: " << Mix_GetError() << std::endl;
+    }
+}
+
+Player::~Player() {
+    if (successParrySound) Mix_FreeChunk(successParrySound);
+    if (failParrySound) Mix_FreeChunk(failParrySound);
+    if (playerHitSound) Mix_FreeChunk(playerHitSound);
+    if (playerMoveSound) Mix_FreeChunk(playerMoveSound);
 }
 
 void Player::LoadDashEffectTextures() {
@@ -166,9 +192,17 @@ void Player::Update(float deltaTime) {
     }
     else if (isMoving) {
         state_ = PlayerState::Move;
+        if (!isMovingSoundPlaying && playerMoveSound) {
+            Mix_PlayChannel(-1, playerMoveSound, -1);
+            isMovingSoundPlaying = true;
+        }
     }
     else {
         state_ = PlayerState::Idle;
+        if (isMovingSoundPlaying) {
+            Mix_HaltChannel(-1);
+            isMovingSoundPlaying = false;
+        }
     }
 
     // 상태가 변경되면 current_frame을 0으로 초기화
@@ -373,11 +407,21 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
 
         // 패링 성공 여부에 따라 타이머 설정
         if (parrySuccess) {
+            std::cout << "Success_Parry" << "\n";
             parry_timer_ = parry_duration_; // 패링 성공 시 지속 시간만 적용
             SetInvincibleTimer(1.0f); // 패링 성공 시 1초간 무적
+            if (successParrySound) {
+                Mix_VolumeChunk(successParrySound, MIX_MAX_VOLUME); // 볼륨 설정
+                Mix_PlayChannel(-1, successParrySound, 0);
+            }
         }
         else {
+            std::cout << "Fail_Parry" << "\n";
             parry_timer_ = parry_cooldown_ + parry_duration_; // 패링 실패 시 쿨다운 적용
+            if (failParrySound) {
+                Mix_VolumeChunk(failParrySound, MIX_MAX_VOLUME); // 볼륨 설정
+                Mix_PlayChannel(-1, failParrySound, 0);
+            }
         }
 
         // 플레이어 이동 처리
@@ -403,6 +447,10 @@ void Player::OnMonsterCollision(const SDL_Rect& monsterRect) {
         std::cout << "Player hit by a monster! Current health: " << g_player_health << std::endl;
         SetInvincibleTimer(5.0f);
         hit_this_frame_ = true;
+        if (playerHitSound) {
+            Mix_VolumeChunk(playerHitSound, MIX_MAX_VOLUME); // 볼륨 설정
+            Mix_PlayChannel(-1, playerHitSound, 0);
+        }
     }
 }
 

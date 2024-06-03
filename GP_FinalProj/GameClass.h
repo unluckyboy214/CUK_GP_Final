@@ -1,4 +1,3 @@
-// GameClass.h
 #pragma once
 
 #include <iostream>
@@ -13,6 +12,8 @@ const int WINDOW_HEIGHT = 600;
 
 void InitGame();
 void ClearGame();
+void PlayBackgroundMusic(const char* file);
+void StopBackgroundMusic();
 
 // Game Phases
 const int PHASE_Intro = -1;
@@ -56,3 +57,5 @@ extern int cloaking_alpha;
 extern bool is_cloaking_on;
 extern float cloaking_time;
 extern float cloaking_duration;
+
+extern Mix_Chunk* successSound; // 성공 효과음

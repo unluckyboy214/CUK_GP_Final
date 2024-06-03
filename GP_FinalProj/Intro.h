@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>
+#include <SDL_mixer.h>
 
 class Intro {
 public:
@@ -14,4 +15,6 @@ private:
     SDL_Rect backgroundRect;
     SDL_Rect startButtonRect;
     SDL_Rect exitButtonRect;
+
+    Mix_Chunk* successSound; // 성공 효과음
 };
