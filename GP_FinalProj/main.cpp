@@ -72,18 +72,25 @@ void ResetGame(Entrance& entrance, KimSuHwan& kimsuhwan, Hall& hall, Nicols1& ni
 
 void ChangePhase(int newPhase) {
     g_current_game_phase = newPhase;
+    static int lastPhase = -1;
+
     switch (newPhase) {
     case PHASE_Intro:
         PlayBackgroundMusic("../../Resource/Sound/Bgm/BG_Intro.mp3");
         break;
     case PHASE_Entrance:
+        PlayBackgroundMusic("../../Resource/Sound/Bgm/BG1.mp3");
+        break;
     case PHASE_KimSuHwan:
     case PHASE_Hall:
     case PHASE_Nicols1:
     case PHASE_Dasol:
     case PHASE_Sophiebara:
     case PHASE_Michael:
-        PlayBackgroundMusic("../../Resource/Sound/Bgm/BG1.mp3");
+        if (lastPhase != PHASE_Entrance && lastPhase != PHASE_KimSuHwan && lastPhase != PHASE_Hall &&
+            lastPhase != PHASE_Nicols1 && lastPhase != PHASE_Dasol && lastPhase != PHASE_Sophiebara && lastPhase != PHASE_Michael) {
+            PlayBackgroundMusic("../../Resource/Sound/Bgm/BG1.mp3");
+        }
         break;
     case PHASE_LastBoss:
         PlayBackgroundMusic("../../Resource/Sound/Bgm/LastBoss.mp3");
@@ -92,6 +99,8 @@ void ChangePhase(int newPhase) {
         PlayBackgroundMusic("../../Resource/Sound/Bgm/GameOver.mp3");
         break;
     }
+
+    lastPhase = newPhase;
 }
 
 int main(int argc, char* argv[]) {
@@ -160,7 +169,7 @@ int main(int argc, char* argv[]) {
                 }
             }
             else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
-                if (g_current_game_phase != PHASE_Intro && g_current_game_phase != PHASE_Gameover) {
+                if (g_current_game_phase != PHASE_Intro && g_current_game_phase != PHASE_GameOver) {
                     g_paused_game_phase = g_current_game_phase;
                     g_current_game_phase = PHASE_Pause;
                 }
