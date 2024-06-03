@@ -45,7 +45,7 @@ void Monster::RenderHealthBar() {
     if (health < maxHealth) {
         int barWidth = 50;
         int barHeight = 5;
-        int barX = x + (128 - barWidth) / 2;  // 체력 바 x 좌표 계산
+        int barX = x + (128 - barWidth) / 2 - 35;  // 체력 바 x 좌표 계산
         int barY = y - 10;  // 체력 바 y 좌표 계산
 
         // 체력 바 배경 렌더링

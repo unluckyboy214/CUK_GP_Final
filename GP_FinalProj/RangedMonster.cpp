@@ -11,14 +11,7 @@ RangedMonster::RangedMonster(int x, int y) : Monster(x, y), health(3), shootCool
         "../../Resource/Monster/shooter_frame3.png",
         "../../Resource/Monster/shooter_frame4.png",
         "../../Resource/Monster/shooter_frame5.png",
-        "../../Resource/Monster/shooter_frame6.png",
-        "../../Resource/Monster/shooter_frame7.png",
-        "../../Resource/Monster/shooter_frame8.png",
-        "../../Resource/Monster/shooter_frame9.png",
-        "../../Resource/Monster/shooter_frame10.png",
-        "../../Resource/Monster/shooter_frame11.png",
-        "../../Resource/Monster/shooter_frame12.png",
-        "../../Resource/Monster/shooter_frame13.png",
+        "../../Resource/Monster/shooter_frame6.png"
     };
     LoadTextures(frameFiles);
 }
@@ -82,7 +75,7 @@ void RangedMonster::ShootProjectile(const SDL_Rect& playerRect) {
         float velX = deltaX / distance * 200.0f; // Adjust speed as needed
         float velY = deltaY / distance * 200.0f; // Adjust speed as needed
 
-        SDL_Rect projectileRect = { x + 64, y + 64, 16, 16 }; // Initial projectile position and size
+        SDL_Rect projectileRect = { x + 12, y + 12, 16, 16 }; // Initial projectile position and size
         projectiles.push_back({ projectileRect, velX, velY, true });
     }
 }
@@ -93,7 +86,7 @@ std::vector<Projectile>& RangedMonster::GetProjectiles() {
 
 void RangedMonster::Render() {
     if (!textures.empty()) {
-        SDL_Rect rect = { x, y, 128, 128 };
+        SDL_Rect rect = { x, y, 52, 52 };
 
         // Apply hit effect
         Uint32 currentTime = SDL_GetTicks();
