@@ -132,7 +132,7 @@ void ChargingMonster::Update(float deltaTime, const SDL_Rect& playerRect) {
         int nextX = x + static_cast<int>(directionX * MONSTER_SPEED * deltaTime);
         int nextY = y + static_cast<int>(directionY * MONSTER_SPEED * deltaTime);
 
-        SDL_Rect monsterRect = { nextX, nextY, 128, 128 };
+        SDL_Rect monsterRect = { nextX, nextY, 52, 52 };
         bool collisionDetected = false;
 
         for (const auto& obstacle : g_obstacles) {
@@ -187,7 +187,7 @@ void ChargingMonster::AdvanceFrame(float deltaTime) {
 
 // ChargingMonster.cpp
 void ChargingMonster::Render() {
-    SDL_Rect dstRect = { x, y, 128, 128 }; // Example size, adjust as needed
+    SDL_Rect dstRect = { x, y, 52, 52 }; // Example size, adjust as needed
     SDL_Texture* currentTexture = nullptr;
 
     switch (state) {
