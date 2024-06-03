@@ -68,19 +68,6 @@ Player::~Player() {
     if (playerMoveSound) Mix_FreeChunk(playerMoveSound);
 }
 
-Player::~Player() {
-    if (successParrySound) Mix_FreeChunk(successParrySound);
-    if (failParrySound) Mix_FreeChunk(failParrySound);
-    if (playerHitSound) Mix_FreeChunk(playerHitSound);
-    if (playerMoveSound) Mix_FreeChunk(playerMoveSound);
-}
-
-Player::~Player() {
-    if (successParrySound) Mix_FreeChunk(successParrySound);
-    if (failParrySound) Mix_FreeChunk(failParrySound);
-    if (playerHitSound) Mix_FreeChunk(playerHitSound);
-    if (playerMoveSound) Mix_FreeChunk(playerMoveSound);
-}
 
 void Player::LoadDashEffectTextures() {
     std::vector<std::string> frameFiles = {
