@@ -8,7 +8,7 @@ bool g_flag_running = true;
 Uint32 g_last_time_ms = 0;
 Uint32 g_frame_per_sec = 30;
 int g_current_game_phase = 0;
-int g_player_health = 5;
+int g_player_health = 10;
 float g_phase_transition_timer = 0.0f;
 const int NUMBER_OF_PHASES = 8;  // ������ �� ����
 std::vector<SDL_Rect> g_obstacles;

@@ -54,7 +54,7 @@ void ClearEventQueue() {
 
 void ResetGame(Entrance& entrance, KimSuHwan& kimsuhwan, Hall& hall, Nicols1& nicols1, Dasol& dasol, Sophiebara& sophiebara, Michael& michael, LastBoss& lastboss, Player& player) {
     g_current_game_phase = PHASE_Intro;
-    g_player_health = 5;
+    g_player_health = 10;
     g_kill_count = 0;
     entrance.ResetMonsters();
     kimsuhwan.ResetMonsters();

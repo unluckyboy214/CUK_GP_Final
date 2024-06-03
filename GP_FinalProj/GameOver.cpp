@@ -30,4 +30,4 @@ void Gameover::HandleEvents(SDL_Event& event) {
         // 마우스 버튼이 눌리면 PHASE_Intro로 전환
         g_current_game_phase = PHASE_Intro;
     }
-}
+} 
