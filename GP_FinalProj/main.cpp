@@ -114,17 +114,22 @@ int main(int argc, char* argv[]) {
             }
 
             if (g_current_game_phase == PHASE_Intro) {
-                intro.HandleEvents(e); // 인트로 페이즈 이벤트 처리
+                intro.HandleEvents(e);
             }
             else if (g_current_game_phase == PHASE_GameOver) {
-                gameover.HandleEvents(e); // 게임 오버 페이즈 이벤트 처리
-                if (g_current_game_phase == PHASE_Intro) { // 게임 오버 화면에서 Intro로 돌아가면 게임 초기화
+                gameover.HandleEvents(e);
+                if (g_current_game_phase == PHASE_Intro) {
                     ResetGame(entrance, kimsuhwan, hall, nicols1, dasol, sophiebara, michael, lastboss, player);
                 }
             }
+            else if (g_current_game_phase == PHASE_Pause) {
+                pause.HandleEvents(e); // 일시정지 화면에서의 이벤트 처리 추가
+            }
             else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
-                // ESC 키를 누르면 일시정지 화면으로 전환합니다.
-                g_current_game_phase = PHASE_Pause;
+                if (g_current_game_phase != PHASE_Intro && g_current_game_phase != PHASE_Gameover) {
+                    g_paused_game_phase = g_current_game_phase;
+                    g_current_game_phase = PHASE_Pause;
+                }
             }
             else {
                 chisam.HandleEvents(e);

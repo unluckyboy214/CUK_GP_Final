@@ -42,22 +42,7 @@ void Pause::Render() {
 }
 
 void Pause::HandleEvents(SDL_Event& event) {
-    if (event.type == SDL_KEYDOWN) {
-        if (event.key.keysym.sym == SDLK_ESCAPE) {
-            // ESC 키를 누르면 이전 페이즈로 돌아갑니다.
-            if (g_current_game_phase == PHASE_Entrance ||
-                g_current_game_phase == PHASE_KimSuHwan ||
-                g_current_game_phase == PHASE_Hall ||
-                g_current_game_phase == PHASE_Nicols1 ||
-                g_current_game_phase == PHASE_Dasol ||
-                g_current_game_phase == PHASE_Sophiebara ||
-                g_current_game_phase == PHASE_Michael ||
-                g_current_game_phase == PHASE_LastBoss) {
-                // 이전 페이즈로 돌아가는 로직 추가
-            }
-        }
-    }
-    else if (event.type == SDL_MOUSEBUTTONDOWN) {
+    if (event.type == SDL_MOUSEBUTTONDOWN) {
         if (event.button.button == SDL_BUTTON_LEFT) {
             int x = event.button.x;
             int y = event.button.y;
@@ -65,50 +50,24 @@ void Pause::HandleEvents(SDL_Event& event) {
             if (x >= continueRect.x && x <= continueRect.x + continueRect.w &&
                 y >= continueRect.y && y <= continueRect.y + continueRect.h) {
                 // 계속하기 버튼 클릭 시 이전 페이즈로 돌아갑니다.
-                if (g_current_game_phase == PHASE_Entrance ||
-                    g_current_game_phase == PHASE_KimSuHwan ||
-                    g_current_game_phase == PHASE_Hall ||
-                    g_current_game_phase == PHASE_Nicols1 ||
-                    g_current_game_phase == PHASE_Dasol ||
-                    g_current_game_phase == PHASE_Sophiebara ||
-                    g_current_game_phase == PHASE_Michael ||
-                    g_current_game_phase == PHASE_LastBoss) {
-                    // 이전 페이즈로 돌아가는 로직 추가
-                }
+                g_current_game_phase = g_paused_game_phase;
             }
             else if (x >= retryRect.x && x <= retryRect.x + retryRect.w &&
                 y >= retryRect.y && y <= retryRect.y + retryRect.h) {
-                // 재시작 버튼 클릭 시 해당 페이즈를 초기화하고 다시 시작합니다.
-                if (g_current_game_phase == PHASE_Entrance) {
-                    g_current_game_phase = PHASE_Entrance;
-                }
-                else if (g_current_game_phase == PHASE_KimSuHwan) {
-                    g_current_game_phase = PHASE_KimSuHwan;
-                }
-                else if (g_current_game_phase == PHASE_Hall) {
-                    g_current_game_phase = PHASE_Hall;
-                }
-                else if (g_current_game_phase == PHASE_Nicols1) {
-                    g_current_game_phase = PHASE_Nicols1;
-                }
-                else if (g_current_game_phase == PHASE_Dasol) {
-                    g_current_game_phase = PHASE_Dasol;
-                }
-                else if (g_current_game_phase == PHASE_Sophiebara) {
-                    g_current_game_phase = PHASE_Sophiebara;
-                }
-                else if (g_current_game_phase == PHASE_Michael) {
-                    g_current_game_phase = PHASE_Michael;
-                }
-                else if (g_current_game_phase == PHASE_LastBoss) {
-                    g_current_game_phase = PHASE_LastBoss;
-                }
+                // 재시작 버튼 클릭 시 Intro 페이즈로 돌아갑니다.
+                g_current_game_phase = PHASE_Intro;
             }
             else if (x >= quitRect.x && x <= quitRect.x + quitRect.w &&
                 y >= quitRect.y && y <= quitRect.y + quitRect.h) {
                 // 종료 버튼 클릭 시 게임을 종료합니다.
                 g_flag_running = false;
             }
+        }
+    }
+    else if (event.type == SDL_KEYDOWN) {
+        if (event.key.keysym.sym == SDLK_ESCAPE) {
+            // ESC 키를 누르면 이전 페이즈로 돌아갑니다.
+            g_current_game_phase = g_paused_game_phase;
         }
     }
 }

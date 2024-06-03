@@ -19,5 +19,6 @@ extern const int NUMBER_OF_PHASES;
 extern std::vector<SDL_Rect> g_obstacles;
 extern int g_kill_count;
 extern TTF_Font* g_font;
+extern int g_paused_game_phase;
 
 #endif // GLOBALS_H
