@@ -14,3 +14,4 @@ const int NUMBER_OF_PHASES = 8;  // ������ �� ����
 std::vector<SDL_Rect> g_obstacles;
 int g_kill_count = 0;
 TTF_Font* g_font = nullptr;
+int g_paused_game_phase = -1;
