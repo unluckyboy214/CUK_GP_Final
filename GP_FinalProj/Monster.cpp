@@ -63,7 +63,7 @@ void Monster::RenderHealthBar() {
 
 void Monster::Render() {
     if (!textures.empty()) {
-        SDL_Rect rect = { x, y, 128, 128 };
+        SDL_Rect rect = { x, y, 52, 52 };
 
         // 피격 효과 적용
         Uint32 currentTime = SDL_GetTicks();
@@ -112,15 +112,8 @@ int Monster::GetHealth() const {
 }
 
 SDL_Rect Monster::GetRect() const {
-    SDL_Rect rect = { x, y, 64, 64 };
+    SDL_Rect rect = { x, y, 52, 52 };
 
-    // Adjust the collision area: reduce the width to 60% and the height to 40%
-    rect.w = static_cast<int>(rect.w * 0.6);
-    rect.h = static_cast<int>(rect.h * 0.4);
-
-    // Center the collision area
-    rect.x = x + (64 - rect.w) / 2;
-    rect.y = y + (64 - rect.h) / 2;
 
     return rect;
 }
