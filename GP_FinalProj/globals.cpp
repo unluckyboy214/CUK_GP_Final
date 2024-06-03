@@ -15,3 +15,6 @@ std::vector<SDL_Rect> g_obstacles;
 int g_kill_count = 0;
 TTF_Font* g_font = nullptr;
 int g_paused_game_phase = -1;
+bool g_reset_game = false;
+bool g_is_fading = false;
+int g_fade_alpha = 255;

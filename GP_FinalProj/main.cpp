@@ -115,6 +115,10 @@ int main(int argc, char* argv[]) {
 
             if (g_current_game_phase == PHASE_Intro) {
                 intro.HandleEvents(e);
+                if (g_reset_game) {
+                    ResetGame(entrance, kimsuhwan, hall, nicols1, dasol, sophiebara, michael, lastboss, player);
+                    g_reset_game = false;
+                }
             }
             else if (g_current_game_phase == PHASE_GameOver) {
                 gameover.HandleEvents(e);
@@ -123,7 +127,10 @@ int main(int argc, char* argv[]) {
                 }
             }
             else if (g_current_game_phase == PHASE_Pause) {
-                pause.HandleEvents(e); // 일시정지 화면에서의 이벤트 처리 추가
+                pause.HandleEvents(e);
+                if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
+                    g_is_fading = true;
+                }
             }
             else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
                 if (g_current_game_phase != PHASE_Intro && g_current_game_phase != PHASE_Gameover) {

@@ -11,6 +11,7 @@ public:
     void Update(float deltaTime);
     void Render();
     void HandleEvents(SDL_Event& event);
+    SDL_Texture* GetBackgroundTexture() const { return backgroundTexture; }
 
 private:
     SDL_Texture* backgroundTexture;

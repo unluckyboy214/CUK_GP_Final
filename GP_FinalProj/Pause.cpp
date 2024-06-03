@@ -35,7 +35,7 @@ void Pause::Render() {
     SDL_SetRenderDrawBlendMode(g_renderer, SDL_BLENDMODE_BLEND);
     SDL_SetTextureAlphaMod(backgroundTexture, 128);
     SDL_RenderCopy(g_renderer, backgroundTexture, NULL, &backgroundRect);
-
+        
     SDL_RenderCopy(g_renderer, continueTexture, NULL, &continueRect);
     SDL_RenderCopy(g_renderer, retryTexture, NULL, &retryRect);
     SDL_RenderCopy(g_renderer, quitTexture, NULL, &quitRect);
@@ -54,8 +54,9 @@ void Pause::HandleEvents(SDL_Event& event) {
             }
             else if (x >= retryRect.x && x <= retryRect.x + retryRect.w &&
                 y >= retryRect.y && y <= retryRect.y + retryRect.h) {
-                // 재시작 버튼 클릭 시 Intro 페이즈로 돌아갑니다.
+                // 재시작 버튼 클릭 시 Intro 페이즈로 돌아가고 게임을 초기화합니다.
                 g_current_game_phase = PHASE_Intro;
+                g_reset_game = true; // 게임 초기화 플래그 설정
             }
             else if (x >= quitRect.x && x <= quitRect.x + quitRect.w &&
                 y >= quitRect.y && y <= quitRect.y + quitRect.h) {

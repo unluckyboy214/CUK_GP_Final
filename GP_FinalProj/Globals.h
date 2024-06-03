@@ -20,5 +20,8 @@ extern std::vector<SDL_Rect> g_obstacles;
 extern int g_kill_count;
 extern TTF_Font* g_font;
 extern int g_paused_game_phase;
+extern bool g_reset_game;
+extern bool g_is_fading;
+extern int g_fade_alpha;
 
 #endif // GLOBALS_H
