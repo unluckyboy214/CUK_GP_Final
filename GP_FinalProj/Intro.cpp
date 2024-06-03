@@ -7,15 +7,15 @@
 
 Intro::Intro() {
     // 배경 이미지 로드
-    SDL_Surface* backgroundSurface = IMG_Load("../../Resource/Map/Intro.png");
+    SDL_Surface* backgroundSurface = IMG_Load("../../Resource/Map/intropic.png");
     backgroundTexture = SDL_CreateTextureFromSurface(g_renderer, backgroundSurface);
     SDL_FreeSurface(backgroundSurface);
 
     // 배경 이미지 크기 설정
     backgroundRect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
 
-    startButtonRect = { 520, 320, 200, 50 };
-    exitButtonRect = { 520, 415, 200, 50 };
+    startButtonRect = { 506, 331, 400, 50 };
+    exitButtonRect = { 511, 438, 400, 50 };
 
     // 효과음 로드 (미리 로드해서 메모리에서 재생)
     successSound = Mix_LoadWAV("../../Resource/Sound/Effect/1.mp3");

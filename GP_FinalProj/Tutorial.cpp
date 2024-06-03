@@ -6,7 +6,7 @@
 #include <random>
 
 Tutorial::Tutorial()
-    : Map("../../Resource/Map/Tutorial.png", 7) {  // maxMonsters 설정
+    : Map("../../Resource/Map/Tutorial.png", 3) {  // maxMonsters 설정
     spawnDelay = 1.0f;  // 초기 몬스터 생성 지연 시간 설정
 }
 
@@ -16,16 +16,22 @@ void Tutorial::SpawnMonsters() {
     std::uniform_int_distribution<> disX(0, WINDOW_WIDTH - 128);
     std::uniform_int_distribution<> disY(0, WINDOW_HEIGHT - 128);
 
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 1; i++) {
         int x = disX(gen);
         int y = disY(gen);
         monsters.push_back(new MovingMonster(x, y));
     }
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 1; i++) {
         int x = disX(gen);
         int y = disY(gen);
         monsters.push_back(new RangedMonster(x, y));
     }
+    for (int i = 0; i < 1; i++) {
+        int x = disX(gen);
+        int y = disY(gen);
+        monsters.push_back(new ChargingMonster(x, y));
+    }
+
 }
 
 void Tutorial::SpawnMonster() {
