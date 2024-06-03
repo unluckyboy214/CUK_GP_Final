@@ -247,6 +247,10 @@ void Player::Render() {
     SDL_RenderCopyEx(g_renderer, current_texture, NULL, &rect_, 0, NULL, flip);
 
     RenderDashEffect(); // 대시 이펙트 렌더링 호출 추가
+    // 충돌 범위 색으로 표시 (디버깅용)
+    SDL_Rect collision_rect = GetRect();
+    SDL_SetRenderDrawColor(g_renderer, 255, 0, 0, 255);  // 빨간색 (RGBA)
+    SDL_RenderDrawRect(g_renderer, &collision_rect);      // 충돌 범위 그리기
 }
 
 void Player::RenderDashEffect() {
@@ -370,6 +374,7 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
         // 패링 성공 여부에 따라 타이머 설정
         if (parrySuccess) {
             parry_timer_ = parry_duration_; // 패링 성공 시 지속 시간만 적용
+            SetInvincibleTimer(1.0f); // 패링 성공 시 1초간 무적
         }
         else {
             parry_timer_ = parry_cooldown_ + parry_duration_; // 패링 실패 시 쿨다운 적용
@@ -384,6 +389,7 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
         }
     }
 }
+
 
 void Player::OnMonsterCollision(const SDL_Rect& monsterRect) {
     if (!IsInvincible() && !hit_this_frame_) {
@@ -409,12 +415,13 @@ bool Player::IsParrying() const {
 }
 
 SDL_Rect Player::GetRect() const {
-    // 충돌 범위를 줄이기 위해 크기를 줄여서 반환
     SDL_Rect smaller_rect = rect_;
-    smaller_rect.w *= 0.4;  // 너비를 40%로 줄임
-    smaller_rect.h *= 0.5;  // 높이를 50%로 줄임
-    smaller_rect.x += rect_.w * 0.3;  // 중앙에 맞추기 위해 x 위치를 조정
-    smaller_rect.y += rect_.h * 0.25; // 중앙에 맞추기 위해 y 위치를 조정
+    // 충돌 범위 조정: 너비를 60%로, 높이를 40%로 줄임
+    smaller_rect.w = static_cast<int>(rect_.w * 0.1);
+    smaller_rect.h = static_cast<int>(rect_.h * 0.2);
+    // 중앙에 맞추기 위해 x, y 위치를 조정
+    smaller_rect.x = rect_.x + (rect_.w - smaller_rect.w) / 2;
+    smaller_rect.y = rect_.y + (rect_.h - smaller_rect.h) / 2;
     return smaller_rect;
 }
 

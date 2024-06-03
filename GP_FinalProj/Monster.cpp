@@ -1,4 +1,3 @@
-//Monster.cpp
 #include "Monster.h"
 #include "globals.h"  // Include the globals header
 #include <SDL_image.h>
@@ -83,13 +82,13 @@ void Monster::Render() {
 
         SDL_RenderCopy(g_renderer, textures[currentFrame], NULL, &rect);
         RenderHealthBar();
+
     }
 }
 
 bool Monster::CheckCollisionWithPlayer(const SDL_Rect& playerRect) {
     SDL_Rect monsterRect = GetRect(); // 몬스터의 충돌 범위를 가져옴
     return SDL_HasIntersection(&monsterRect, &playerRect);
-
 }
 
 int Monster::getX() const {
@@ -113,7 +112,17 @@ int Monster::GetHealth() const {
 }
 
 SDL_Rect Monster::GetRect() const {
-    return { x, y, 64, 64 }; // 충돌 범위의 크기를 렌더링 크기와 일치시킴
+    SDL_Rect rect = { x, y, 64, 64 };
+
+    // Adjust the collision area: reduce the width to 60% and the height to 40%
+    rect.w = static_cast<int>(rect.w * 0.6);
+    rect.h = static_cast<int>(rect.h * 0.4);
+
+    // Center the collision area
+    rect.x = x + (64 - rect.w) / 2;
+    rect.y = y + (64 - rect.h) / 2;
+
+    return rect;
 }
 
 void Monster::SetHitTimer(float duration) {
