@@ -278,15 +278,21 @@ void Player::Render() {
         return;
     }
 
+    // Set player size to match ranged monster size
+    rect_.w = 52;
+    rect_.h = 52;
+
     SDL_RendererFlip flip = flip_ ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     SDL_RenderCopyEx(g_renderer, current_texture, NULL, &rect_, 0, NULL, flip);
 
     RenderDashEffect(); // 대시 이펙트 렌더링 호출 추가
+
     // 충돌 범위 색으로 표시 (디버깅용)
     SDL_Rect collision_rect = GetRect();
     SDL_SetRenderDrawColor(g_renderer, 255, 0, 0, 255);  // 빨간색 (RGBA)
     SDL_RenderDrawRect(g_renderer, &collision_rect);      // 충돌 범위 그리기
 }
+
 
 void Player::RenderDashEffect() {
     if (isDashEffectActive && !dashEffectTextures.empty()) {
