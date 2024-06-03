@@ -411,8 +411,10 @@ bool Player::IsParrying() const {
 SDL_Rect Player::GetRect() const {
     // 충돌 범위를 줄이기 위해 크기를 줄여서 반환
     SDL_Rect smaller_rect = rect_;
-    smaller_rect.w *= 0.5;  // 너비를 50%로 줄임
-    smaller_rect.h *= 0.6;  // 높이를 60%로 줄임
+    smaller_rect.w *= 0.4;  // 너비를 40%로 줄임
+    smaller_rect.h *= 0.5;  // 높이를 50%로 줄임
+    smaller_rect.x += rect_.w * 0.3;  // 중앙에 맞추기 위해 x 위치를 조정
+    smaller_rect.y += rect_.h * 0.25; // 중앙에 맞추기 위해 y 위치를 조정
     return smaller_rect;
 }
 

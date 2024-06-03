@@ -47,12 +47,19 @@ void RangedMonster::Update(float deltaTime, const SDL_Rect& playerRect) {
                 it = projectiles.erase(it);
             }
             else {
-                // Check collision with the player
-                if (SDL_HasIntersection(&it->rect, &playerRect)) {
+                // Define a smaller collision rectangle
+                SDL_Rect collisionRect = {
+                    it->rect.x + it->rect.w / 4,
+                    it->rect.y + it->rect.h / 4,
+                    it->rect.w / 2,
+                    it->rect.h / 2
+                };
+
+                // Check collision with the player using the smaller rectangle
+                if (SDL_HasIntersection(&collisionRect, &playerRect)) {
                     g_player_health--; // Reduce player health
                     it->active = false;
                     it = projectiles.erase(it);
-
                 }
                 else {
                     ++it;
@@ -64,6 +71,7 @@ void RangedMonster::Update(float deltaTime, const SDL_Rect& playerRect) {
         }
     }
 }
+
 
 void RangedMonster::ShootProjectile(const SDL_Rect& playerRect) {
     float deltaX = playerRect.x - (x + 64);
