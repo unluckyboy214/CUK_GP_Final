@@ -10,6 +10,7 @@
 #include "LastBoss.h"
 #include "GameOver.h"
 #include "Pause.h"
+#include "Tutorial.h"
 
 // Game variables
 SDL_Rect g_player_destination_rect;
