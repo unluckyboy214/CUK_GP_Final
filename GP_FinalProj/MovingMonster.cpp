@@ -10,18 +10,6 @@ MovingMonster::MovingMonster(int x, int y) : Monster(x, y), health(3), isStunned
         "../../Resource/Monster/slime_frame4.png",
         "../../Resource/Monster/slime_frame5.png"
     };
-
-    stunFrameFiles = {
-        "../../Resource/Monster/slime_stun_frame1.png",
-        "../../Resource/Monster/slime_stun_frame2.png",
-        "../../Resource/Monster/slime_stun_frame3.png",
-        "../../Resource/Monster/slime_stun_frame4.png",
-        "../../Resource/Monster/slime_stun_frame5.png",
-        "../../Resource/Monster/slime_stun_frame6.png",
-        "../../Resource/Monster/slime_stun_frame7.png",
-        "../../Resource/Monster/slime_stun_frame8.png"
-    };
-
     LoadTextures(normalFrameFiles);
 }
 
@@ -52,7 +40,7 @@ void MovingMonster::MoveTowardsPlayer(float deltaTime, const SDL_Rect& playerRec
 
 void MovingMonster::Render() {
     if (!textures.empty()) {
-        SDL_Rect rect = { x, y, 128, 128 };
+        SDL_Rect rect = { x, y, 52, 52 };
 
         // Apply hit effect
         Uint32 currentTime = SDL_GetTicks();
