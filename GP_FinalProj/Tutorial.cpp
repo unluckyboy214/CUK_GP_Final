@@ -17,7 +17,7 @@ Tutorial::Tutorial()
     SDL_FreeSurface(portalSurface);
 
     // 포탈 이미지 크기 설정
-    portalRect = { 350, 250, 100, 100 };
+    portalRect = { 350, 500, 100, 100 };
 }
 
 void Tutorial::SpawnMonsters() {
