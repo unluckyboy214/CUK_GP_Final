@@ -17,6 +17,7 @@ private:
     SDL_Texture* portalTexture;
     SDL_Rect portalRect;
     bool showPortal;
+    int deathCount;
 };
 
 #endif // Tutorial_H

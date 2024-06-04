@@ -53,11 +53,15 @@ void Tutorial::SpawnMonster() {
     if (monsters.size() < maxMonsters) {
         int x = disX(gen);
         int y = disY(gen);
-        if (monsters.size() % 2 == 0) {
+        deathCount++;
+        if (deathCount % 3 == 1) {
             monsters.push_back(new MovingMonster(x, y));
         }
-        else {
+        else if (deathCount % 3 == 2) {
             monsters.push_back(new RangedMonster(x, y));
+        }
+        else if (deathCount % 3 == 0) {
+            monsters.push_back(new ChargingMonster(x, y));
         }
     }
 }
