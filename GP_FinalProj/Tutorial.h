@@ -8,6 +8,7 @@ public:
     Tutorial();
     virtual void SpawnMonsters() override;
     virtual void SpawnMonster() override;
+    virtual void HandleEvent(SDL_Event& event);
 };
 
 #endif // Tutorial_H
