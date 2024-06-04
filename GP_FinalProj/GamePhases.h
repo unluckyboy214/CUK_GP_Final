@@ -13,5 +13,6 @@ extern const int PHASE_LastBoss;
 extern const int PHASE_GameOver; // Ãß°¡
 extern const int PHASE_Pause;
 extern const int PHASE_Tutorial;
+extern const int PHASE_Ending;
 
 #endif // GAME_PHASES_H

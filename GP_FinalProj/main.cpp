@@ -10,11 +10,11 @@
 #include "Dasol.h"
 #include "Sophiebara.h"
 #include "Michael.h"
-#include "LastBoss.h"
 #include "Intro.h"
-#include "GameOver.h" // 추가
+#include "GameOver.h"
 #include "Pause.h"
 #include "Tutorial.h"
+#include "Ending.h"
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
@@ -98,7 +98,7 @@ void ClearEventQueue() {
     }
 }
 
-void ResetGame(Entrance& entrance, KimSuHwan& kimsuhwan, Hall& hall, Nicols1& nicols1, Dasol& dasol, Sophiebara& sophiebara, Michael& michael, LastBoss& lastboss, Player& player) {
+void ResetGame(Entrance& entrance, KimSuHwan& kimsuhwan, Hall& hall, Nicols1& nicols1, Dasol& dasol, Sophiebara& sophiebara, Michael& michael, Player& player) {
     g_current_game_phase = PHASE_Intro;
     g_player_health = 10;
     g_kill_count = 0;
@@ -109,7 +109,6 @@ void ResetGame(Entrance& entrance, KimSuHwan& kimsuhwan, Hall& hall, Nicols1& ni
     dasol.ResetMonsters();
     sophiebara.ResetMonsters();
     michael.ResetMonsters();
-    lastboss.ResetMonsters();
     SetPlayerToCenter(player);
     ResetDirectionKeys(); // 방향 키 상태 초기화
     ClearEventQueue(); // 이벤트 큐 초기화
@@ -138,11 +137,11 @@ void ChangePhase(int newPhase) {
             PlayBackgroundMusic("../../Resource/Sound/Bgm/BG1.mp3");
         }
         break;
-    case PHASE_LastBoss:
-        PlayBackgroundMusic("../../Resource/Sound/Bgm/LastBoss.mp3");
-        break;
     case PHASE_GameOver:
         PlayBackgroundMusic("../../Resource/Sound/Bgm/GameOver.mp3");
+        break;
+    case PHASE_Ending:
+        PlayBackgroundMusic("../../Resource/Sound/Bgm/Ending.mp3");
         break;
     }
 
@@ -164,7 +163,7 @@ int main(int argc, char* argv[]) {
     Health health(g_renderer);
 
     Intro intro;
-    Gameover gameover; // 추가
+    Gameover gameover;
     Pause pause;
     Tutorial tutorial;
     Entrance entrance;
@@ -174,7 +173,7 @@ int main(int argc, char* argv[]) {
     Dasol dasol;
     Sophiebara sophiebara;
     Michael michael;
-    LastBoss lastboss;
+    Ending ending;
     Player player;
     Chisam chisam(WINDOW_WIDTH / 20, WINDOW_HEIGHT / 20, g_renderer, font);
 
@@ -197,14 +196,14 @@ int main(int argc, char* argv[]) {
             if (g_current_game_phase == PHASE_Intro) {
                 intro.HandleEvents(e);
                 if (g_reset_game) {
-                    ResetGame(entrance, kimsuhwan, hall, nicols1, dasol, sophiebara, michael, lastboss, player);
+                    ResetGame(entrance, kimsuhwan, hall, nicols1, dasol, sophiebara, michael, player);
                     g_reset_game = false;
                 }
             }
             else if (g_current_game_phase == PHASE_GameOver) {
                 gameover.HandleEvents(e);
                 if (g_current_game_phase == PHASE_Intro) {
-                    ResetGame(entrance, kimsuhwan, hall, nicols1, dasol, sophiebara, michael, lastboss, player);
+                    ResetGame(entrance, kimsuhwan, hall, nicols1, dasol, sophiebara, michael, player);
                     ChangePhase(PHASE_Intro);
                 }
             }
@@ -249,8 +248,7 @@ int main(int argc, char* argv[]) {
                 case PHASE_Michael:
                     player.HandleEvents(e, michael.GetMonsters());
                     break;
-                case PHASE_LastBoss:
-                    player.HandleEvents(e, lastboss.GetMonsters());
+                case PHASE_Ending:
                     break;
                 }
             }
@@ -263,6 +261,10 @@ int main(int argc, char* argv[]) {
         else if (g_current_game_phase == PHASE_GameOver) {
             gameover.Update(deltaTime);
             gameover.Render();
+        }
+        else if (g_current_game_phase == PHASE_Ending) {
+            ending.Update(deltaTime);
+            ending.Render();
         }
         else {
             player.Update(deltaTime);
@@ -315,7 +317,7 @@ int main(int argc, char* argv[]) {
             }
 
             switch (g_current_game_phase) {
-            case PHASE_Tutorial: // Tutorial 페이즈 추가
+            case PHASE_Tutorial:
                 tutorial.Update(deltaTime);
                 tutorial.Render();
                 break;
@@ -347,10 +349,6 @@ int main(int argc, char* argv[]) {
             case PHASE_Michael:
                 michael.Update(deltaTime);
                 michael.Render();
-                break;
-            case PHASE_LastBoss:
-                lastboss.Update(deltaTime);
-                lastboss.Render();
                 break;
             case PHASE_Pause:
                 pause.Update(deltaTime);

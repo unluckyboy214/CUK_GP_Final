@@ -2,14 +2,15 @@
 #include <cstdlib>
 #include <ctime>
 #include <SDL_image.h>
+#include <iostream>
+#include "GamePhases.h"  // 추가
 
 // External global variables
 extern int g_current_game_phase;
-extern const int PHASE_LastBoss;
 
 Chisam::Chisam(int mapWidth, int mapHeight, SDL_Renderer* renderer, TTF_Font* font)
     : mapWidth(mapWidth), mapHeight(mapHeight), renderer(renderer), font(font), currentDialogueIndex(0), visible(true), texture(nullptr) {
-    
+
     dialogues = {
         "HI", "I am Chisam!", "Help!!", "Please...",
         "HI", "I am Chisam", "Help!!", "?? Something weird.."
@@ -103,8 +104,12 @@ void Chisam::HandleEvents(SDL_Event& e) {
             currentDialogueIndex++;
             if (currentDialogueIndex >= dialogues.size()) {
                 visible = false;
-                // Transition to the last boss map
-                g_current_game_phase = PHASE_LastBoss;
+                // Transition to the ending map
+                g_current_game_phase = PHASE_Ending; // PHASE_Ending으로 변경
+                std::cout << "Ending\n";
+                if (g_current_game_phase != PHASE_Ending) {
+                    std::cout << "Error: Failed to transition to Ending phase\n";
+                }
             }
         }
     }
