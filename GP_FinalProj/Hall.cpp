@@ -5,6 +5,7 @@
 #include <SDL_image.h>
 
 Hall::Hall() : Map("../../Resource/Map/Hall.png",5) {
+    spawnDelay = 2.0f;
     SpawnMonsters();
 }
 

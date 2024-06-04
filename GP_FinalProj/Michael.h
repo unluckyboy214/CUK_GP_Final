@@ -8,6 +8,8 @@ public:
     Michael();
     virtual void SpawnMonsters() override;
     virtual void SpawnMonster() override;
+private:
+    int deathCount;
 };
 
 #endif // MICHAEL_H

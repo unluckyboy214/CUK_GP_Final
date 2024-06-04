@@ -8,6 +8,8 @@ public:
     Sophiebara();
     virtual void SpawnMonsters() override;
     virtual void SpawnMonster() override;
+private:
+    int deathCount;
 };
 
 #endif // SOPHIEBARA_H

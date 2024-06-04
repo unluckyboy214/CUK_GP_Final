@@ -6,6 +6,7 @@
 #include <random>
 
 KimSuHwan::KimSuHwan() : Map("../../Resource/Map/KimSuHwan.png",4) {
+    spawnDelay = 2.0f;
     SpawnMonsters(); // SpawnMonsters 호출
 }
 
