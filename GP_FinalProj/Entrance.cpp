@@ -6,7 +6,7 @@
 
 Entrance::Entrance()
     : Map("../../Resource/Map/Entrance.png", 4) {  // maxMonsters 설정
-    spawnDelay = 1.0f;  // 초기 몬스터 생성 지연 시간 설정
+    spawnDelay = 2.0f;  // 초기 몬스터 생성 지연 시간 설정
 }
 
 void Entrance::SpawnMonsters() {

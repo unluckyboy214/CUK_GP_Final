@@ -5,8 +5,8 @@
 #include <random>
 
 Nicols1::Nicols1()
-    : Map("../../Resource/Map/Nicols1.png", 7) {  // maxMonsters 설정
-    spawnDelay = 10.0f;  // 초기 몬스터 생성 지연 시간 설정
+    : Map("../../Resource/Map/Nicols1.png", 5) {  // maxMonsters 설정
+    spawnDelay = 2.0f;  // 초기 몬스터 생성 지연 시간 설정
 }
 
 void Nicols1::SpawnMonsters() {
@@ -20,7 +20,7 @@ void Nicols1::SpawnMonsters() {
         int y = disY(gen);
         monsters.push_back(new MovingMonster(x, y));
     }
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 1; i++) {
         int x = disX(gen);
         int y = disY(gen);
         monsters.push_back(new RangedMonster(x, y));
@@ -36,11 +36,12 @@ void Nicols1::SpawnMonster() {
     if (monsters.size() < maxMonsters) {
         int x = disX(gen);
         int y = disY(gen);
-        if (monsters.size() % 2 == 0) {
-            monsters.push_back(new MovingMonster(x, y));
+        deathCount++;
+        if (deathCount % 3 == 0) {
+            monsters.push_back(new RangedMonster(x, y));
         }
         else {
-            monsters.push_back(new RangedMonster(x, y));
+            monsters.push_back(new MovingMonster(x, y));
         }
     }
 }
