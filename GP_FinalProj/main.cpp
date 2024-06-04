@@ -226,57 +226,46 @@ int main(int argc, char* argv[]) {
                 g_current_game_phase = PHASE_GameOver;
             }
 
-            if (g_kill_count >= 10 && g_current_game_phase != PHASE_LastBoss) {
+            if (g_kill_count >= 3 && g_current_game_phase == PHASE_Entrance) {
+                ChangePhase(PHASE_KimSuHwan);
                 g_kill_count = 0;
-                switch (g_current_game_phase) {
-                case PHASE_Tutorial: // Tutorial 페이즈 추가
-                    ChangePhase(PHASE_Entrance);
-                    entrance.ResetMonsters();
-                    break;
-                case PHASE_Entrance:
-                    ChangePhase(PHASE_KimSuHwan);
-                    kimsuhwan.ResetMonsters();
-                    break;
-                case PHASE_KimSuHwan:
-                    ChangePhase(PHASE_Hall);
-                    hall.ResetMonsters();
-                    break;
-                case PHASE_Hall:
-                    ChangePhase(PHASE_Nicols1);
-                    nicols1.ResetMonsters();
-                    break;
-                case PHASE_Nicols1:
-                    ChangePhase(PHASE_Dasol);
-                    dasol.ResetMonsters();
-                    break;
-                case PHASE_Dasol:
-                    ChangePhase(PHASE_Sophiebara);
-                    sophiebara.ResetMonsters();
-                    break;
-                case PHASE_Sophiebara:
-                    ChangePhase(PHASE_Michael);
-                    michael.ResetMonsters();
-                    break;
-                case PHASE_Michael:
-                    ChangePhase(PHASE_LastBoss);
-                    lastboss.ResetMonsters();
-                    break;
-                case PHASE_Pause:
-                    pause.HandleEvents(e);
-                    break;
-                }
+                kimsuhwan.ResetMonsters();
                 SetPlayerToCenter(player);
             }
-            else if (g_kill_count >= 7 && g_current_game_phase == PHASE_KimSuHwan) {
+            else if (g_kill_count >= 4 && g_current_game_phase == PHASE_KimSuHwan) {
                 ChangePhase(PHASE_Hall);
                 g_kill_count = 0;
                 hall.ResetMonsters();
                 SetPlayerToCenter(player);
             }
-            else if (g_kill_count >= 5 && g_current_game_phase == PHASE_Entrance) {
-                ChangePhase(PHASE_KimSuHwan);
+            else if (g_kill_count >= 5 && g_current_game_phase == PHASE_Hall) {
+                ChangePhase(PHASE_Nicols1);
                 g_kill_count = 0;
-                kimsuhwan.ResetMonsters();
+                nicols1.ResetMonsters();
+                SetPlayerToCenter(player);
+            }
+            else if (g_kill_count >= 6 && g_current_game_phase == PHASE_Nicols1) {
+                ChangePhase(PHASE_Dasol);
+                g_kill_count = 0;
+                dasol.ResetMonsters();
+                SetPlayerToCenter(player);
+            }
+            else if (g_kill_count >= 7 && g_current_game_phase == PHASE_Dasol) {
+                ChangePhase(PHASE_Sophiebara);
+                g_kill_count = 0;
+                sophiebara.ResetMonsters();
+                SetPlayerToCenter(player);
+            }
+            else if (g_kill_count >= 8 && g_current_game_phase == PHASE_Sophiebara) {
+                ChangePhase(PHASE_Michael);
+                g_kill_count = 0;
+                michael.ResetMonsters();
+                SetPlayerToCenter(player);
+            }
+            else if (g_kill_count >= 9 && g_current_game_phase == PHASE_Michael) {
+                ChangePhase(PHASE_LastBoss); //엔딩 여기다 넣으면 댈듯
+                g_kill_count = 0;
+                lastboss.ResetMonsters();
                 SetPlayerToCenter(player);
             }
 
