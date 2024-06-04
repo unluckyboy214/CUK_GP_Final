@@ -26,15 +26,60 @@ void SetPlayerToCenter(Player& player) {
 
 void RenderKillCount() {
     SDL_Color color = { 255, 0, 0, 255 };
-    std::string killCountText = "Kills: " + std::to_string(g_kill_count);
+    int requiredKillCount = 0;
+
+    switch (g_current_game_phase) {
+    case PHASE_Entrance:
+        requiredKillCount = 3;
+        break;
+    case PHASE_KimSuHwan:
+        requiredKillCount = 4;
+        break;
+    case PHASE_Hall:
+        requiredKillCount = 5;
+        break;
+    case PHASE_Nicols1:
+        requiredKillCount = 6;
+        break;
+    case PHASE_Dasol:
+        requiredKillCount = 7;
+        break;
+    case PHASE_Sophiebara:
+        requiredKillCount = 8;
+        break;
+    case PHASE_Michael:
+        requiredKillCount = 9;
+        break;
+    default:
+        requiredKillCount = 0;
+        break;
+    }
+
+    std::string killCountText = "Kills: " + std::to_string(g_kill_count) + " / " + std::to_string(requiredKillCount);
     SDL_Surface* surface = TTF_RenderText_Solid(g_font, killCountText.c_str(), color);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(g_renderer, surface);
-
+    
     int text_width = surface->w;
     int text_height = surface->h;
+    int text_margin_top = 10;
     SDL_FreeSurface(surface);
 
-    SDL_Rect renderQuad = { WINDOW_WIDTH / 2 - text_width / 2, 0, text_width, text_height };
+    // Set background dimensions slightly larger than text dimensions
+    int padding = 10; // Additional padding on the left and right
+    SDL_Rect backgroundRect = { WINDOW_WIDTH / 2 - text_width / 2 - 50 - padding, text_margin_top - 5, text_width + padding * 2, text_height + 10 };
+
+    // Render gray background
+    SDL_SetRenderDrawColor(g_renderer, 192, 192, 192, 255); // Gray
+    SDL_RenderFillRect(g_renderer, &backgroundRect);
+
+    // Render darker gray border
+    SDL_SetRenderDrawColor(g_renderer, 128, 128, 128, 255); // Darker Gray
+    SDL_RenderDrawRect(g_renderer, &backgroundRect);
+
+    // Reset color for text rendering
+    SDL_SetRenderDrawColor(g_renderer, 0, 0, 0, 255); // Black
+
+    SDL_Rect renderQuad = { WINDOW_WIDTH / 2 - text_width / 2 - 50, text_margin_top, text_width, text_height };
     SDL_RenderCopy(g_renderer, texture, NULL, &renderQuad);
     SDL_DestroyTexture(texture);
 }
