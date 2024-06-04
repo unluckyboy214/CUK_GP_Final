@@ -58,7 +58,7 @@ void RenderKillCount() {
     std::string killCountText = "Kills: " + std::to_string(g_kill_count) + " / " + std::to_string(requiredKillCount);
     SDL_Surface* surface = TTF_RenderText_Solid(g_font, killCountText.c_str(), color);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(g_renderer, surface);
-    
+
     int text_width = surface->w;
     int text_height = surface->h;
     int text_margin_top = 10;
@@ -115,8 +115,11 @@ void ResetGame(Entrance& entrance, KimSuHwan& kimsuhwan, Hall& hall, Nicols1& ni
 }
 
 void ChangePhase(int newPhase) {
-    g_current_game_phase = newPhase;
     static int lastPhase = -1;
+
+    if (newPhase == PHASE_GameOver || newPhase == PHASE_Ending) {
+        StopBackgroundMusic();
+    }
 
     switch (newPhase) {
     case PHASE_Intro:
@@ -145,6 +148,7 @@ void ChangePhase(int newPhase) {
         break;
     }
 
+    g_current_game_phase = newPhase;
     lastPhase = newPhase;
 }
 
@@ -270,7 +274,7 @@ int main(int argc, char* argv[]) {
             player.Update(deltaTime);
 
             if (g_player_health < 1) {
-                g_current_game_phase = PHASE_GameOver;
+                ChangePhase(PHASE_GameOver);  // Changed to use ChangePhase function
             }
 
             if (g_kill_count >= 3 && g_current_game_phase == PHASE_Entrance) {
@@ -310,9 +314,8 @@ int main(int argc, char* argv[]) {
                 SetPlayerToCenter(player);
             }
             else if (g_kill_count >= 9 && g_current_game_phase == PHASE_Michael) {
-                ChangePhase(PHASE_LastBoss); //엔딩 여기다 넣으면 댈듯
+                ChangePhase(PHASE_Ending);
                 g_kill_count = 0;
-                lastboss.ResetMonsters();
                 SetPlayerToCenter(player);
             }
 

@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <ctime>
+#include "GamePhases.h"
 
 class Chisam {
 public:

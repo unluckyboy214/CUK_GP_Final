@@ -1,12 +1,15 @@
 #include "Chisam.h"
+#include "globals.h"
+#include "GamePhases.h"
 #include <cstdlib>
 #include <ctime>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 #include <iostream>
-#include "GamePhases.h"  // 추가
 
 // External global variables
 extern int g_current_game_phase;
+extern const int PHASE_Ending;
 
 Chisam::Chisam(int mapWidth, int mapHeight, SDL_Renderer* renderer, TTF_Font* font)
     : mapWidth(mapWidth), mapHeight(mapHeight), renderer(renderer), font(font), currentDialogueIndex(0), visible(true), texture(nullptr) {
@@ -104,11 +107,21 @@ void Chisam::HandleEvents(SDL_Event& e) {
             currentDialogueIndex++;
             if (currentDialogueIndex >= dialogues.size()) {
                 visible = false;
-                // Transition to the ending map
-                g_current_game_phase = PHASE_Ending; // PHASE_Ending으로 변경
-                std::cout << "Ending\n";
-                if (g_current_game_phase != PHASE_Ending) {
-                    std::cout << "Error: Failed to transition to Ending phase\n";
+                g_current_game_phase = PHASE_Ending;
+                if (g_current_game_phase == PHASE_Ending) {
+                    // 음악을 멈추고 Ending 음악을 재생
+                    Mix_HaltMusic();
+                    Mix_Music* endingMusic = Mix_LoadMUS("../../Resource/Sound/Bgm/Ending.mp3");
+                    if (endingMusic == nullptr) {
+                        std::cerr << "Failed to load ending music: " << Mix_GetError() << std::endl;
+                    }
+                    else {
+                        Mix_PlayMusic(endingMusic, -1);
+                    }
+                    //g_current_game_phase = PHASE_Ending;
+                }
+                else {
+                    std::cout << "Error: Transition to Ending Phase failed.\n"; // 실패 로그
                 }
             }
         }
