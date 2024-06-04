@@ -5,7 +5,7 @@
 #include <random>
 
 Entrance::Entrance()
-    : Map("../../Resource/Map/Entrance.png", 7) {  // maxMonsters 설정
+    : Map("../../Resource/Map/Entrance.png", 4) {  // maxMonsters 설정
     spawnDelay = 1.0f;  // 초기 몬스터 생성 지연 시간 설정
 }
 
@@ -28,7 +28,7 @@ void Entrance::SpawnMonsters() {
         generatePosition(x, y);
         monsters.push_back(new MovingMonster(x, y));
     }
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 0; ++i) {
         int x, y;
         generatePosition(x, y);
         monsters.push_back(new RangedMonster(x, y));
