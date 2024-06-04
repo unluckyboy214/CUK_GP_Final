@@ -29,5 +29,6 @@ void Gameover::HandleEvents(SDL_Event& event) {
     if (event.type == SDL_MOUSEBUTTONDOWN) {
         // 마우스 버튼이 눌리면 PHASE_Intro로 전환
         g_current_game_phase = PHASE_Intro;
+        g_reset_game = true; // 게임 초기화 플래그 설정
     }
-} 
+}

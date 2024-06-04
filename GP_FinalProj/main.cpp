@@ -98,7 +98,7 @@ void ClearEventQueue() {
     }
 }
 
-void ResetGame(Entrance& entrance, KimSuHwan& kimsuhwan, Hall& hall, Nicols1& nicols1, Dasol& dasol, Sophiebara& sophiebara, Michael& michael, Player& player) {
+void ResetGame(Entrance& entrance, KimSuHwan& kimsuhwan, Hall& hall, Nicols1& nicols1, Dasol& dasol, Sophiebara& sophiebara, Michael& michael, Tutorial& tutorial, Player& player) { 
     g_current_game_phase = PHASE_Intro;
     g_player_health = 10;
     g_kill_count = 0;
@@ -109,6 +109,8 @@ void ResetGame(Entrance& entrance, KimSuHwan& kimsuhwan, Hall& hall, Nicols1& ni
     dasol.ResetMonsters();
     sophiebara.ResetMonsters();
     michael.ResetMonsters();
+    tutorial.ResetMonsters();
+    tutorial.ResetPortalCloaking(); // 추가: 튜토리얼 페이즈의 포탈 클로킹 상태 초기화
     SetPlayerToCenter(player);
     ResetDirectionKeys(); // 방향 키 상태 초기화
     ClearEventQueue(); // 이벤트 큐 초기화
@@ -200,15 +202,24 @@ int main(int argc, char* argv[]) {
             if (g_current_game_phase == PHASE_Intro) {
                 intro.HandleEvents(e);
                 if (g_reset_game) {
-                    ResetGame(entrance, kimsuhwan, hall, nicols1, dasol, sophiebara, michael, player);
+                    ResetGame(entrance, kimsuhwan, hall, nicols1, dasol, sophiebara, michael, tutorial, player);
                     g_reset_game = false;
                 }
             }
             else if (g_current_game_phase == PHASE_GameOver) {
-                gameover.HandleEvents(e);
-                if (g_current_game_phase == PHASE_Intro) {
-                    ResetGame(entrance, kimsuhwan, hall, nicols1, dasol, sophiebara, michael, player);
+                gameover.Update(deltaTime);
+                gameover.Render();
+                while (SDL_PollEvent(&e)) {
+                    if (e.type == SDL_QUIT) {
+                        g_flag_running = false;
+                    }
+                    gameover.HandleEvents(e);
+                }
+
+                if (g_reset_game) {
+                    ResetGame(entrance, kimsuhwan, hall, nicols1, dasol, sophiebara, michael, tutorial, player);
                     ChangePhase(PHASE_Intro);
+                    g_reset_game = false;
                 }
             }
             else if (g_current_game_phase == PHASE_Pause) {
@@ -261,10 +272,20 @@ int main(int argc, char* argv[]) {
         if (g_current_game_phase == PHASE_Intro) {
             intro.Update(deltaTime);
             intro.Render();
+            if (g_reset_game) {
+                ResetGame(entrance, kimsuhwan, hall, nicols1, dasol, sophiebara, michael, tutorial, player);
+                g_reset_game = false;
+            }
         }
         else if (g_current_game_phase == PHASE_GameOver) {
             gameover.Update(deltaTime);
             gameover.Render();
+
+            if (g_reset_game) {
+                ResetGame(entrance, kimsuhwan, hall, nicols1, dasol, sophiebara, michael, tutorial, player);
+                ChangePhase(PHASE_Tutorial);
+                g_reset_game = false;
+            }
         }
         else if (g_current_game_phase == PHASE_Ending) {
             ending.Update(deltaTime);
