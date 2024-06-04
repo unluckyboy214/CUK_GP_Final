@@ -48,13 +48,13 @@ Player::Player()
     //playerMoveSound = Mix_LoadWAV("../../Resource/Sound/Effect/Player_move.mp3");
 
     if (!successParrySound) {
-        std::cerr << "Error loading success parry sound: " << Mix_GetError() << std::endl;
+        //std::cerr << "Error loading success parry sound: " << Mix_GetError() << std::endl;
     }
     if (!failParrySound) {
-        std::cerr << "Error loading fail parry sound: " << Mix_GetError() << std::endl;
+        //std::cerr << "Error loading fail parry sound: " << Mix_GetError() << std::endl;
     }
     if (!playerHitSound) {
-        std::cerr << "Error loading player hit sound: " << Mix_GetError() << std::endl;
+        //std::cerr << "Error loading player hit sound: " << Mix_GetError() << std::endl;
     }
     /*if (!playerMoveSound) {
         std::cerr << "Error loading player move sound: " << Mix_GetError() << std::endl;
@@ -86,7 +86,7 @@ void Player::LoadDashEffectTextures() {
             SDL_FreeSurface(temp_surface);
         }
         else {
-            std::cerr << "Failed to load dash effect texture: " << IMG_GetError() << std::endl;
+            //std::cerr << "Failed to load dash effect texture: " << IMG_GetError() << std::endl;
         }
     }
 }
@@ -106,22 +106,22 @@ void Player::LoadAnimation(PlayerState state, const std::string& base_path, int 
         std::string path = base_path + std::to_string(i) + ".png";
         SDL_Surface* surface = IMG_Load(path.c_str());
         if (!surface) {
-            std::cerr << "Failed to load surface: " << path << " Error: " << IMG_GetError() << std::endl;
+            //std::cerr << "Failed to load surface: " << path << " Error: " << IMG_GetError() << std::endl;
             continue;
         }
         SDL_Texture* texture = SDL_CreateTextureFromSurface(g_renderer, surface);
         SDL_FreeSurface(surface);
         if (!texture) {
-            std::cerr << "Failed to create texture: " << path << " Error: " << SDL_GetError() << std::endl;
+            //std::cerr << "Failed to create texture: " << path << " Error: " << SDL_GetError() << std::endl;
             continue;
         }
         animation.frames.push_back(texture);
     }
     if (animation.frames.empty()) {
-        std::cerr << "No frames loaded for state: " << static_cast<int>(state) << std::endl;
+        //std::cerr << "No frames loaded for state: " << static_cast<int>(state) << std::endl;
     }
     else {
-        std::cout << "Loaded " << animation.frames.size() << " frames for state: " << static_cast<int>(state) << std::endl;
+        //std::cout << "Loaded " << animation.frames.size() << " frames for state: " << static_cast<int>(state) << std::endl;
     }
     shared_animations_[state] = animation;
 }
@@ -237,7 +237,7 @@ void Player::Update(float deltaTime) {
         Uint32 current_time = SDL_GetTicks();
         if (current_time - invincible_start_time_ >= invincible_duration_ * 1000) {
             invincible_duration_ = 0.0f;
-            std::cout << "Player invincibility ended." << std::endl;
+            //std::cout << "Player invincibility ended." << std::endl;
         }
     }
     hit_this_frame_ = false;
@@ -260,13 +260,13 @@ void Player::UpdateDashEffect(float deltaTime) {
 void Player::Render() {
     // Get current texture based on state and frame
     if (animations_.find(state_) == animations_.end() || animations_[state_].frames.empty()) {
-        std::cerr << "Error: no frames available for state " << static_cast<int>(state_) << std::endl;
+        //std::cerr << "Error: no frames available for state " << static_cast<int>(state_) << std::endl;
         return;
     }
 
     // Validate current frame index
     if (current_frame_ >= animations_[state_].frames.size()) {
-        std::cerr << "Error: current_frame_ " << current_frame_ << " is out of bounds for state " << static_cast<int>(state_) << std::endl;
+        //std::cerr << "Error: current_frame_ " << current_frame_ << " is out of bounds for state " << static_cast<int>(state_) << std::endl;
         return;
     }
 
@@ -274,7 +274,7 @@ void Player::Render() {
 
     // Render texture if valid
     if (current_texture == nullptr) {
-        std::cerr << "Error: current_texture is nullptr in state " << static_cast<int>(state_) << ", frame " << current_frame_ << std::endl;
+        //std::cerr << "Error: current_texture is nullptr in state " << static_cast<int>(state_) << ", frame " << current_frame_ << std::endl;
         return;
     }
 
@@ -397,7 +397,7 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
                 int currentHealth = (*it)->GetHealth();
                 (*it)->SetHealth(currentHealth - 1);
                 (*it)->SetHitTimer(1.5f); // hitTimer 설정 함수 호출
-                std::cout << "Monster at (" << (*it)->getX() << ", " << (*it)->getY() << ") hit, health: " << (*it)->GetHealth() << std::endl; // 디버깅 메시지
+                //std::cout << "Monster at (" << (*it)->getX() << ", " << (*it)->getY() << ") hit, health: " << (*it)->GetHealth() << std::endl; // 디버깅 메시지
                 if ((*it)->IsDead()) {
                     delete* it;
                     it = monsters.erase(it);
@@ -414,7 +414,7 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
 
         // 패링 성공 여부에 따라 타이머 설정
         if (parrySuccess) {
-            std::cout << "Success_Parry" << "\n";
+            //std::cout << "Success_Parry" << "\n";
             parry_timer_ = parry_duration_; // 패링 성공 시 지속 시간만 적용
             SetInvincibleTimer(1.0f); // 패링 성공 시 1초간 무적
             if (successParrySound) {
@@ -423,7 +423,7 @@ void Player::PerformParry(std::vector<Monster*>& monsters) {
             }
         }
         else {
-            std::cout << "Fail_Parry" << "\n";
+            //std::cout << "Fail_Parry" << "\n";
             parry_timer_ = parry_cooldown_ + parry_duration_; // 패링 실패 시 쿨다운 적용
             if (failParrySound) {
                 Mix_VolumeChunk(failParrySound, MIX_MAX_VOLUME); // 볼륨 설정
@@ -451,7 +451,7 @@ void Player::OnMonsterCollision(const SDL_Rect& monsterRect) {
         else {
             g_player_health = 0;
         }
-        std::cout << "Player hit by a monster! Current health: " << g_player_health << std::endl;
+        //std::cout << "Player hit by a monster! Current health: " << g_player_health << std::endl;
         SetInvincibleTimer(5.0f);
         hit_this_frame_ = true;
         if (playerHitSound) {
@@ -492,5 +492,5 @@ bool Player::IsInvincible() const {
 void Player::SetInvincibleTimer(float duration) {
     invincible_start_time_ = SDL_GetTicks();
     invincible_duration_ = duration;
-    std::cout << "Player is now invincible for " << duration << " seconds." << std::endl;
+    //std::cout << "Player is now invincible for " << duration << " seconds." << std::endl;
 }

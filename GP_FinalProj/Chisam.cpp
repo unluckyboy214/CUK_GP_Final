@@ -113,7 +113,7 @@ void Chisam::HandleEvents(SDL_Event& e) {
                     Mix_HaltMusic();
                     Mix_Music* endingMusic = Mix_LoadMUS("../../Resource/Sound/Bgm/Ending.mp3");
                     if (endingMusic == nullptr) {
-                        std::cerr << "Failed to load ending music: " << Mix_GetError() << std::endl;
+                        //std::cerr << "Failed to load ending music: " << Mix_GetError() << std::endl;
                     }
                     else {
                         Mix_PlayMusic(endingMusic, -1);
@@ -121,7 +121,7 @@ void Chisam::HandleEvents(SDL_Event& e) {
                     //g_current_game_phase = PHASE_Ending;
                 }
                 else {
-                    std::cout << "Error: Transition to Ending Phase failed.\n"; // 실패 로그
+                    //std::cout << "Error: Transition to Ending Phase failed.\n"; // 실패 로그
                 }
             }
         }
