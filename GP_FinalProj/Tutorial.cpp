@@ -51,3 +51,12 @@ void Tutorial::SpawnMonster() {
         }
     }
 }
+
+void Tutorial::HandleEvent(SDL_Event& event) {
+    if (event.type == SDL_KEYDOWN) {
+        if (event.key.keysym.sym == SDLK_c) {
+            // C키를 누르면 Entrance 맵으로 이동
+            g_current_game_phase = PHASE_Entrance;
+        }
+    }
+}

@@ -5,8 +5,6 @@
 
 BossMonster::BossMonster(int x, int y) : Monster(x, y), hp(20) {
     std::vector<std::string> frameFiles = {
-        "../../Resource/Monster/boss_frame1.png",
-        "../../Resource/Monster/boss_frame2.png"
     };
     LoadTextures(frameFiles);
 }

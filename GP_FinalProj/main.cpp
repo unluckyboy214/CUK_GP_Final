@@ -78,6 +78,7 @@ void ChangePhase(int newPhase) {
     case PHASE_Intro:
         PlayBackgroundMusic("../../Resource/Sound/Bgm/BG_Intro.mp3");
         break;
+    case PHASE_Tutorial:
     case PHASE_Entrance:
         PlayBackgroundMusic("../../Resource/Sound/Bgm/BG1.mp3");
         break;
@@ -179,6 +180,7 @@ int main(int argc, char* argv[]) {
 
                 switch (g_current_game_phase) {
                 case PHASE_Tutorial:
+                    tutorial.HandleEvent(e);
                     player.HandleEvents(e, tutorial.GetMonsters());
                     break;
                 case PHASE_Entrance:
