@@ -1,8 +1,10 @@
 #include "Hall.h"
+#include "MovingMonster.h"
+#include "ChargingMonster.h"
 #include <random>
 #include <SDL_image.h>
 
-Hall::Hall() : Map("../../Resource/Map/Hall.png",10) {
+Hall::Hall() : Map("../../Resource/Map/Hall.png",5) {
     SpawnMonsters();
 }
 
@@ -21,9 +23,13 @@ void Hall::SpawnMonsters() {
         } while (std::sqrt(std::pow(player_.GetRect().x - x, 2) + std::pow(player_.GetRect().y - y, 2)) < minDistanceFromPlayer);
     };
 
+    for (int i = 0; i < 3; ++i) {
+        int x = disX(gen);
+        int y = disY(gen);
+        monsters.push_back(new MovingMonster(x, y));
+    }
 
-
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 2; ++i) {
         int x = disX(gen);
         int y = disY(gen);
         monsters.push_back(new ChargingMonster(x, y));
@@ -43,14 +49,16 @@ void Hall::SpawnMonster() {
             x = disX(gen);
             y = disY(gen);
         } while (std::sqrt(std::pow(player_.GetRect().x - x, 2) + std::pow(player_.GetRect().y - y, 2)) < minDistanceFromPlayer);
-    };
+        };
 
     if (monsters.size() < maxMonsters) {
-
-        int x = disX(gen);
-        int y = disY(gen);
-        monsters.push_back(new ChargingMonster(x, y));
+        int x, y;
+        generatePosition(x, y);
+        if (monsters.size() % 2 == 0) {
+            monsters.push_back(new MovingMonster(x, y));
+        }
+        else {
+            monsters.push_back(new ChargingMonster(x, y));
+        }
     }
-
-
 }
