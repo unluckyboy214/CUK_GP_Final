@@ -28,11 +28,6 @@ void Entrance::SpawnMonsters() {
         generatePosition(x, y);
         monsters.push_back(new MovingMonster(x, y));
     }
-    for (int i = 0; i < 0; ++i) {
-        int x, y;
-        generatePosition(x, y);
-        monsters.push_back(new RangedMonster(x, y));
-    }
 }
 
 void Entrance::SpawnMonster() {
@@ -55,8 +50,6 @@ void Entrance::SpawnMonster() {
         if (monsters.size() % 2 == 0) {
             monsters.push_back(new MovingMonster(x, y));
         }
-        else {
-            monsters.push_back(new RangedMonster(x, y));
-        }
     }
 }
+

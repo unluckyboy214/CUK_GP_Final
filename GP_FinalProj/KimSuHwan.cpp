@@ -1,10 +1,11 @@
 #include "KimSuHwan.h"
 #include "MovingMonster.h"
 #include "RangedMonster.h"
+#include "ChargingMonster.h"
 #include <SDL_image.h>
 #include <random>
 
-KimSuHwan::KimSuHwan() : Map("../../Resource/Map/KimSuHwan.png",10) {
+KimSuHwan::KimSuHwan() : Map("../../Resource/Map/KimSuHwan.png",4) {
     SpawnMonsters(); // SpawnMonsters 호출
 }
 
@@ -22,15 +23,20 @@ void KimSuHwan::SpawnMonsters() {
         } while (std::sqrt(std::pow(player_.GetRect().x - x, 2) + std::pow(player_.GetRect().y - y, 2)) < minDistanceFromPlayer);
     };
 
-    for (int i = 0; i < 4; ++i) {
+    /*for (int i = 0; i < 0; ++i) {
         int x, y;
         generatePosition(x, y);
         monsters.push_back(new MovingMonster(x, y));
     }
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 0; ++i) {
         int x, y;
         generatePosition(x, y);
         monsters.push_back(new RangedMonster(x, y));
+    }*/
+    for (int i = 0; i < 4; ++i) {
+        int x, y;
+        generatePosition(x, y);
+        monsters.push_back(new ChargingMonster(x, y));
     }
 }
 
@@ -51,11 +57,6 @@ void KimSuHwan::SpawnMonster() {
     if (monsters.size() < maxMonsters) {
         int x, y;
         generatePosition(x, y);
-        if (monsters.size() % 2 == 0) {
-            monsters.push_back(new MovingMonster(x, y));
-        }
-        else {
-            monsters.push_back(new RangedMonster(x, y));
-        }
+        monsters.push_back(new ChargingMonster(x, y));
     }
 }
